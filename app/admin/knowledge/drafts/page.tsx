@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { PageHeading, RequireAdmin } from "@/components/ui";
 import { AdminField, adminError, useAdminCopy } from "@/components/admin/shared";
 import { useAdminCatalog } from "@/components/admin/use-catalog";
+import { Pagination } from "@/components/Pagination";
 import { listLearningDrafts, reviewLearningDraft, materializeLearningDraft, rollbackLearningDraft, type LearningDraft } from "@/lib/admin-knowledge";
 
 function Drafts() {
@@ -71,7 +72,7 @@ function Drafts() {
             <strong className="block text-lg">{item.title}</strong><span className="block text-sm text-subtle">{item.kind} · {item.status} · {item.model || "AI"}</span><span className="text-sm text-subtle">{item.sourceIds.length} {c("nguồn", "sources")} · {item.tokensUsed} tokens</span>
           </button></li>)}</ul>
           {!items.length && <p className="mt-5 text-subtle">{c("Không có draft ở trạng thái này.", "No drafts with this status.")}</p>}
-          <nav aria-label={c("Phân trang draft", "Draft pagination")} className="mt-5 flex items-center gap-4"><button className="kg-secondary" disabled={busy || page <= 1} onClick={() => { setPage(p => p - 1); setSelected(null); }}>{c("Trước", "Previous")}</button><span>{page} / {Math.max(pages, 1)}</span><button className="kg-secondary" disabled={busy || page >= pages} onClick={() => { setPage(p => p + 1); setSelected(null); }}>{c("Sau", "Next")}</button></nav>
+          <Pagination page={page} totalPages={pages} onChange={next => { setPage(next); setSelected(null); }} disabled={busy || loading} />
         </>}
       </section>
       {selected && <section className="min-w-0 space-y-5 border-t border-line pt-5 xl:border-l xl:border-t-0 xl:pl-6 xl:pt-0">
