@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { RequireAuth, Field, PageHeading } from "@/components/ui";
+import PasswordPanel from "@/components/PasswordPanel";
 import { useLocale } from "@/components/locale";
 import { apiRequest } from "@/lib/api-client";
 import { uploadAvatar } from "@/lib/storage";
@@ -16,6 +16,8 @@ type Profile = {
   avatarUrl?: string | null;
   role: string;
   authProvider: string;
+  /** `false` khi tài khoản chỉ đăng nhập bằng Google (chưa đặt mật khẩu). */
+  hasPassword: boolean;
   stats: UserStats;
 };
 
@@ -102,7 +104,7 @@ function ProfilePage() {
           <div><dt className="text-xs text-subtle">{t("Vai trò")}</dt><dd className="mt-1 font-medium text-strong">{profile.role}</dd></div>
           <div><dt className="text-xs text-subtle">{t("Thành tích học tập")}</dt><dd className="mt-1 font-medium text-strong">{profile.stats.currentStreak.toLocaleString(formatLocale)} {t("ngày liên tiếp")} · {(profile.stats.longestStreak ?? 0).toLocaleString(formatLocale)} {t("ngày dài nhất")}</dd></div>
         </dl>
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-xl bg-muted/55 p-4"><div><h3 className="font-medium text-strong">{t("Đổi mật khẩu")}</h3><p className="mt-1 text-sm text-subtle">{t("Nhận mã xác minh qua email để đặt lại mật khẩu an toàn.")}</p></div><Link href="/forgot-password" className="kg-secondary">{t("Mở trang đặt lại mật khẩu")}</Link></div>
+        <PasswordPanel hasPassword={profile.hasPassword} />
       </section>
     </section>}
   </div>;
