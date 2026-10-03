@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { RequireAuth, Field, PageHeading } from "@/components/ui";
 import { useLocale } from "@/components/locale";
 import { apiRequest } from "@/lib/api-client";
@@ -93,6 +94,16 @@ function ProfilePage() {
         <Field label="Tên hiển thị"><input required value={displayName} disabled={busy || loading} onChange={event => setDisplayName(event.target.value)} className="kg-field" maxLength={80} autoComplete="nickname" /></Field>
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5"><p className="text-sm tabular-nums text-body">{t("Kinh nghiệm tích lũy")}: {profile.stats.xp.toLocaleString(formatLocale)} XP<span className="mx-2" aria-hidden>·</span>{t("Ngày liên tiếp")}: {profile.stats.currentStreak.toLocaleString(formatLocale)}</p><button type="submit" disabled={busy || loading || !displayName.trim() || displayName.trim() === profile.displayName} className="kg-button">{t(busy ? "Đang lưu…" : "Lưu hồ sơ")}</button></div>
       </form>
+      <section className="border-t border-line pt-6" aria-labelledby="account-settings-heading">
+        <h2 id="account-settings-heading" className="text-xl text-strong">{t("Thông tin tài khoản")}</h2>
+        <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div><dt className="text-xs text-subtle">{t("Email")}</dt><dd className="mt-1 break-all font-medium text-strong">{profile.email}</dd><p className="mt-1 text-xs text-subtle">{t("Email hiện chưa hỗ trợ chỉnh sửa trực tiếp để bảo vệ phiên đăng nhập.")}</p></div>
+          <div><dt className="text-xs text-subtle">{t("Phương thức đăng nhập")}</dt><dd className="mt-1 font-medium text-strong">{profile.authProvider}</dd></div>
+          <div><dt className="text-xs text-subtle">{t("Vai trò")}</dt><dd className="mt-1 font-medium text-strong">{profile.role}</dd></div>
+          <div><dt className="text-xs text-subtle">{t("Thành tích học tập")}</dt><dd className="mt-1 font-medium text-strong">{profile.stats.currentStreak.toLocaleString(formatLocale)} {t("ngày liên tiếp")} · {(profile.stats.longestStreak ?? 0).toLocaleString(formatLocale)} {t("ngày dài nhất")}</dd></div>
+        </dl>
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-xl bg-muted/55 p-4"><div><h3 className="font-medium text-strong">{t("Đổi mật khẩu")}</h3><p className="mt-1 text-sm text-subtle">{t("Nhận mã xác minh qua email để đặt lại mật khẩu an toàn.")}</p></div><Link href="/forgot-password" className="kg-secondary">{t("Mở trang đặt lại mật khẩu")}</Link></div>
+      </section>
     </section>}
   </div>;
 }

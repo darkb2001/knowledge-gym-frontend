@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { LearningContent } from "@/components/LearningContent";
 import { apiRequest } from "@/lib/api-client";
 import { RequireAdmin, PageHeading, ContentLanguageNotice } from "@/components/ui";
+import { supportedTimezones } from "@/lib/timezones";
 
 type Settings = { enabled: boolean; localTime: string; timezone: string; dailyLimit: number; policy: "MANUAL_REVIEW" | "AUTO_PUBLISH_QUALIFIED"; qualityThreshold: number; lastScheduledDate: string | null; lastRunAt: string | null };
 type WriterRun = { id: string; status: string; attempts: number; errorMessage: string | null };
@@ -14,6 +15,7 @@ type Revision = { id: string; version: number; title: string; body: string; exce
 type Draft = { title: string; body: string; excerpt: string };
 
 const initial: Settings = { enabled: false, localTime: "06:00:00", timezone: "Asia/Jakarta", dailyLimit: 1, policy: "MANUAL_REVIEW", qualityThreshold: 85, lastScheduledDate: null, lastRunAt: null };
+const TIMEZONES = supportedTimezones();
 
 function WriterAdmin() {
   const { t, formatLocale } = useLocale();
@@ -147,7 +149,7 @@ function WriterAdmin() {
         <label className="flex items-center gap-3 text-sm"><input type="checkbox" checked={settings.enabled} onChange={event => setSettings({ ...settings, enabled: event.target.checked })} />{t("Bật tạo bài tự động mỗi ngày")}</label>
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm">{t("Giờ địa phương")}<input className="kg-field" type="time" value={settings.localTime.slice(0, 5)} onChange={event => setSettings({ ...settings, localTime: event.target.value + ":00" })} /></label>
-          <label className="block text-sm">{t("Múi giờ IANA")}<input className="kg-field" value={settings.timezone} onChange={event => setSettings({ ...settings, timezone: event.target.value })} placeholder="Asia/Jakarta" /></label>
+          <label className="block text-sm">{t("Múi giờ IANA")}<select className="kg-field" value={TIMEZONES.includes(settings.timezone) ? settings.timezone : "__custom__"} onChange={event => setSettings({ ...settings, timezone: event.target.value === "__custom__" ? settings.timezone : event.target.value })}><option value="__custom__" disabled>{settings.timezone || t("Chọn múi giờ")}</option>{TIMEZONES.map(zone => <option key={zone} value={zone}>{zone.replaceAll("_", " ")} · {zone}</option>)}</select><span className="mt-2 block text-xs leading-relaxed text-subtle">{t("Chọn múi giờ IANA từ danh sách; danh sách lấy từ API Intl của trình duyệt.")}</span></label>
           <label className="block text-sm">{t("Số bài tối đa mỗi ngày")}<input className="kg-field" type="number" min={1} max={10} value={settings.dailyLimit} onChange={event => setSettings({ ...settings, dailyLimit: Number(event.target.value) })} /></label>
           <label className="block text-sm">{t("Ngưỡng chất lượng auto-publish")}<input className="kg-field" type="number" min={0} max={100} value={settings.qualityThreshold} onChange={event => setSettings({ ...settings, qualityThreshold: Number(event.target.value) })} /></label>
         </div>
