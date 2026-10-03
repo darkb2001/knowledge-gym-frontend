@@ -92,13 +92,6 @@ export const messages: Record<string, string> = {
   "Nếu yêu cầu hợp lệ, mã xác minh đã được gửi. Mã có hiệu lực 10 phút.": "If the request is valid, a verification code has been sent. It stays valid for 10 minutes.",
   "Không xác minh được email": "Could not verify the email", "Đang xác minh…": "Verifying…",
   "Đã có tài khoản chưa xác minh?": "Already registered but not verified?",
-  "Too many requests. Try again later.": "Quá nhiều yêu cầu. Thử lại sau ít phút.",
-  "Invalid or expired email verification code": "Mã xác minh không đúng hoặc đã hết hạn.",
-  "Account already exists; sign in instead": "Email này đã có tài khoản — hãy đăng nhập.",
-  "Email already verified; sign in or reset password": "Email đã xác minh rồi — hãy đăng nhập hoặc đặt lại mật khẩu.",
-  "Passwords do not match": "Mật khẩu nhập lại không khớp",
-  "Invalid verification request": "Yêu cầu xác minh không hợp lệ.",
-  "Password must be 8–72 characters": "Mật khẩu phải từ 8–72 ký tự.",
   "Đang hoàn tất đăng nhập…": "Finishing sign-in…", "Nhận token…": "Restoring your session…",
   "Thiếu accessToken trong URL hash — thử đăng nhập lại.": "The sign-in token is missing. Please sign in again.",
   "Đang chuẩn bị phiên ôn…": "Preparing your review…", "Không mở được phiên ôn tập": "Could not start the review session",
@@ -230,6 +223,17 @@ const viLabels: Record<string, string> = {
   "Dashboard": "Tiến độ", "Mindmap": "Sơ đồ kiến thức", "Knowledge Gym Blog": "Bài viết Knowledge Gym",
   "Search backend": "Công cụ tìm kiếm", "AI Writer": "Biên tập bài viết",
   "QUICK": "Ghi nhanh", "STUDY": "Học tập", "HIGHLIGHT": "Điểm đáng nhớ", "BOOKMARK": "Đánh dấu",
+  // Loi API (backend tra tieng Anh) hien thi cho nguoi dung VI.
+  "Invalid email or password": "Email hoặc mật khẩu không đúng.",
+  "Too many requests. Try again later.": "Quá nhiều yêu cầu. Thử lại sau ít phút.",
+  "Email verification required": "Email chưa được xác minh — hãy xác minh rồi đăng nhập.",
+  "Invalid or expired email verification code": "Mã xác minh không đúng hoặc đã hết hạn.",
+  "Invalid verification request": "Yêu cầu xác minh không hợp lệ.",
+  "Account already exists; sign in instead": "Email này đã có tài khoản — hãy đăng nhập.",
+  "Email already verified; sign in or reset password": "Email đã xác minh rồi — hãy đăng nhập hoặc đặt lại mật khẩu.",
+  "Passwords do not match": "Mật khẩu nhập lại không khớp.",
+  "Password must be 8–72 characters": "Mật khẩu phải từ 8–72 ký tự.",
+  "Password must be at least 8 characters": "Mật khẩu phải có ít nhất 8 ký tự.",
 };
 
 export function formatReviewInterval(days: number, locale: Locale): string {
