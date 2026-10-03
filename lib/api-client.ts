@@ -43,7 +43,7 @@ export class ApiError extends Error {
   readonly problem: ApiProblem;
 
   constructor(status: number, problem: ApiProblem) {
-    super(problem.detail || problem.title || `HTTP ${status}`);
+    super(problem.detail || problem.title || problem.message || `HTTP ${status}`);
     this.name = "ApiError";
     this.status = status;
     this.problem = problem;

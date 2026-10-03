@@ -60,4 +60,8 @@ export type ApiProblem = {
   title?: string;
   detail?: string;
   status?: number;
+  /** Rate-limit filter (`429`) answers with `{error, message, retryAfter}` instead of RFC-7807. */
+  message?: string;
+  error?: string;
+  retryAfter?: number;
 };
