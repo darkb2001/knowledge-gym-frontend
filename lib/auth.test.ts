@@ -12,7 +12,10 @@ import { apiRequest, setAccessToken } from "./api-client";
 import { register, requestEmailVerification, verifyExistingEmail } from "./auth";
 
 describe("registration confirmation", () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.resetAllMocks();
+    vi.mocked(apiRequest).mockResolvedValue({ message: "Verification complete" });
+  });
 
   it("rejects mismatched confirmation before sending a request", async () => {
     await expect(register("user@example.com", "password123", "User", "different123", "123456"))
@@ -22,7 +25,7 @@ describe("registration confirmation", () => {
   });
 
   it("requests email code without sending password or installing a session", async () => {
-    await requestEmailVerification("user@example.com");
+    await expect(requestEmailVerification("user@example.com")).resolves.toBe("Verification complete");
     expect(apiRequest).toHaveBeenCalledWith("/auth/email-verification/request", {
       method: "POST", body: { email: "user@example.com" }, skipAuth: true,
     });
@@ -30,7 +33,8 @@ describe("registration confirmation", () => {
   });
 
   it("activates legacy account with a new password but does not log in", async () => {
-    await verifyExistingEmail("user@example.com", "123456", "newPassword123", "newPassword123");
+    await expect(verifyExistingEmail("user@example.com", "123456", "newPassword123", "newPassword123"))
+      .resolves.toBe("Verification complete");
     expect(apiRequest).toHaveBeenCalledWith("/auth/verify-email", {
       method: "POST", body: { email: "user@example.com", code: "123456",
         newPassword: "newPassword123", confirmPassword: "newPassword123" }, skipAuth: true,
