@@ -1,0 +1,130 @@
+name: Frontend CI and Production Deploy
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Lint, types, tests, audit and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: frontend-ci-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test
+      - name: Audit production dependencies
+        run: npm audit --omit=dev
+      - run: npm run build
+      - name: Check served icons and login
+        shell: bash
+        run: |
+          npm run start:local > /tmp/knowledge-gym-next.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl -fsS http://localhost:3100/login > /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          node scripts/verify-deployment.mjs http://localhost:3100
+
+  deploy:
+    name: Deploy production to Vercel
+    needs: ci
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      deployments: write
+    concurrency:
+      group: vercel-production
+      cancel-in-progress: false
+    environment:
+      name: production
+      url: ${{ steps.production.outputs.url }}
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Validate deployment secrets
+        shell: bash
+        run: |
+          for key in VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID; do
+            if [ -z "${!key}" ]; then
+              echo "::error::Missing production secret: $key"
+              exit 1
+            fi
+          done
+      - name: Skip superseded commits
+        id: current
+        shell: bash
+        run: |
+          latest=$(git ls-remote origin refs/heads/main | cut -f1)
+          if [ "$latest" = "$GITHUB_SHA" ]; then
+            echo 'deploy=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'deploy=false' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Pull production project settings
+        if: steps.current.outputs.deploy == 'true'
+        run: >-
+          npx --yes vercel@62.2.0 pull --yes --environment=production
+          --token="$VERCEL_TOKEN"
+      - name: Validate production API configuration
+        if: steps.current.outputs.deploy == 'true'
+        run: node scripts/verify-production-env.mjs
+      - name: Build with production environment
+        if: steps.current.outputs.deploy == 'true'
+        run: npx --yes vercel@62.2.0 build --prod --token="$VERCEL_TOKEN"
+      - name: Deploy prebuilt production output
+        if: steps.current.outputs.deploy == 'true'
+        id: deploy
+        shell: bash
+        run: |
+          url=$(npx --yes vercel@62.2.0 deploy --prebuilt --prod \
+            --token="$VERCEL_TOKEN")
+          [[ "$url" == https://* ]] || exit 1
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+      - name: Resolve canonical production domain
+        if: steps.current.outputs.deploy == 'true'
+        id: production
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        shell: bash
+        run: |
+          url=$(node scripts/production-url.mjs)
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          printf '### Production deployment\n%s\n' "$url" \
+            >> "$GITHUB_STEP_SUMMARY"
+      - name: Verify deployed login and favicon routes
+        if: steps.current.outputs.deploy == 'true'
+        env:
+          DEPLOYMENT_URL: ${{ steps.production.outputs.url }}
+        run: node scripts/verify-deployment.mjs "$DEPLOYMENT_URL"

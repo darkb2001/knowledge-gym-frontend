@@ -1,6 +1,6 @@
 # Knowledge Gym Frontend (m4b)
 
-Next.js 14 App Router + TypeScript + Tailwind. Nói chuyện với backend qua
+Next.js 15 App Router + TypeScript + Tailwind. Nói chuyện với backend qua
 `NEXT_PUBLIC_API_BASE` (mặc định `http://localhost:8080/api/v1`).
 
 ## Chạy local
@@ -10,9 +10,10 @@ Next.js 14 App Router + TypeScript + Tailwind. Nói chuyện với backend qua
 cd knowledge-gym && ./gradlew :kg-presentation:bootRun
 
 # Terminal 2 — FE
-cd knowledge-gym/kg-frontend
+cd knowledge-gym-frontend
 cp .env.example .env.local   # chỉnh nếu cần
-npm run dev                  # http://localhost:3000
+npm ci
+npm run dev:local            # http://localhost:3100
 ```
 
 ## Auth
@@ -35,4 +36,12 @@ npm run dev                  # http://localhost:3000
 | `/questions` | filter module / difficulty / tag + search `q` + phân trang |
 | `/questions/[id]` | render `answerHtml` (đã sanitize phía server) |
 
-CORS backend đã allow `http://localhost:3000` + credentials.
+Backend cần allow đúng origin frontend (local: `http://localhost:3100`) và credentials.
+
+## CI/CD và favicon
+
+CI kiểm tra lint, types, tests, audit production, build và các route icon. Chỉ `main` sau khi CI pass mới deploy Vercel, dùng ba secret trong GitHub environment **`production`**. Vercel Git auto-deploy được tắt trong `vercel.json` để không deploy trùng/bỏ qua CI.
+
+Cấu hình `NEXT_PUBLIC_API_BASE` bằng URL backend HTTPS trong Vercel **Production Environment Variables** trước khi deploy. Favicon SVG/ICO và icon iOS dùng biểu tượng stack hiện tại của Knowledge Gym.
+
+Xem [hướng dẫn deployment và kết quả kiểm tra](docs/DEPLOYMENT.md), bao gồm giới hạn smoke test và các cảnh báo dependency phát triển còn tồn tại.
