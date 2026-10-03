@@ -2,9 +2,9 @@
 import { useLocale } from "@/components/locale";
 
 import { useCallback, useEffect, useState } from "react";
-import DOMPurify from "isomorphic-dompurify";
+import { LearningContent } from "@/components/LearningContent";
 import { apiRequest } from "@/lib/api-client";
-import { RequireAuth, PageHeading, ContentLanguageNotice } from "@/components/ui";
+import { RequireAdmin, PageHeading, ContentLanguageNotice } from "@/components/ui";
 
 type Settings = { enabled: boolean; localTime: string; timezone: string; dailyLimit: number; policy: "MANUAL_REVIEW" | "AUTO_PUBLISH_QUALIFIED"; qualityThreshold: number; lastScheduledDate: string | null; lastRunAt: string | null };
 type WriterRun = { id: string; status: string; attempts: number; errorMessage: string | null };
@@ -172,13 +172,13 @@ function WriterAdmin() {
           <div className="flex flex-wrap gap-2"><button type="button" disabled={busy} onClick={() => void saveEdit()} className="kg-secondary">{t("Lưu chỉnh sửa")}</button><button type="button" disabled={busy} onClick={() => void action(`/admin/blog/writer/posts/${selected.id}/publish`, "Đã xuất bản bài viết.")} className="kg-button">{t("Duyệt & xuất bản")}</button><button type="button" disabled={busy} onClick={() => void action(`/admin/blog/writer/posts/${selected.id}/reject`, "Đã từ chối bài viết.")} className="kg-secondary text-danger">{t("Từ chối")}</button></div>
           <div className="border-t border-line pt-5"><label htmlFor="revision-instruction" className="mb-2 block text-sm font-medium">{t("Yêu cầu AI chỉnh sửa")}</label><textarea id="revision-instruction" className="kg-field min-h-28" value={instruction} onChange={event => setInstruction(event.target.value)} placeholder={t("Ví dụ: giải thích rõ hơn transaction isolation và thêm ví dụ code…")} /><button type="button" disabled={busy || !configured || !instruction.trim()} onClick={() => void revise()} className="kg-secondary mt-3">{t("Tạo bản chỉnh sửa")}</button></div>
         </div>
-        <div className="min-w-0"><h3 className="mb-4 text-base">{t("Preview · phiên bản #")}{revisions.at(-1)?.version ?? 1}</h3><article className="answer-html rounded-xl bg-muted/45 p-5" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draft.body) }} /><ContentLanguageNotice /></div>
+        <div className="min-w-0"><h3 className="mb-4 text-base">{t("Preview · phiên bản #")}{revisions.at(-1)?.version ?? 1}</h3><LearningContent html={draft.body} className="rounded-xl bg-muted/45 p-5" /><ContentLanguageNotice /></div>
       </div></section>
       <section className="kg-panel"><h2 className="mb-5 text-xl">{t("Lịch sử phiên bản (không ghi đè)")}</h2><div className="space-y-3">{revisions.map(revision => <div key={revision.id} className="flex flex-wrap items-center justify-between gap-3 border-b border-line/70 pb-4 last:border-b-0"><div><p className="text-sm font-medium text-strong">#{revision.version} · {t("Điểm")} {revision.qualityScore ?? "-"} · {revision.tokensUsed ?? 0} tokens · ${revision.costUsd?.toFixed(4) ?? "0.0000"}</p><p className="mt-1 text-xs text-subtle">{revision.instruction ?? t("Bản tạo đầu tiên")} · {new Date(revision.createdAt).toLocaleString(formatLocale)}</p></div>{revision.version !== revisions.at(-1)?.version && <div className="flex gap-2"><button type="button" onClick={() => setCompareRevision(revision)} className="kg-secondary">{t("So sánh")}</button><button type="button" disabled={busy} onClick={() => void restore(revision.version)} className="kg-secondary">{t("Khôi phục")}</button></div>}</div>)}</div>
-        {compareRevision && <div className="mt-5 border-t border-line pt-5"><h3 className="mb-4 text-lg">{t("So sánh bản hiện tại với #")}{compareRevision.version}</h3><div className="grid gap-5 md:grid-cols-2"><article aria-label={t("Bản hiện tại")} className="answer-html max-h-96 overflow-auto rounded-xl bg-muted/40 p-5" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draft.body) }} /><article aria-label={t("Bản trước")} className="answer-html max-h-96 overflow-auto rounded-xl bg-muted/40 p-5" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(compareRevision.body) }} /></div></div>}
+        {compareRevision && <div className="mt-5 border-t border-line pt-5"><h3 className="mb-4 text-lg">{t("So sánh bản hiện tại với #")}{compareRevision.version}</h3><div className="grid gap-5 md:grid-cols-2"><div aria-label={t("Bản hiện tại")} className="max-h-96 overflow-auto rounded-xl bg-muted/40 p-5"><LearningContent html={draft.body} /></div><div aria-label={t("Bản trước")} className="max-h-96 overflow-auto rounded-xl bg-muted/40 p-5"><LearningContent html={compareRevision.body} /></div></div></div>}
       </section>
     </>}
   </div>;
 }
 
-export default function AdminWriterPage(){return <RequireAuth><WriterAdmin/></RequireAuth>;}
+export default function AdminWriterPage(){return <RequireAdmin><WriterAdmin/></RequireAdmin>;}

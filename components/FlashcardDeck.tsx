@@ -3,7 +3,7 @@ import { useLocale } from "@/components/locale";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ApiError } from "@/lib/api-client";
-import { sanitizeAnswerHtml } from "@/lib/sanitize-html";
+import { LearningContent } from "./LearningContent";
 import { QUALITY, reviewCard, type DueCard } from "@/lib/srs";
 import { formatReviewInterval } from "@/lib/i18n";
 
@@ -75,6 +75,7 @@ export function FlashcardDeck({
   const [summaries, setSummaries] = useState<ReviewSummary[]>([]);
 
   const shownAtRef = useRef<number>(Date.now());
+  const inFlight = useRef(false);
   const card = cards[index];
 
   // Thời gian đo từ lúc thẻ được hiển thị — mỗi thẻ mới bắt đầu lại đồng hồ.
@@ -86,7 +87,8 @@ export function FlashcardDeck({
 
   const submit = useCallback(
     async (quality: number) => {
-      if (!card || submitting) return;
+      if (!card || inFlight.current) return;
+      inFlight.current = true;
       setSubmitting(true);
       setError(null);
       const timeMs = Date.now() - shownAtRef.current;
@@ -100,21 +102,19 @@ export function FlashcardDeck({
         };
         const next = [...summaries, summary];
         setSummaries(next);
-        if (index + 1 < cards.length) {
-          setIndex(index + 1);
-        } else {
-          onFinished?.(next);
-        }
+        setIndex(index + 1);
+        if (index + 1 >= cards.length) onFinished?.(next);
       } catch (err) {
         setError(err instanceof ApiError ? err.message : "Không gửi được kết quả ôn");
         // Gửi lỗi thì đồng hồ phải bắt đầu lại: giữ nguyên `shownAtRef` sẽ khiến lần thử lại
         // cộng dồn cả thời gian của lần hỏng vào `time_ms`, làm hỏng số liệu tốc độ của thẻ này.
         shownAtRef.current = Date.now();
       } finally {
+        inFlight.current = false;
         setSubmitting(false);
       }
     },
-    [card, cards.length, index, onFinished, submitting, summaries],
+    [card, cards.length, index, onFinished, summaries],
   );
 
   // Phím tắt: Space/Enter lật; 1–4 (hoặc A/H/G/E) chấm — khớp nút chuột (chấm được cả khi chưa lật).
@@ -161,59 +161,23 @@ export function FlashcardDeck({
 
   return (
     <div className="animate-fade-up">
-      <div className="mb-3 flex items-baseline justify-between gap-4 text-xs uppercase tracking-[0.18em] text-subtle">
+      <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3 text-sm tabular-nums text-subtle">
         <span>
           {t("Thẻ ")}{index + 1} {t(" / ")}{cards.length}
         </span>
         {card.moduleSlug ? <span>{card.moduleSlug}</span> : null}
       </div>
 
-      {/* Cả vùng là nút lật thẻ — bàn phím vẫn dùng được nhờ role="button" + tabIndex. */}
-      <div
-        role="button"
-        tabIndex={0}
-        aria-label={flipped ? t("Lật về mặt câu hỏi") : t("Lật xem đáp án")}
-        onClick={() => setFlipped((value) => !value)}
-        className="group relative min-h-[22rem] cursor-pointer rounded-sm border border-line bg-surface/60 transition hover:border-accent/60 [perspective:1600px]"
-      >
-        <div
-          className={`absolute inset-0 transition-transform duration-500 [transform-style:preserve-3d] ${
-            flipped ? "[transform:rotateY(180deg)]" : ""
-          }`}
-        >
-          {/*
-           * Hai mặt `absolute inset-0` chồng lên nhau — nếu để flow bình thường thì mặt đáp án
-           * nằm dưới khung `min-h` sau khi lật (viewport trống). `invisible` (không chỉ
-           * backface-visibility) để screen reader / Ctrl+F không đọc đáp án khi chưa lật.
-           * Scroll nằm trên từng mặt để nội dung dài vẫn cuộn được trong khung cố định.
-           */}
-          <div
-            aria-hidden={flipped}
-            className={`absolute inset-0 overflow-y-auto p-6 [backface-visibility:hidden] sm:p-10 ${
-              flipped ? "invisible" : ""
-            }`}
-          >
-            <p className="text-xs uppercase tracking-[0.18em] text-subtle">
-              {card.difficulty ?? "—"}
-            </p>
-            <p className="mt-4 font-display text-2xl text-strong sm:text-3xl">{card.title}</p>
-            <p className="mt-10 text-sm text-subtle">{t("Nhấn để lật card — hoặc dùng Space")}</p>
-          </div>
-
-          <div
-            aria-hidden={!flipped}
-            className={`absolute inset-0 overflow-y-auto p-6 [backface-visibility:hidden] [transform:rotateY(180deg)] sm:p-10 ${
-              flipped ? "" : "invisible"
-            }`}
-          >
-            <p className="text-xs uppercase tracking-[0.18em] text-positive">{t("Đáp án")}</p>
-            <p className="mt-3 font-display text-xl text-strong">{card.title}</p>
-            <div
-              className="answer-html mt-6 border-t border-line pt-6"
-              dangerouslySetInnerHTML={{ __html: sanitizeAnswerHtml(card.answerHtml) }}
-            />
-          </div>
-        </div>
+      <div className="min-w-0 overflow-hidden rounded-2xl border border-line bg-surface">
+        {!flipped ? <button type="button" aria-label={t("Lật xem đáp án")} disabled={submitting} onClick={() => setFlipped(true)} className="flex min-h-[22rem] w-full flex-col items-start justify-between gap-8 p-6 text-left transition-colors hover:bg-muted/35 sm:p-10">
+          <span className="rounded-md bg-sage/60 px-3 py-1 text-xs text-positive">{card.difficulty ?? (locale === "en" ? "Review" : "Ôn tập")}</span>
+          <span className="block break-words text-2xl font-semibold leading-relaxed text-strong sm:text-3xl">{card.title}</span>
+          <span className="text-sm text-accent">{locale === "en" ? "Reveal answer. Space also works." : "Mở đáp án. Bạn cũng có thể dùng phím Space."}</span>
+        </button> : <div className="space-y-5 p-6 sm:p-10">
+          <div className="flex flex-wrap items-center justify-between gap-3"><p className="text-sm font-medium text-positive">{t("Đáp án")}</p><button type="button" className="kg-secondary" aria-label={t("Lật về mặt câu hỏi")} onClick={() => setFlipped(false)}>{locale === "en" ? "Back to question" : "Về câu hỏi"}</button></div>
+          <h2 className="break-words text-xl">{card.title}</h2>
+          <LearningContent html={card.answerHtml} className="border-t border-line pt-5" />
+        </div>}
       </div>
 
       {error ? (
@@ -222,7 +186,7 @@ export function FlashcardDeck({
         </p>
       ) : null}
 
-      <div className="mt-6 grid gap-2 sm:grid-cols-4">
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {RATINGS.map((rating) => (
           <button
             key={rating.quality}

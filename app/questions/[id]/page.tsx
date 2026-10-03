@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { RequireAuth, ContentLanguageNotice } from "@/components/ui";
 import { ApiError } from "@/lib/api-client";
 import { getQuestion } from "@/lib/questions";
-import { sanitizeAnswerHtml } from "@/lib/sanitize-html";
+import { LearningContent } from "@/components/LearningContent";
 import type { QuestionDetail } from "@/lib/types";
 
 function QuestionDetailView() {
@@ -66,11 +66,7 @@ function QuestionDetailView() {
       ) : null}
 
       <ContentLanguageNotice />
-      <div
-        className="answer-html mt-8 border-t border-line pt-8"
-        // Server Jsoup Safelist + client DOMPurify (defense-in-depth).
-        dangerouslySetInnerHTML={{ __html: sanitizeAnswerHtml(question.answerHtml) }}
-      />
+      <LearningContent html={question.answerHtml} className="mt-8 border-t border-line pt-8" />
     </article>
   );
 }

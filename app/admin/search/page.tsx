@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { DatabaseIcon as Database, MagnifyingGlassIcon as MagnifyingGlass, ArrowsClockwiseIcon as ArrowsClockwise } from "@phosphor-icons/react";
-import { RequireAuth, PageHeading } from "@/components/ui";
+import { RequireAdmin, PageHeading } from "@/components/ui";
 import { useLocale } from "@/components/locale";
 import { apiRequest } from "@/lib/api-client";
+import { esControlErrorMessage, requestEsControl, type EsAction, type SearchSettings } from "@/lib/es-control";
 
 type Mode = "POSTGRES" | "ELASTICSEARCH" | "AUTO";
-type Settings = { mode: Mode; version: number; updatedAt: string; updatedBy: string | null; elasticsearchConfigured: boolean };
+type Settings = SearchSettings;
 const needsElasticsearch = (mode: Mode) => mode !== "POSTGRES";
 const options = [
   { mode: "POSTGRES" as const, name: "PostgreSQL", icon: Database, description: "Ổn định nhất, không phụ thuộc Elasticsearch." },
@@ -16,14 +17,16 @@ const options = [
 ];
 
 function SearchAdmin() {
-  const { t, formatLocale } = useLocale();
+  const { t, formatLocale, locale } = useLocale();
   const [settings, setSettings] = useState<Settings | null>(null);
   const [mode, setMode] = useState<Mode>("POSTGRES");
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [lifecycle, setLifecycle] = useState("");
+  const [lifecycle, setLifecycle] = useState<{ output: string; fallback: string } | null>(null);
+  const [lifecycleError, setLifecycleError] = useState<{ reason: unknown } | null>(null);
+  const [lifecycleAction, setLifecycleAction] = useState<EsAction>("status");
   const [reload, setReload] = useState(0);
   useEffect(() => {
     const controller = new AbortController();
@@ -31,25 +34,25 @@ function SearchAdmin() {
     apiRequest<Settings>("/admin/search/settings", { signal: controller.signal }).then(next => { if (!controller.signal.aborted) { setSettings(next); setMode(next.mode); setError(""); } }).catch(reason => { if (!controller.signal.aborted) setError(reason instanceof Error ? reason.message : "Không tải được cấu hình search"); }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [reload]);
-  async function runLifecycle(action: "status" | "start" | "stop") {
+  async function runLifecycle(action: EsAction) {
     if (busy) return;
     if (action === "stop" && !window.confirm(t("Tắt Elasticsearch? Search sẽ chuyển về PostgreSQL."))) return;
-    setBusy(true); setError(""); setLifecycle("");
+    setBusy(true); setLifecycleError(null); setLifecycle(null); setLifecycleAction(action);
     try {
       if (action === "stop") {
-        const next = await apiRequest<Settings>(`/admin/search/elasticsearch/stop`, { method: "POST" });
-        setSettings(next); setMode(next.mode);
-        setLifecycle("Elasticsearch đã dừng; search chuyển về PostgreSQL.");
+        const result = await requestEsControl("stop");
+        if (result.settings) { setSettings(result.settings); setMode(result.settings.mode); }
+        setLifecycle({ output: "", fallback: "Elasticsearch đã dừng; search chuyển về PostgreSQL." });
       } else if (action === "start") {
-        const result = await apiRequest<{ output: string }>(`/admin/search/elasticsearch/start`, { method: "POST" });
-        setLifecycle(result.output || "Elasticsearch đã khởi động.");
+        const result = await requestEsControl("start");
+        setLifecycle({ output: result.output, fallback: "Elasticsearch đã khởi động." });
         setReload(value => value + 1);
       } else {
-        const result = await apiRequest<{ output: string }>(`/admin/search/elasticsearch/status`);
-        setLifecycle(result.output || "Đã lấy trạng thái Elasticsearch.");
+        const result = await requestEsControl("status");
+        setLifecycle({ output: result.output, fallback: "Đã lấy trạng thái Elasticsearch." });
       }
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : "Không điều khiển được Elasticsearch");
+      setLifecycleError({ reason });
     } finally { setBusy(false); }
   }
   async function save() {
@@ -67,7 +70,8 @@ function SearchAdmin() {
     <PageHeading title="Cấu hình tìm kiếm" description="Chuyển backend runtime mà không cần restart ứng dụng." />
     {error && <p role="alert" className="mb-6">{t(error)}<button type="button" onClick={() => setReload(value => value + 1)} className="ml-4 underline">{t("Thử lại")}</button></p>}
     {message && <p role="status" className="mb-6">{t(message)}</p>}
-    {lifecycle && <p role="status" className="mb-6 whitespace-pre-wrap break-words">{t(lifecycle)}</p>}
+    {lifecycleError && <p role="alert" className="mb-6">{esControlErrorMessage(lifecycleError.reason, locale === "en")}<button type="button" disabled={busy || loading} onClick={() => void runLifecycle(lifecycleAction)} className="ml-4 underline">{t("Thử lại")}</button></p>}
+    {lifecycle && <p role="status" className="mb-6 whitespace-pre-wrap break-words">{lifecycle.output || t(lifecycle.fallback)}</p>}
     {loading && <p role="status">{t("Đang tải cấu hình…")}</p>}
     {settings && <div className="grid items-start gap-7 xl:grid-cols-[minmax(0,1fr)_280px]">
       <section className="kg-panel">
@@ -86,4 +90,4 @@ function SearchAdmin() {
     </div>}
   </div>;
 }
-export default function AdminSearchPage() { return <RequireAuth><SearchAdmin /></RequireAuth>; }
+export default function AdminSearchPage() { return <RequireAdmin><SearchAdmin /></RequireAdmin>; }

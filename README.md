@@ -38,6 +38,12 @@ npm run dev:local            # http://localhost:3100
 
 Backend cần allow đúng origin frontend (local: `http://localhost:3100`) và credentials.
 
+## Khu quản trị
+
+Admin mở `/admin/content` để biên tập câu hỏi, tổ chức chủ đề/module và theo dõi import; `/admin/posts` để soạn và xuất bản bài viết thủ công. Writer và Search Admin vẫn giữ các chức năng hiện có.
+
+Các chức năng cần API mới được đánh dấu **chờ backend**, không giả lập lưu thành công. Xem [hợp đồng tích hợp và ba cờ rollout](docs/ADMIN-WORKSPACE.md) trước khi bật chúng trên Vercel.
+
 ## CI/CD và favicon
 
 CI kiểm tra lint, types, tests, audit production, build và các route icon. Chỉ `main` sau khi CI pass mới deploy Vercel, dùng ba secret trong GitHub environment **`production`**. Vercel Git auto-deploy được tắt trong `vercel.json` để không deploy trùng/bỏ qua CI.

@@ -56,8 +56,8 @@
   .kg-main [role="alert"] { @apply rounded-xl border border-danger/25 bg-[#fbefea] p-4 text-danger; }
   .kg-main [role="status"] { @apply rounded-xl border border-positive/25 bg-sage/40 p-4 text-positive; }
   .kg-main fieldset { @apply rounded-xl bg-surface; }
-  .kg-main fieldset label:has(input:checked) { @apply border-accent bg-accent-soft; }
-  .kg-main fieldset label:hover { @apply bg-muted; }
+  .kg-main fieldset label:has(input:checked):not([data-result]) { @apply border-accent bg-accent-soft; }
+  .kg-main fieldset:not(:disabled) label:hover { @apply bg-muted; }
 }
 
 /* Keep the server's sanitized answer vocabulary, with a legible light reading surface. */
@@ -107,6 +107,28 @@
 .answer-html .stat-value { @apply text-xl font-semibold text-strong; }
 .answer-html .stat-label { @apply text-xs text-subtle; }
 .answer-html .step-badge { @apply mr-2 inline-block rounded border border-accent/30 px-2 py-1 text-xs text-accent; }
+
+/* Reading tools share the same warm palette as the authoring preview. */
+.answer-html { container-type: inline-size; min-width: 0; }
+.answer-html pre { white-space: pre; overflow-wrap: normal; tab-size: 2; line-height: 1.8; }
+.answer-html pre code { padding: 0; background: transparent; font-size: inherit; }
+.answer-html .kg-code-toolbar { @apply flex flex-wrap items-center justify-between gap-2 rounded-t-xl border border-line bg-muted px-4 text-xs text-subtle; }
+.answer-html .kg-code-toolbar button { @apply min-h-11 rounded-md px-3 font-sans text-xs font-medium text-accent hover:bg-surface; }
+.answer-html .kg-code-toolbar + pre { margin-top: 0; border-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
+.answer-html .hljs-keyword, .answer-html .hljs-selector-tag, .answer-html .hljs-literal { color: #395d83; }
+.answer-html .hljs-title, .answer-html .hljs-type, .answer-html .hljs-built_in { color: #8a482a; }
+.answer-html .hljs-string, .answer-html .hljs-regexp, .answer-html .hljs-attr { color: #386345; }
+.answer-html .hljs-number, .answer-html .hljs-symbol { color: #7046a0; }
+.answer-html .hljs-comment { color: #59635f; font-style: italic; }
+.answer-html .flow-row { flex-direction: column; flex-wrap: nowrap; }
+.answer-html .flow-node { min-width: 0; text-align: center; overflow-wrap: anywhere; }
+.answer-html .flow-node.primary { @apply bg-accent-soft; }
+.answer-html .flow-node.success { @apply bg-sage; }
+.answer-html .flow-arrow { align-self: center; transform: rotate(90deg); }
+@container (min-width: 560px) {
+  .answer-html .flow-row { flex-direction: row; }
+  .answer-html .flow-arrow { transform: none; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }

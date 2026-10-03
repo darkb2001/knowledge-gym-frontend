@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
-import { ArrowRightIcon as ArrowRight, BookOpenIcon as BookOpen, ChartLineIcon as ChartLine, CirclesThreeIcon as CirclesThree, CompassIcon as Compass, GearSixIcon as GearSix, NotebookIcon as Notebook, SignOutIcon as SignOut, StackIcon as Stack, TextAlignLeftIcon as TextAlignLeft, UserCircleIcon as UserCircle, UsersThreeIcon as UsersThree } from "@phosphor-icons/react";
+import { ArrowRightIcon as ArrowRight, BookOpenIcon as BookOpen, CheckIcon as Check, ChartLineIcon as ChartLine, CirclesThreeIcon as CirclesThree, CompassIcon as Compass, GearSixIcon as GearSix, NotebookIcon as Notebook, SignOutIcon as SignOut, StackIcon as Stack, TextAlignLeftIcon as TextAlignLeft, UserCircleIcon as UserCircle, UsersThreeIcon as UsersThree } from "@phosphor-icons/react";
 import { getAccessToken, RefreshUnreachableError } from "@/lib/api-client";
 import { logout, readStoredUser, restoreSession } from "@/lib/auth";
 import { LanguageSwitch, useLocale } from "@/components/locale";
@@ -29,15 +29,23 @@ function Brand() {
 
 function Navigation({ user, onNavigate }: { user: User | null; onNavigate?: () => void }) {
   const pathname = usePathname();
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const adminLabels: Record<string, string> = { "/admin/content": "Content library", "/admin/posts": "Blog editor", "/admin/users": "Accounts", "/admin/comments": "Comments", "/admin/learning": "Learning administration", "/admin/knowledge": "AI knowledge intake", "/admin/knowledge/drafts": "AI learning drafts" };
   const admin = user?.role === "ADMIN" || user?.role === "ROLE_ADMIN";
   const links = (items: typeof navigation) => items.map(({ href, label, icon: Icon }) => {
     const active = pathname === href || pathname.startsWith(href + "/");
-    return <Link key={href} href={href} onClick={onNavigate} aria-current={active ? "page" : undefined} className={`flex min-h-11 items-center gap-3 rounded-lg px-3.5 py-2.5 text-[13px] font-medium transition-colors ${active ? "bg-sage text-strong" : "text-body hover:bg-surface/60 hover:text-strong"}`}><Icon size={19} weight={active ? "fill" : "regular"} aria-hidden /><span>{t(label)}</span></Link>;
+    return <Link key={href} href={href} onClick={onNavigate} aria-current={active ? "page" : undefined} className={`flex min-h-11 items-center gap-3 rounded-lg px-3.5 py-2.5 text-[13px] font-medium transition-colors ${active ? "bg-sage text-strong" : "text-body hover:bg-surface/60 hover:text-strong"}`}><Icon size={19} weight={active ? "fill" : "regular"} aria-hidden /><span>{locale === "en" && adminLabels[href] ? adminLabels[href] : t(label)}</span></Link>;
   });
   return <nav aria-label={t("Điều hướng chính")} className="space-y-1">
     {links(navigation)}
     {admin && <div className="mt-7 border-t border-line pt-5"><p className="mb-2 px-3.5 text-xs font-medium text-subtle">{t("Công cụ quản trị")}</p>{links([
+      { href: "/admin/content", label: "Quản trị thư viện", icon: BookOpen },
+      { href: "/admin/posts", label: "Biên tập bài viết", icon: Notebook },
+      { href: "/admin/users", label: "Quản lý tài khoản", icon: UserCircle },
+      { href: "/admin/comments", label: "Kiểm duyệt bình luận", icon: TextAlignLeft },
+      { href: "/admin/learning", label: "Quản trị dữ liệu học", icon: ChartLine },
+      { href: "/admin/knowledge", label: "AI thu nạp kiến thức", icon: GearSix },
+      { href: "/admin/knowledge/drafts", label: "Duyệt nội dung AI", icon: Check },
       { href: "/admin/writer", label: "Quản trị nội dung", icon: TextAlignLeft },
       { href: "/admin/search", label: "Quản trị tìm kiếm", icon: GearSix },
     ])}</div>}
@@ -130,6 +138,24 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   if (restoreError) return <main className="flex min-h-[100dvh] flex-col items-center justify-center gap-5 bg-canvas px-5"><p className="max-w-lg text-center text-danger" role="alert">{t(restoreError)}</p><button type="button" className="kg-secondary" onClick={() => window.location.reload()}>{t("Thử lại")}</button><Link href="/login" className="inline-flex min-h-11 items-center text-accent underline">{t("← Quay lại đăng nhập")}</Link><LanguageSwitch /></main>;
   if (!ready) return <main className="flex min-h-[100dvh] items-center justify-center bg-canvas text-subtle"><p role="status">{t("Đang mở phòng tập…")}</p></main>;
   return <AppFrame user={user}>{children}</AppFrame>;
+}
+
+function AdminGate({ children }: { children: ReactNode }) {
+  const { locale, t } = useLocale();
+  const [user, setUser] = useState<User | null | undefined>(undefined);
+  useEffect(() => {
+    const update = () => setUser(readStoredUser());
+    update();
+    window.addEventListener("kg:user-changed", update);
+    return () => window.removeEventListener("kg:user-changed", update);
+  }, []);
+  if (user === undefined) return <p role="status">{t("Đang tải…")}</p>;
+  if (user?.role !== "ADMIN" && user?.role !== "ROLE_ADMIN") return <section className="kg-panel"><h1 className="kg-page-heading">{locale === "en" ? "Admin access required" : "Cần quyền quản trị"}</h1><p className="mt-4 text-subtle">{locale === "en" ? "This workspace is available to administrators only." : "Khu vực này chỉ dành cho tài khoản quản trị."}</p><Link href="/learn" className="kg-secondary mt-5">{t("Chọn chủ đề")}</Link></section>;
+  return <>{children}</>;
+}
+
+export function RequireAdmin({ children }: { children: ReactNode }) {
+  return <RequireAuth><AdminGate>{children}</AdminGate></RequireAuth>;
 }
 
 export function AuthShell({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {

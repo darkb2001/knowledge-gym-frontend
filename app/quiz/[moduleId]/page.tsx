@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RequireAuth, inputClass } from "@/components/ui";
 import QuizQuestion from "@/components/QuizQuestion";
+import { Pagination } from "@/components/Pagination";
 import { generateQuiz, submitQuiz, quizHistory, type Quiz, type QuizResult, type QuizStrategy, type QuizSummary } from "@/lib/quiz";
 function QuizFlow({ moduleId }: { moduleId: string }) {
   const { t, formatLocale } = useLocale();
@@ -70,7 +71,7 @@ function QuizFlow({ moduleId }: { moduleId: string }) {
   </>}
   <section className="space-y-3 border-t border-line pt-6"><h2 className="font-display text-xl">{t("Lịch sử quiz")}</h2>
    {historyError ? <p role="alert">{t(historyError)} <button onClick={() => setHistoryTick(n => n + 1)} className="underline">{t("Thử lại")}</button></p> : history.length === 0 ? <p className="text-subtle">{t("Chưa có phiên quiz.")}</p> : history.map(h => <p key={h.id}>{new Date(h.startedAt).toLocaleString(formatLocale)} {t(" · ")}{h.strategy} {t(" · ")}{h.total} {t(" câu · ")}{h.finishedAt ? `${h.score}%` : t("Chưa nộp")}</p>)}
-   <div className="flex gap-4"><button disabled={page <= 1} onClick={() => setPage(p => p - 1)}>{t("← Trước")}</button><span>{page}{t("/")}{Math.max(1, pages)}</span><button disabled={page >= pages} onClick={() => setPage(p => p + 1)}>{t("Sau →")}</button></div>
+   <Pagination page={page} totalPages={pages} onChange={setPage} disabled={Boolean(historyError)} />
   </section>
  </div>;
 }

@@ -63,7 +63,7 @@ export default function RegisterPage() {
     }
     setBusy(true);
     try {
-      await register(email.trim(), password, displayName.trim(), code.trim());
+      await register(email.trim(), password, displayName.trim(), confirmPassword, code.trim());
       router.replace("/learn");
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Đăng ký thất bại");

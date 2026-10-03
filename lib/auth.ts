@@ -51,11 +51,15 @@ export async function register(
   email: string,
   password: string,
   displayName: string,
+  confirmPassword: string,
   verificationCode: string,
 ): Promise<TokenResponse> {
+  if (password !== confirmPassword) {
+    throw new Error("Mật khẩu xác nhận không khớp.");
+  }
   const data = await apiRequest<TokenResponse>("/auth/register", {
     method: "POST",
-    body: { email, password, confirmPassword: password, displayName, verificationCode },
+    body: { email, password, confirmPassword, displayName, verificationCode },
     skipAuth: true,
   });
   setAccessToken(data.accessToken);
@@ -79,10 +83,15 @@ export async function verifyEmail(
   code: string,
   newPassword: string,
 ): Promise<string> {
+  return verifyExistingEmail(email, code, newPassword, newPassword);
+}
+
+export async function verifyExistingEmail(
+  email: string, code: string, newPassword: string, confirmPassword: string,
+): Promise<string> {
+  if (newPassword !== confirmPassword) throw new Error("Mật khẩu xác nhận không khớp.");
   const data = await apiRequest<{ message: string }>("/auth/verify-email", {
-    method: "POST",
-    body: { email, code, newPassword, confirmPassword: newPassword },
-    skipAuth: true,
+    method: "POST", body: { email, code, newPassword, confirmPassword }, skipAuth: true,
   });
   return data.message;
 }

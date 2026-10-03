@@ -66,6 +66,10 @@ type RequestOptions = Omit<RequestInit, "body"> & {
 };
 
 async function parseProblem(res: Response): Promise<ApiProblem> {
+  // Gateways may replace Problem Details with HTML/plain text. Do not parse it as JSON.
+  if (!res.headers.get("content-type")?.toLowerCase().includes("json")) {
+    return { title: "error", detail: res.statusText, status: res.status };
+  }
   try {
     const data = (await res.json()) as ApiProblem;
     return data;

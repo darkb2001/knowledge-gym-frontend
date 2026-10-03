@@ -7,6 +7,7 @@ import { FormEvent, Suspense, useCallback, useEffect, useMemo, useState } from "
 import { RequireAuth, inputClass, PageHeading, ContentLanguageNotice } from "@/components/ui";
 import { ArrowRightIcon as ArrowRight, MagnifyingGlassIcon as MagnifyingGlass } from "@phosphor-icons/react";
 import { ApiError } from "@/lib/api-client";
+import { Pagination } from "@/components/Pagination";
 import { listModules, listQuestions, listTopics } from "@/lib/questions";
 import type { Module, QuestionSummary, Topic } from "@/lib/types";
 
@@ -158,7 +159,7 @@ function QuestionsBrowser() {
     {error ? <p role="alert">{t(error)}<button type="button" className="ml-4 underline" onClick={() => setCatalogTick(value => value + 1)}>{t("Thử lại")}</button></p> : loading ? <p role="status" className="kg-panel text-subtle">{t("Đang tải…")}</p> : items.length === 0 ? <div className="kg-panel py-10"><p className="text-subtle">{t("Không có câu hỏi khớp bộ lọc.")}</p><button type="button" className="kg-secondary mt-5" onClick={clearFilters}>{t("Xóa bộ lọc")}</button></div> : <ul className="overflow-hidden rounded-2xl border border-line/80 bg-surface">
       {items.map(item => <li key={item.id} className="border-b border-line/60 last:border-b-0"><Link href={`/questions/${item.id}`} className="group flex items-center gap-4 px-5 py-5 transition-colors hover:bg-muted/45 sm:px-6"><span className="min-w-0 flex-1"><span className="flex flex-wrap items-center gap-2"><span className={`rounded-md border px-2 py-1 text-[11px] font-medium ${difficultyTone(item.difficulty)}`}>{item.difficulty}</span><span className="text-xs text-subtle">{item.moduleSlug}</span></span><span className="mt-2 block break-words text-lg font-medium text-strong group-hover:text-accent">{item.title}</span>{item.tags.length > 0 && <span className="mt-2 block text-xs text-subtle">{item.tags.join(", ")}</span>}</span><ArrowRight size={19} aria-hidden className="shrink-0 text-subtle group-hover:text-accent" /></Link></li>)}
     </ul>}
-    <div className="mt-6 flex items-center justify-between gap-4 text-sm"><button type="button" disabled={page <= 1 || loading} onClick={() => setPage(value => Math.max(1, value - 1))} className="kg-secondary">{t("Trước")}</button><span className="tabular-nums text-subtle">{t("Trang")} {page} / {totalPages}</span><button type="button" disabled={page >= totalPages || loading} onClick={() => setPage(value => value + 1)} className="kg-secondary">{t("Sau")}</button></div>
+    <Pagination page={page} totalPages={totalPages} onChange={setPage} disabled={loading || Boolean(error)} />
     <ContentLanguageNotice />
   </div>;
 }

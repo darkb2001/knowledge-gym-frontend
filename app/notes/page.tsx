@@ -4,6 +4,7 @@ import { useLocale } from "@/components/locale";
 import { useCallback, useEffect, useState } from "react";
 import { apiRequest, ensureAccessToken, getAccessToken, getApiBase } from "@/lib/api-client";
 import { renderSafeMarkdown } from "@/lib/markdown";
+import { LearningContent } from "@/components/LearningContent";
 import { RequireAuth, PageHeading } from "@/components/ui";
 
 type Note = {
@@ -203,10 +204,7 @@ function Notes() {
         <div>
           {!previewHtml && <p className="mb-3 text-sm text-subtle">{t("Chưa có nội dung")}</p>}
           <p className="mb-2 text-sm font-medium text-subtle">{t("Xem trước an toàn")}</p>
-          <div
-            className="answer-html min-h-24 rounded-sm border border-line bg-surface/80 p-3"
-            dangerouslySetInnerHTML={{ __html: previewHtml }}
-          />
+          <LearningContent html={previewHtml} className="min-h-24 rounded-sm border border-line bg-surface/80 p-3" />
         </div>
         <div className="flex flex-wrap gap-2">
           <button
