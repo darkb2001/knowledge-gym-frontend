@@ -42,19 +42,49 @@ export async function login(email: string, password: string): Promise<TokenRespo
   return data;
 }
 
+/**
+ * Registration is verified: the API rejects `POST /auth/register` unless the 6-digit
+ * code emailed by {@link requestEmailVerification} is supplied together with a matching
+ * `confirmPassword`.
+ */
 export async function register(
   email: string,
   password: string,
   displayName: string,
+  verificationCode: string,
 ): Promise<TokenResponse> {
   const data = await apiRequest<TokenResponse>("/auth/register", {
     method: "POST",
-    body: { email, password, displayName },
+    body: { email, password, confirmPassword: password, displayName, verificationCode },
     skipAuth: true,
   });
   setAccessToken(data.accessToken);
   storeUser(data.user);
   return data;
+}
+
+/** Emails a 6-digit verification code (valid 10 minutes) for registration or a legacy unverified account. */
+export async function requestEmailVerification(email: string): Promise<string> {
+  const data = await apiRequest<{ message: string }>("/auth/email-verification/request", {
+    method: "POST",
+    body: { email },
+    skipAuth: true,
+  });
+  return data.message;
+}
+
+/** Verifies a legacy (pre-verification) account: consumes the code and sets a new password. */
+export async function verifyEmail(
+  email: string,
+  code: string,
+  newPassword: string,
+): Promise<string> {
+  const data = await apiRequest<{ message: string }>("/auth/verify-email", {
+    method: "POST",
+    body: { email, code, newPassword, confirmPassword: newPassword },
+    skipAuth: true,
+  });
+  return data.message;
 }
 
 export async function logout(): Promise<void> {

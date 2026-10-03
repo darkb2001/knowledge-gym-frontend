@@ -64,6 +64,12 @@ export default function LoginPage() {
             {t(error)}
           </p>
         ) : null}
+        {error === "Email verification required" ? (
+          <p className="mb-4 text-sm text-subtle">
+            <Link href="/verify-email" className="text-positive underline underline-offset-4 hover:text-strong">
+              {t("Xác minh email")}</Link>
+          </p>
+        ) : null}
         <button type="submit" className={primaryBtnClass} disabled={busy}>
           {busy ? t("Đang vào…") : t("Vào phòng tập")}
         </button>
