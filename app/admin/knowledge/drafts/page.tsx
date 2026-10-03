@@ -58,12 +58,12 @@ function Drafts() {
     finally { lock.current = false; setBusy(false); }
   }
   const ready = !busy && reason.trim().length > 0 && confirmed;
-  return <div>
+  return <div className="flex min-h-0 flex-1 flex-col">
     <PageHeading title={c("Duyệt nội dung học AI", "Review AI learning content")} description={c("Duyệt, tạo câu hỏi nháp và thu hồi nội dung mà không xóa lịch sử học.", "Review, create draft questions and withdraw content without deleting learning history.")} />
     {error !== undefined && <p role="alert" className="mb-4 text-danger">{String(adminError(error, locale === "en"))} <button className="underline" disabled={busy} onClick={() => setTick(t => t + 1)}>{c("Tải lại danh sách", "Reload list")}</button></p>}
     {message && <p role="status" className="mb-4 text-positive">{message} {questionId && <Link className="underline" href={`/admin/content?questionId=${questionId}`}>{c("Mở thư viện quản trị", "Open content administration")}</Link>}</p>}
-    <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(320px,440px)]">
-      <section className="min-w-0" aria-busy={loading}>
+    <div className="grid min-h-0 flex-1 gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(320px,440px)]">
+      <section className="flex min-h-0 min-w-0 flex-col" aria-busy={loading}>
         <AdminField label={c("Trạng thái", "Status")}><select className="kg-field" value={status} disabled={busy} onChange={e => { setStatus(e.target.value as LearningDraft["status"]); setPage(1); setSelected(null); }}>
           <option value="REVIEW">{c("Chờ duyệt", "Pending review")}</option><option value="APPROVED">{c("Đã duyệt", "Approved")}</option><option value="REJECTED">{c("Đã từ chối", "Rejected")}</option>
         </select></AdminField>
