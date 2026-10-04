@@ -17,9 +17,6 @@ export default function OAuthErrorPage() {
     : t("Không thể hoàn tất đăng nhập Google. Vui lòng thử lại.");
   return (
     <AuthShell title={t("Đăng nhập thất bại")} subtitle={message}>
-      <p role="alert" className="mb-4 text-sm text-warning">
-        {message}
-      </p>
       <button type="button" className={primaryBtnClass} onClick={() => startGoogleLogin()}>
         {t("Thử lại")}
       </button>

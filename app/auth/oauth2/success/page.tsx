@@ -84,12 +84,9 @@ export default function OAuthSuccessPage() {
   }, [router]);
 
   return (
-    <AuthShell title={t("Google")} subtitle={t("Đang hoàn tất đăng nhập…")}>
+    <AuthShell title={t("Google")} subtitle={failed ? t(FAILURE_MESSAGE) : t("Đang hoàn tất đăng nhập…")}>
       {failed ? (
         <div className="space-y-3">
-          <p className="text-sm text-warning" role="alert">
-            {t(FAILURE_MESSAGE)}
-          </p>
           <button type="button" className={primaryBtnClass} onClick={() => startGoogleLogin()}>
             {t("Thử lại")}
           </button>
