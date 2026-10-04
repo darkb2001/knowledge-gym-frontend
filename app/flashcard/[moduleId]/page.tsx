@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { FlashcardDeck, type ReviewSummary } from "@/components/FlashcardDeck";
 import { RequireAuth } from "@/components/ui";
-import { ApiError } from "@/lib/api-client";
+
 import { listModules } from "@/lib/questions";
 import { enrollModule, listDue, type DueCard } from "@/lib/srs";
 
@@ -66,7 +66,7 @@ function FlashcardSession() {
         if (ac.signal.aborted || isAbortError(err)) return;
         setSession({
           phase: "error",
-          message: err instanceof ApiError ? err.message : "Không mở được phiên ôn tập",
+          message: err instanceof Error ? err.message : "Không mở được phiên ôn tập",
         });
       }
     })();

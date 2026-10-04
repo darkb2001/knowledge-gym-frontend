@@ -3,6 +3,7 @@ import {
   __resetApiClientForTests,
   apiRequest,
   ensureAccessToken,
+  GATEWAY_UNAVAILABLE_MESSAGE,
   getAccessToken,
   RefreshUnreachableError,
   setAccessToken,
@@ -104,5 +105,53 @@ describe("applyOAuthHash", () => {
     expect(applyOAuthHash("#role=USER")).toBeNull();
     expect(applyOAuthHash("#accessToken=only")).toBeNull();
     expect(getAccessToken()).toBeNull();
+  });
+});
+
+/**
+ * Sự cố 04/10: app bị recreate lúc deploy, nginx trả 502 HTML cho `POST /auth/login`. Thông báo
+ * "Bad Gateway" lọt ra UI không nói gì với người dùng nên họ tưởng mật khẩu sai. Lỗi hạ tầng phải
+ * nói rõ là hạ tầng.
+ */
+describe("lỗi gateway khi app đang restart", () => {
+  beforeEach(() => {
+    __resetApiClientForTests();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it("đổi 502 HTML thành thông báo máy chủ đang khởi động lại", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response("<html><head><title>502 Bad Gateway</title></head></html>", {
+          status: 502,
+          headers: { "content-type": "text/html" },
+        }),
+      ),
+    );
+
+    await expect(
+      apiRequest("/auth/login", { method: "POST", body: { email: "a@b.c", password: "x" }, skipAuth: true }),
+    ).rejects.toMatchObject({ status: 502, message: GATEWAY_UNAVAILABLE_MESSAGE });
+  });
+
+  it("giữ nguyên chi tiết khi máy chủ trả Problem Details JSON", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ title: "conflict", detail: "Email đã được đăng ký" }), {
+          status: 409,
+          headers: { "content-type": "application/problem+json" },
+        }),
+      ),
+    );
+
+    await expect(
+      apiRequest("/auth/register", { method: "POST", body: {}, skipAuth: true }),
+    ).rejects.toMatchObject({ status: 409, message: "Email đã được đăng ký" });
   });
 });

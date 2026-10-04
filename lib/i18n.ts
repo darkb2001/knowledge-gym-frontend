@@ -290,6 +290,20 @@ export const messages: Record<string, string> = {
   "Liên kết nguồn tin": "Feed link", "Sao chép liên kết": "Copy link", "Đã sao chép": "Copied", "Mở tệp XML": "Open the XML file", "Theo dõi bằng Feedly": "Follow with Feedly",
   "Dán liên kết này vào Feedly, Inoreader, NetNewsWire hoặc bất kỳ trình đọc RSS nào. Tệp XML luôn hợp lệ kể cả khi chưa có bài viết.": "Paste this link into Feedly, Inoreader, NetNewsWire or any RSS reader. The XML file stays valid even before the first article is published.",
   "Bài viết gần đây": "Recent articles", "Về trang bài viết": "Back to articles", "Đã sao chép liên kết nguồn tin.": "Feed link copied.",
+  // Trang lỗi OAuth: mỗi mã lý do có hướng dẫn riêng, không dùng một câu "thử lại" chung.
+  "Email này đã có tài khoản mật khẩu. Hãy đăng nhập bằng mật khẩu — nếu quên, dùng “Quên mật khẩu?”.":
+    "This email already has a password account. Sign in with your password — use “Forgot password?” if you don't remember it.",
+  "Tài khoản đã bị khoá. Liên hệ quản trị viên để được mở lại.":
+    "This account is blocked. Contact an administrator to restore access.",
+  "Email Google của bạn chưa được xác minh. Xác minh email trong tài khoản Google rồi thử lại.":
+    "Your Google email is not verified. Verify it in your Google account and try again.",
+  "Tài khoản Google không chia sẻ email. Hãy dùng tài khoản Google khác hoặc đăng nhập bằng email và mật khẩu.":
+    "That Google account does not share an email. Use another Google account, or sign in with email and password.",
+  "Tài khoản này đã liên kết với một Google khác. Hãy dùng đúng Google bạn đã đăng ký, hoặc đăng nhập bằng mật khẩu.":
+    "This account is already linked to a different Google account. Use the one you signed up with, or sign in with a password.",
+  "Bạn đã huỷ đăng nhập Google. Có thể thử lại bất cứ lúc nào.":
+    "You cancelled the Google sign-in. You can try again at any time.",
+  "Đăng nhập bằng email và mật khẩu": "Sign in with email and password",
 };
 
 const viLabels: Record<string, string> = {
@@ -303,6 +317,12 @@ const viLabels: Record<string, string> = {
   "QUICK": "Ghi nhanh", "STUDY": "Học tập", "HIGHLIGHT": "Điểm đáng nhớ", "BOOKMARK": "Đánh dấu",
   // Loi API (backend tra tieng Anh) hien thi cho nguoi dung VI.
   "Invalid email or password": "Email hoặc mật khẩu không đúng.",
+  // 502/503/504 tu nginx: app dang restart/deploy — khong phai sai mat khau.
+  "Máy chủ đang khởi động lại. Vui lòng đợi vài giây rồi thử lại.":
+    "The server is restarting. Please wait a few seconds and try again.",
+  // Tài khoản tạo bằng Google chưa có mật khẩu: hướng họ sang nút Google thay vì "sai mật khẩu".
+  "oauth_only_account": "Tài khoản này đăng nhập bằng Google, chưa có mật khẩu. Hãy bấm “Tiếp tục với Google”.",
+  "Account is blocked": "Tài khoản đã bị khoá. Liên hệ quản trị viên.",
   "Too many requests. Try again later.": "Quá nhiều yêu cầu. Thử lại sau ít phút.",
   "Email verification required": "Email chưa được xác minh — hãy xác minh rồi đăng nhập.",
   "Invalid or expired email verification code": "Mã xác minh không đúng hoặc đã hết hạn.",

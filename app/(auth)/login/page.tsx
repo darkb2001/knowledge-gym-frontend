@@ -11,7 +11,7 @@ import {
   inputClass,
   primaryBtnClass,
 } from "@/components/ui";
-import { ApiError, ensureAccessToken, hasUsableAccessToken } from "@/lib/api-client";
+import { ensureAccessToken, hasUsableAccessToken } from "@/lib/api-client";
 import { login, startGoogleLogin, verifySession } from "@/lib/auth";
 
 /**
@@ -57,7 +57,9 @@ export default function LoginPage() {
       await login(email.trim(), password);
       router.replace(safeNextPath());
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Đăng nhập thất bại");
+      // `Error.message` quan trọng: lỗi mạng của fetch là "Failed to fetch", đã có bản dịch
+      // tiếng Việt; nếu chỉ in "Đăng nhập thất bại" thì người dùng tưởng sai mật khẩu.
+      setError(err instanceof Error ? err.message : "Đăng nhập thất bại");
     } finally {
       setBusy(false);
     }

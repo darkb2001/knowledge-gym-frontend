@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { RequireAuth, ContentLanguageNotice } from "@/components/ui";
-import { ApiError } from "@/lib/api-client";
+
 import { getQuestion, listQuestions } from "@/lib/questions";
 import { LearningContent } from "@/components/LearningContent";
 import type { QuestionDetail, QuestionSummary } from "@/lib/types";
@@ -37,7 +37,7 @@ function QuestionDetailView() {
       } catch (err) {
         if (cancelled || (err instanceof DOMException && err.name === "AbortError")) return;
         if (!cancelled) {
-          setError(err instanceof ApiError ? err.message : "Không tải được câu hỏi");
+          setError(err instanceof Error ? err.message : "Không tải được câu hỏi");
         }
       }
     })();

@@ -11,7 +11,7 @@ import {
   inputClass,
   primaryBtnClass,
 } from "@/components/ui";
-import { ApiError } from "@/lib/api-client";
+
 import { register, requestEmailVerification, startGoogleLogin } from "@/lib/auth";
 import CodeStep from "@/components/auth/CodeStep";
 
@@ -43,7 +43,7 @@ export default function RegisterPage() {
       setStep(2);
       return true;
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Không gửi được mã");
+      setError(err instanceof Error ? err.message : "Không gửi được mã");
       return false;
     } finally {
       setBusy(false);
@@ -67,7 +67,7 @@ export default function RegisterPage() {
       await register(email.trim(), password, displayName.trim(), confirmPassword, code.trim());
       router.replace("/learn");
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Đăng ký thất bại");
+      setError(err instanceof Error ? err.message : "Đăng ký thất bại");
     } finally {
       setBusy(false);
     }

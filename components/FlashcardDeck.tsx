@@ -4,7 +4,7 @@ import { useLocale } from "@/components/locale";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowUpRightIcon as ArrowUpRight } from "@phosphor-icons/react";
-import { ApiError } from "@/lib/api-client";
+
 import { QUALITY, reviewCard, type DueCard } from "@/lib/srs";
 import { extractKeyAnswer } from "@/lib/flashcard-summary";
 import { formatReviewInterval } from "@/lib/i18n";
@@ -133,7 +133,7 @@ export function FlashcardDeck({
         setIndex(index + 1);
         if (index + 1 >= cards.length) onFinished?.(next);
       } catch (err) {
-        setError(err instanceof ApiError ? err.message : "Không gửi được kết quả ôn");
+        setError(err instanceof Error ? err.message : "Không gửi được kết quả ôn");
         // Gửi lỗi thì đồng hồ phải bắt đầu lại: giữ nguyên `shownAtRef` sẽ khiến lần thử lại
         // cộng dồn cả thời gian của lần hỏng vào `time_ms`, làm hỏng số liệu tốc độ của thẻ này.
         shownAtRef.current = Date.now();

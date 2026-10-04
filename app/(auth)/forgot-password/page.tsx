@@ -4,7 +4,7 @@ import { useLocale } from "@/components/locale";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { AuthShell, Field, inputClass, primaryBtnClass } from "@/components/ui";
-import { ApiError } from "@/lib/api-client";
+
 import { forgotPassword, resetPassword } from "@/lib/auth";
 import CodeStep from "@/components/auth/CodeStep";
 
@@ -29,7 +29,7 @@ export default function ForgotPasswordPage() {
       setMessage(msg);
       setStep(2);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Không gửi được mã");
+      setError(err instanceof Error ? err.message : "Không gửi được mã");
     } finally {
       setBusy(false);
     }
@@ -61,7 +61,7 @@ export default function ForgotPasswordPage() {
       setCode("");
       setNewPassword("");
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Đặt lại mật khẩu thất bại");
+      setError(err instanceof Error ? err.message : "Đặt lại mật khẩu thất bại");
     } finally {
       setBusy(false);
     }

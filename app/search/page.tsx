@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MagnifyingGlassIcon as MagnifyingGlass } from "@phosphor-icons/react";
-import { ApiError, apiRequest } from "@/lib/api-client";
+import { apiRequest } from "@/lib/api-client";
 import { PageHeading, RequireAuth, inputClass } from "@/components/ui";
 
 type HitType = "question" | "module" | "post";
@@ -72,7 +72,7 @@ function SearchScreen() {
         .then(next => { setHits(normalize(next)); setStatus("done"); setError(""); })
         .catch((reason: unknown) => {
           if ((reason as { name?: string })?.name === "AbortError") return;
-          setError(reason instanceof ApiError ? reason.message : reason instanceof Error ? reason.message : "Không tìm kiếm được, vui lòng thử lại.");
+          setError(reason instanceof Error ? reason.message : "Không tìm kiếm được, vui lòng thử lại.");
           setStatus("error");
         });
     }, 300);

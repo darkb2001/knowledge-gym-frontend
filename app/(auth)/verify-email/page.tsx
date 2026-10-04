@@ -4,7 +4,7 @@ import { useLocale } from "@/components/locale";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { AuthShell, Field, inputClass, primaryBtnClass } from "@/components/ui";
-import { ApiError } from "@/lib/api-client";
+
 import { requestEmailVerification, verifyEmail } from "@/lib/auth";
 import CodeStep from "@/components/auth/CodeStep";
 
@@ -51,7 +51,7 @@ export default function VerifyEmailPage() {
       setStep(1);
       setCode("");
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Không xác minh được email");
+      setError(err instanceof Error ? err.message : "Không xác minh được email");
     } finally {
       setBusy(false);
     }
@@ -64,7 +64,7 @@ export default function VerifyEmailPage() {
     try {
       setMessage(await requestEmailVerification(email.trim()));
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Không gửi được mã");
+      setError(err instanceof Error ? err.message : "Không gửi được mã");
     } finally {
       setBusy(false);
     }

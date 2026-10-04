@@ -104,6 +104,12 @@ export function __resetApiClientForTests(): void {
   sessionVersion++;
 }
 
+/**
+ * 502/503/504 từ gateway = hạ tầng đang restart/deploy, KHÔNG phải sai mật khẩu. Dùng chung một câu
+ * để login/register/refresh đều nói cùng sự thật, tránh người dùng gõ lại mật khẩu vô ích.
+ */
+export const GATEWAY_UNAVAILABLE_MESSAGE = "Máy chủ đang khởi động lại. Vui lòng đợi vài giây rồi thử lại.";
+
 export class ApiError extends Error {
   readonly status: number;
   readonly problem: ApiProblem;
@@ -134,6 +140,12 @@ type RequestOptions = Omit<RequestInit, "body"> & {
 async function parseProblem(res: Response): Promise<ApiProblem> {
   // Gateways may replace Problem Details with HTML/plain text. Do not parse it as JSON.
   if (!res.headers.get("content-type")?.toLowerCase().includes("json")) {
+    // 502/503/504 ở đây là hạ tầng (nginx không kết nối được app: deploy/restart/OOM), không phải
+    // sai thông tin đăng nhập. Trước đây `statusText` ("Bad Gateway") lọt thẳng ra UI nên người dùng
+    // tưởng mình gõ sai mật khẩu — xem nginx access log 17:03:21Z ngày 04/10 khi app đang restart.
+    if (res.status === 502 || res.status === 503 || res.status === 504) {
+      return { title: "service_unavailable", detail: GATEWAY_UNAVAILABLE_MESSAGE, status: res.status };
+    }
     return { title: "error", detail: res.statusText, status: res.status };
   }
   try {

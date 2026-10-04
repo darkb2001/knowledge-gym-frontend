@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { FormEvent, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { RequireAuth, inputClass, PageHeading, ContentLanguageNotice } from "@/components/ui";
 import { ArrowRightIcon as ArrowRight, MagnifyingGlassIcon as MagnifyingGlass } from "@phosphor-icons/react";
-import { ApiError } from "@/lib/api-client";
+
 import { Pagination } from "@/components/Pagination";
 import { listModules, listQuestions, listTopics } from "@/lib/questions";
 import type { Module, QuestionSummary, Topic } from "@/lib/types";
@@ -79,7 +79,7 @@ function QuestionsBrowser() {
         setCatalogError(null);
       } catch (err) {
         if (ac.signal.aborted || isAbortError(err)) return;
-        setCatalogError(err instanceof ApiError ? err.message : "Không tải được catalog");
+        setCatalogError(err instanceof Error ? err.message : "Không tải được catalog");
       }
     })();
     return () => ac.abort();
@@ -107,7 +107,7 @@ function QuestionsBrowser() {
         setTotalElements(data.totalElements);
       } catch (err) {
         if (signal.aborted || isAbortError(err)) return;
-        setError(err instanceof ApiError ? err.message : "Không tải được câu hỏi");
+        setError(err instanceof Error ? err.message : "Không tải được câu hỏi");
         setItems([]);
       } finally {
         if (!signal.aborted) setLoading(false);
