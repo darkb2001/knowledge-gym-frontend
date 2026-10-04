@@ -4,6 +4,7 @@ import { LocaleProvider } from "@/components/locale";
 import { ThemeProvider } from "@/components/theme";
 import { MountainScene } from "@/components/MountainScene";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
+import { MOTION_INIT_SCRIPT } from "@/lib/motion";
 import "./globals.css";
 import "./scenic.css";
 
@@ -22,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi" suppressHydrationWarning>
-      <head><script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} /></head>
+      <head><script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} /><script dangerouslySetInnerHTML={{ __html: MOTION_INIT_SCRIPT }} /></head>
       <body className={`${geist.variable} ${geistMono.variable} min-h-[100dvh] antialiased`}><MountainScene /><LocaleProvider><ThemeProvider>{children}</ThemeProvider></LocaleProvider></body>
     </html>
   );

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { RequireAuth, Field, PageHeading } from "@/components/ui";
 import PasswordPanel from "@/components/PasswordPanel";
+import SessionsPanel from "@/components/SessionsPanel";
+import MotionToggle from "@/components/MotionToggle";
 import { useLocale } from "@/components/locale";
 import { apiRequest } from "@/lib/api-client";
 import { uploadAvatar, validateAvatar } from "@/lib/storage";
@@ -184,6 +186,12 @@ function ProfilePage() {
         <PasswordPanel hasPassword={profile.hasPassword} />
       </section>
     </section>}
+      <section className="border-t border-line pt-6" aria-labelledby="display-preferences-heading">
+        <h2 id="display-preferences-heading" className="text-lg font-semibold text-strong">{t("Hiển thị & hiệu ứng")}</h2>
+        <p className="mt-1 text-sm text-subtle">{t("Một số điện thoại tắt hiệu ứng động của trang khi bật Giảm chuyển động.")}</p>
+        <div className="mt-4"><MotionToggle /></div>
+      </section>
+    <SessionsPanel />
     <ProgressSection />
   </div>;
 }
