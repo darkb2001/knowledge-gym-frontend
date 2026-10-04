@@ -25,7 +25,7 @@ export default function BlogPage() {
     return () => controller.abort();
   }, [reload]);
   return <PublicShell>
-    <PageHeading title="Bài viết" description="Đọc một chút. Hiểu thêm một chút." action={<a href={`${getApiBase()}/blog/feed.rss`} className="kg-secondary"><Rss size={19} aria-hidden />RSS</a>} />
+    <PageHeading title="Bài viết" description="Đọc một chút. Hiểu thêm một chút." action={<Link href="/blog/rss" className="kg-secondary"><Rss size={19} aria-hidden />RSS</Link>} />
     {loading && <p role="status" className="kg-panel">{t("Đang tải bài viết…")}</p>}
     {error && <p role="alert">{t(error)}<button type="button" onClick={() => setReload(value => value + 1)} className="ml-4 underline">{t("Thử lại")}</button></p>}
     {!loading && !error && posts.length === 0 && <p className="kg-panel text-subtle">{t("Chưa có bài viết được xuất bản.")}</p>}

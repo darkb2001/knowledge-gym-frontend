@@ -197,3 +197,40 @@ export async function apiRequest<T>(
   }
   return undefined as T;
 }
+
+/**
+ * Multipart upload (ảnh đại diện). Không dùng được `apiRequest` vì body phải là `FormData`:
+ * để browser tự đặt `Content-Type` kèm `boundary`, và **không** `JSON.stringify` body.
+ *
+ * Vẫn giữ nguyên hành vi xác thực của `apiRequest`: gắn access token, gặp `401` thì refresh +
+ * thử lại đúng một lần.
+ */
+export async function apiUpload<T>(
+  path: string,
+  formData: FormData,
+  options: { _retried?: boolean } = {},
+): Promise<T> {
+  const headers = new Headers();
+  if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`);
+
+  const res = await fetch(`${API_BASE}${path.startsWith("/") ? path : `/${path}`}`, {
+    method: "POST",
+    headers,
+    credentials: "include",
+    body: formData,
+  });
+
+  if (res.status === 401 && !options._retried) {
+    if (await tryRefresh()) return apiUpload<T>(path, formData, { _retried: true });
+    bounceToLogin();
+  }
+
+  if (res.status === 204) return undefined as T;
+
+  if (!res.ok) throw new ApiError(res.status, await parseProblem(res));
+
+  if (res.headers.get("content-type")?.includes("application/json")) {
+    return (await res.json()) as T;
+  }
+  return undefined as T;
+}

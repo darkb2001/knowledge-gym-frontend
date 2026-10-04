@@ -1,10 +1,107 @@
 import { apiRequest } from "./api-client";
 import type { PageResponse } from "./types";
-/** Phiên luyện phỏng vấn — KHÔNG có điểm số: BE trả đáp án mẫu (`answerHtml`) ngay khi nộp câu trả lời. */
-export type InterviewSession = { id: string; topicId: string; questionCount: number; mode: "TEXT"; status: "ACTIVE" | "FINISHED"; startedAt: string; finishedAt: string | null; questionIds: string[] };
-export type Interview = { session: InterviewSession; questions: { questionId: string; title: string }[] };
-export type InterviewAnswer = { questionId: string; userAnswer: string; answerHtml: string };
-export const startInterview = (topicId: string, questionCount: number) => apiRequest<Interview>("/mock-interview/start", { method: "POST", body: { topicId, questionCount, mode: "TEXT" } });
-export const answerInterview = (id: string, questionId: string, userAnswer: string) => apiRequest<InterviewAnswer>(`/mock-interview/${encodeURIComponent(id)}/answer`, { method: "POST", body: { questionId, userAnswer } });
-export const finishInterview = (id: string) => apiRequest<InterviewSession>(`/mock-interview/${encodeURIComponent(id)}/finish`, { method: "POST" });
-export const interviewHistory = (page = 1, signal?: AbortSignal) => apiRequest<PageResponse<InterviewSession>>(`/mock-interview/history?page=${page}&size=10`, { signal });
+
+/**
+ * Mock interview API — mô hình "submit toàn cục".
+ *
+ * Người dùng điền bao nhiêu ô tuỳ ý rồi bấm **một** nút *Kết thúc phỏng vấn*; FE gửi toàn bộ câu
+ * trả lời trong một request (`POST /{id}/submit`) và BE trả trang kết quả đầy đủ mọi câu của phiên
+ * — kể cả câu bỏ trống. Không còn endpoint lưu câu trả lời / xem đáp án theo từng câu, và KHÔNG
+ * có điểm số: `answerHtml` chỉ là đáp án tham khảo.
+ */
+export type InterviewSession = {
+  id: string;
+  topicId: string;
+  questionCount: number;
+  mode: "TEXT";
+  status: "ACTIVE" | "FINISHED";
+  startedAt: string;
+  finishedAt: string | null;
+  questionIds: string[];
+};
+
+export type InterviewQuestion = { questionId: string; title: string };
+
+export type Interview = { session: InterviewSession; questions: InterviewQuestion[] };
+
+/** Một dòng của trang kết quả. `userAnswer` null = người dùng để trống câu này. */
+export type InterviewResultItem = {
+  questionId: string;
+  title: string;
+  userAnswer: string | null;
+  answerHtml: string | null;
+  answeredAt: string | null;
+};
+
+export type InterviewResult = {
+  session: InterviewSession;
+  items: InterviewResultItem[];
+  answeredCount: number;
+};
+
+export type InterviewAnswerInput = { questionId: string; answer: string };
+
+export const startInterview = (topicId: string, questionCount: number) =>
+  apiRequest<Interview>("/mock-interview/start", {
+    method: "POST",
+    body: { topicId, questionCount, mode: "TEXT" },
+  });
+
+/** Nộp tất cả câu trả lời một lần; câu để trống gửi chuỗi rỗng vẫn hợp lệ. */
+export const submitInterview = (id: string, answers: InterviewAnswerInput[]) =>
+  apiRequest<InterviewResult>(`/mock-interview/${encodeURIComponent(id)}/submit`, {
+    method: "POST",
+    body: { answers },
+  });
+
+export const interviewResult = (id: string, signal?: AbortSignal) =>
+  apiRequest<InterviewResult>(`/mock-interview/${encodeURIComponent(id)}/result`, { signal });
+
+export const interviewHistory = (page = 1, size = 10, signal?: AbortSignal) =>
+  apiRequest<PageResponse<InterviewSession>>(
+    `/mock-interview/history?page=${page}&size=${size}`,
+    { signal },
+  );
+
+/**
+ * Nháp câu trả lời giữ trong `localStorage` để refresh/đóng tab không mất bài đang viết.
+ * Mọi truy cập đều bọc `try/catch`: chế độ riêng tư của Safari chặn storage và ném lỗi.
+ */
+const draftKey = (sessionId: string) => `kg.interview.draft.${sessionId}`;
+
+export function readDraft(sessionId: string): Record<string, string> {
+  try {
+    const raw = localStorage.getItem(draftKey(sessionId));
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as unknown;
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
+    const draft: Record<string, string> = {};
+    for (const [key, value] of Object.entries(parsed as Record<string, unknown>)) {
+      if (typeof value === "string") draft[key] = value;
+    }
+    return draft;
+  } catch {
+    return {};
+  }
+}
+
+export function writeDraft(sessionId: string, answers: Record<string, string>): void {
+  try {
+    localStorage.setItem(draftKey(sessionId), JSON.stringify(answers));
+  } catch {
+    /* storage đầy hoặc bị chặn — nháp chỉ là tiện ích, không được làm hỏng luồng làm bài */
+  }
+}
+
+export function clearDraft(sessionId: string): void {
+  try {
+    localStorage.removeItem(draftKey(sessionId));
+  } catch {
+    /* xem writeDraft */
+  }
+}
+
+/** Số ô đã có nội dung — dùng cho bộ đếm "đã trả lời x/y" và màn xác nhận kết thúc. */
+export function countAnswered(answers: Record<string, string>): number {
+  return Object.values(answers).filter(value => value.trim().length > 0).length;
+}

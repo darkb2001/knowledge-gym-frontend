@@ -5,7 +5,7 @@ import { RequireAuth, Field, PageHeading } from "@/components/ui";
 import PasswordPanel from "@/components/PasswordPanel";
 import { useLocale } from "@/components/locale";
 import { apiRequest } from "@/lib/api-client";
-import { uploadAvatar } from "@/lib/storage";
+import { uploadAvatar, validateAvatar } from "@/lib/storage";
 import { readStoredUser, storeUser } from "@/lib/auth";
 import type { UserStats } from "@/lib/dashboard";
 
@@ -71,10 +71,16 @@ function ProfilePage() {
   async function onPickAvatar(file: File | undefined) {
     if (!file || !profile || busy) return;
     if (!displayName.trim()) { setError("Vui lòng nhập tên hiển thị trước khi lưu."); return; }
+    const invalid = validateAvatar(file);
+    if (invalid) { setError(invalid); return; }
     setBusy(true); setError(""); setMessage("");
     try {
-      const publicUrl = await uploadAvatar(file);
-      await persistProfile(publicUrl);
+      const updated = await uploadAvatar(file);
+      setProfile(current => current ? { ...current, avatarUrl: updated.avatarUrl, displayName: updated.displayName } : current);
+      setDisplayName(updated.displayName);
+      const stored = readStoredUser();
+      if (stored) { storeUser({ ...stored, displayName: updated.displayName }); window.dispatchEvent(new Event("kg:user-changed")); }
+      setMessage("Đã cập nhật ảnh đại diện.");
     } catch (reason) { setError(reason instanceof Error ? reason.message : "Không tải ảnh đại diện"); }
     finally { setBusy(false); }
   }

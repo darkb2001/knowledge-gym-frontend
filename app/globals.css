@@ -43,11 +43,11 @@
   .kg-secondary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-sm border border-line bg-surface px-4 py-2.5 text-sm font-medium text-strong transition-colors hover:bg-muted disabled:opacity-50; }
   .kg-field { @apply w-full rounded-sm border border-control bg-surface px-3.5 py-2.5 text-strong outline-none transition-colors placeholder:text-subtle focus:border-accent focus:ring-2 focus:ring-accent/15; }
   .kg-panel { @apply rounded-2xl border border-line/80 bg-surface p-5 sm:p-6; }
-  .kg-page-heading { @apply text-3xl font-semibold text-strong sm:text-4xl; }
+  .kg-page-heading { @apply text-[26px] font-semibold leading-tight tracking-[-0.02em] text-strong sm:text-4xl; }
   .kg-intro { @apply mt-3 max-w-2xl text-base leading-relaxed text-subtle; }
   .kg-notice { @apply rounded-xl border border-line bg-surface p-4 text-sm leading-relaxed; }
   .kg-shell { @apply min-h-[100dvh] bg-canvas; }
-  .kg-main { @apply mx-auto flex min-h-[calc(100dvh_-_76px)] w-full max-w-[1320px] flex-col px-5 py-7 sm:px-8 sm:py-10 xl:px-12; }
+  .kg-main { @apply mx-auto flex min-h-[calc(100dvh_-_64px)] w-full max-w-[1320px] flex-col px-4 py-6 sm:min-h-[calc(100dvh_-_76px)] sm:px-8 sm:py-10 xl:px-12; }
   .kg-main > :first-child { @apply flex min-h-full flex-1 flex-col; }
   .kg-main > main { max-width: none; padding: 0; }
   .kg-reading { @apply mx-auto w-full max-w-[78ch] rounded-2xl border border-line/70 bg-surface p-5 sm:p-10; }
@@ -63,6 +63,10 @@
 
 /* Keep the server's sanitized answer vocabulary, with a legible light reading surface. */
 .answer-html { @apply space-y-5 text-base leading-[1.8] text-body; overflow-wrap: anywhere; }
+/* Mobile: long code fences and wide tables must scroll inside the card, never widen the page. */
+.answer-html pre { max-width: 100%; overflow-x: auto; font-size: 0.8125rem; line-height: 1.6; }
+.answer-html table { display: block; max-width: 100%; overflow-x: auto; }
+.answer-html img, .answer-html iframe, .answer-html video { max-width: 100%; height: auto; }
 .answer-html h1 { @apply mt-8 text-2xl; }
 .answer-html h2 { @apply mt-8 text-xl; }
 .answer-html h3, .answer-html h4 { @apply mt-6 text-lg; }

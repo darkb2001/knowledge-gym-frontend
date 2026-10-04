@@ -37,6 +37,6 @@ export function useLocale() {
 export function LanguageSwitch() {
   const { locale, setLocale, t } = useLocale();
   return <div role="group" aria-label={t("Ngôn ngữ")} className="inline-flex shrink-0 rounded-lg border border-line bg-surface p-1">
-    {(["vi", "en"] as const).map((language) => <button key={language} type="button" lang={language} aria-pressed={locale === language} aria-label={language === "vi" ? "Tiếng Việt" : "English"} onClick={() => setLocale(language)} className={`min-h-8 min-w-10 rounded-md px-2 text-xs font-semibold transition-colors ${locale === language ? "bg-accent text-on-accent" : "text-subtle hover:bg-muted"}`}>{language === "vi" ? "VI" : "EN"}</button>)}
+    {(["vi", "en"] as const).map((language) => <button key={language} type="button" lang={language} aria-pressed={locale === language} aria-label={language === "vi" ? "Tiếng Việt" : "English"} onClick={() => setLocale(language)} className={`min-h-9 min-w-11 rounded-md px-2 text-xs font-semibold transition-colors ${locale === language ? "bg-accent text-on-accent" : "text-subtle hover:bg-muted"}`}>{language === "vi" ? "VI" : "EN"}</button>)}
   </div>;
 }

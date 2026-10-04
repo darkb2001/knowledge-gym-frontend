@@ -21,9 +21,9 @@ const navigation = [
 ];
 
 function Brand() {
-  return <Link href="/learn" className="inline-flex items-center gap-3 text-strong">
-    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent text-on-accent"><Stack size={24} weight="bold" aria-hidden /></span>
-    <span className="text-[17px] font-semibold leading-tight tracking-[-0.035em]">Knowledge<br />Gym<span className="text-accent">.</span></span>
+  return <Link href="/learn" className="inline-flex min-w-0 items-center gap-2.5 text-strong sm:gap-3">
+    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent text-on-accent sm:h-10 sm:w-10"><Stack size={22} weight="bold" aria-hidden /></span>
+    <span className="truncate text-base font-semibold leading-tight tracking-[-0.035em] sm:text-[17px]">Knowledge Gym<span className="text-accent">.</span></span>
   </Link>;
 }
 
@@ -63,10 +63,10 @@ export function AppHeader({ user }: { user: User | null }) {
     finally { setBusy(false); router.replace("/login"); }
   }
   return <header className="border-b border-line/70 bg-canvas">
-    <div className="flex min-h-[76px] items-center justify-between gap-3 px-5 sm:px-8 xl:px-12">
-      <div className="lg:hidden"><Brand /></div>
+    <div className="flex min-h-[64px] items-center justify-between gap-2 px-4 sm:min-h-[76px] sm:gap-3 sm:px-8 xl:px-12">
+      <div className="min-w-0 lg:hidden"><Brand /></div>
       <p className="hidden text-sm text-subtle lg:block">{t("Không gian học của bạn")}</p>
-      <div className="flex items-center gap-3 sm:gap-5">
+      <div className="flex shrink-0 items-center gap-2 sm:gap-5">
         <LanguageSwitch />
         {user ? <><span className="hidden max-w-40 truncate text-sm font-medium text-strong sm:inline">{user.displayName}</span><button type="button" onClick={onLogout} disabled={busy} aria-label={t("Đăng xuất")} title={t("Đăng xuất")} className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-subtle hover:bg-muted disabled:opacity-50"><SignOut size={20} aria-hidden /></button></> : <Link href="/login" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-accent hover:bg-muted" aria-label={t("Đăng nhập")}><UserCircle size={21} className="sm:hidden" aria-hidden /><span className="hidden text-sm font-medium sm:inline">{t("Đăng nhập")}</span></Link>}
       </div>
