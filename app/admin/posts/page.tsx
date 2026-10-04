@@ -66,7 +66,7 @@ function BlogWorkspace() {
     try { const result = await collectPosts(); setMessage(`${c("Đã thu thập nội dung", "Content collected")}: ${JSON.stringify(result)}`); setTick(value => value + 1); }
     catch (reason) { setError(reason); } finally { setCollecting(false); }
   }
-  return <div>
+  return <div className="kg-page">
     <PageHeading title={c("Biên tập bài viết", "Blog editor")} description={c("Viết nội dung của bạn, xem trước và xuất bản khi đã sẵn sàng.", "Write your own content, preview it and publish when ready.")} action={<Link href="/admin/writer" className="kg-secondary">{c("Writer & lịch sử phiên bản", "Writer & revision history")}</Link>} />
     {!blogListEnabled && <div className="mb-6"><PendingBackend>{c("Danh sách hiện là hàng đợi duyệt, không phải toàn bộ bài viết. Danh sách đầy đủ đang chờ API mới. Có thể mở bất kỳ bài viết nào bằng ID hoặc tạo bản nháp thủ công bên dưới.", "This list is the review queue, not all articles. The complete list awaits a new API. Open an existing article by ID or create a manual draft below.")}</PendingBackend></div>}
     {Boolean(error) && <p role="alert" className="mb-5">{adminError(error, locale === "en")} <button type="button" className="underline" onClick={() => setTick(value => value + 1)}>{c("Thử lại", "Retry")}</button></p>}
@@ -77,7 +77,6 @@ function BlogWorkspace() {
         <div className="flex items-center justify-between gap-3"><h2 className="text-lg">{blogListEnabled ? c("Bài viết", "Articles") : c("Hàng đợi duyệt", "Review queue")}</h2><button type="button" className="kg-button !px-3" onClick={() => { if (!discard()) return; selection.current?.abort(); setOpening(false); setSelected(null); setEditorKey(value => value + 1); setDirty(false); }}><PlusIcon size={17} aria-hidden />{c("Tạo mới", "New")}</button></div>
         <form className="space-y-3" onSubmit={event => { event.preventDefault(); setPage(1); setSearch(query.trim()); }}><AdminField label={c("Tìm bài viết", "Search articles")}><input className="kg-field" value={query} onChange={event => setQuery(event.target.value)} /></AdminField>{blogListEnabled && <AdminField label={c("Trạng thái", "Status")}><select className="kg-field" value={status} onChange={event => { setStatus(event.target.value); setPage(1); }}><option value="">{c("Tất cả", "All")}</option>{["DRAFT", "REVIEW", "PUBLISHED", "ARCHIVED", "HIDDEN", "DELETED"].map(value => <option key={value}>{value}</option>)}</select></AdminField>}<button className="kg-secondary w-full">{c("Tìm", "Search")}</button></form>
         {loading ? <p role="status">{c("Đang tải…", "Loading…")}</p> : !posts.length ? <p className="text-sm text-subtle">{c("Chưa có bài viết trong danh sách này.", "There are no articles in this list yet.")}</p> : <ul className="space-y-1">{posts.map(post => <li key={post.id}><button type="button" className={`w-full rounded-xl p-4 text-left hover:bg-muted ${selected?.id === post.id ? "bg-sage" : ""}`} disabled={opening} onClick={() => void open(post.id)} aria-pressed={selected?.id === post.id}><span className="mb-2 block text-xs text-subtle">{post.status}</span><span className="block break-words text-sm font-medium text-strong">{post.title}</span></button></li>)}</ul>}
-        <Pagination page={page} totalPages={pages} onChange={setPage} disabled={loading} />
         <form className="space-y-3 border-t border-line pt-5" onSubmit={event => { event.preventDefault(); void open(id.trim()); }}><AdminField label={c("Mở bài viết theo ID", "Open article by ID")}><input className="kg-field font-mono text-sm" value={id} onChange={event => setId(event.target.value)} /></AdminField><button className="kg-secondary w-full" disabled={opening || !isUuid(id.trim())}>{c("Mở bài viết", "Open article")}</button></form>
         <button type="button" className="kg-secondary w-full" disabled={collecting} onClick={() => void collect()}>{collecting ? c("Đang thu thập…", "Collecting…") : c("Thu thập nguồn bài viết", "Collect article sources")}</button>
       </section>
@@ -85,6 +84,7 @@ function BlogWorkspace() {
         {opening ? <p role="status">{c("Đang mở bài viết…", "Opening article…")}</p> : <PostEditor key={`${selected?.id ?? "new"}-${editorKey}`} post={selected} modules={catalog.modules} onDirty={setDirty} onSaved={() => setTick(value => value + 1)} />}
       </section>
     </div>
+    <Pagination page={page} totalPages={pages} onChange={setPage} disabled={loading} />
   </div>;
 }
 export default function AdminPostsPage() { return <RequireAdmin><BlogWorkspace /></RequireAdmin>; }

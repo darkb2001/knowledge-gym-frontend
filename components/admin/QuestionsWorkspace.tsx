@@ -64,7 +64,8 @@ export function QuestionsWorkspace({ modules, dirty, onDirty }: { modules: Modul
     finally { if (!controller.signal.aborted) setOpening(false); }
   }
   function create() { if (!discard()) return; selection.current?.abort(); setOpening(false); setSelected(null); setEditorKey(value => value + 1); onDirty(false); }
-  return <div className="grid min-w-0 gap-7 2xl:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)]">
+  return <div className="kg-page">
+    <div className="grid min-w-0 gap-7 2xl:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)]">
     <section className="min-w-0" aria-label={c("Danh sách câu hỏi quản trị", "Admin question list")}>
       <div className="mb-4 flex items-center justify-between gap-3"><h2 className="text-lg">{c("Thư viện", "Library")} <span className="text-sm font-normal tabular-nums text-subtle">({total})</span></h2><button type="button" onClick={create} className="kg-button !px-3"><PlusIcon size={18} aria-hidden />{c("Tạo mới", "New")}</button></div>
       <form className="space-y-3" onSubmit={event => { event.preventDefault(); setPage(1); setSearch(query.trim()); }}>
@@ -74,10 +75,11 @@ export function QuestionsWorkspace({ modules, dirty, onDirty }: { modules: Modul
       </form>
       {Boolean(error) && <p role="alert" className="mt-4">{adminError(error, locale === "en")} <button type="button" className="underline" onClick={() => setTick(value => value + 1)}>{c("Thử lại", "Retry")}</button></p>}
       {loading ? <div aria-busy="true" aria-label={c("Đang tải thư viện", "Loading library")} className="mt-5 space-y-3">{[0, 1, 2].map(index => <div key={index} className="h-24 rounded-lg bg-muted" />)}</div> : !items.length ? <p className="py-8 text-sm leading-relaxed text-subtle">{c("Chưa có câu hỏi khớp bộ lọc. Tạo câu mới hoặc đổi bộ lọc.", "No matching questions. Create a question or adjust your filters.")}</p> : <ul className="mt-5 space-y-1">{items.map(item => <li key={item.id}><button type="button" disabled={opening} aria-pressed={selected?.id === item.id} onClick={() => void choose(item.id)} className={`w-full rounded-xl p-4 text-left transition-colors disabled:opacity-50 ${selected?.id === item.id ? "bg-sage" : "hover:bg-muted"}`}><span className="mb-2 block text-xs text-subtle">{item.difficulty} / {item.moduleSlug}{item.contentStatus && ` · ${item.contentStatus}`}</span><span className="block break-words text-sm font-medium leading-relaxed text-strong">{item.title}</span></button></li>)}</ul>}
-      <Pagination page={page} totalPages={pages} onChange={setPage} disabled={loading} />
     </section>
     <section ref={editor} tabIndex={-1} className="kg-panel min-w-0 scroll-mt-24" aria-label={c("Vùng biên tập câu hỏi", "Question editor")}>
       {opening ? <p role="status">{c("Đang mở câu hỏi…", "Opening question…")}</p> : <QuestionEditor key={editorKey} question={selected} modules={modules} onDirty={onDirty} onSaved={question => { setSelected(question); setTick(value => value + 1); }} onDeleted={() => { setSelected(null); setEditorKey(value => value + 1); setTick(value => value + 1); }} />}
     </section>
+    </div>
+    <Pagination page={page} totalPages={pages} onChange={setPage} disabled={loading} />
   </div>;
 }

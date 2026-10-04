@@ -5,6 +5,8 @@ export const localeTag = (locale: Locale) => locale === "en" ? "en-US" : "vi-VN"
 /** UI messages only. API-authored learning content is deliberately not translated. */
 export const messages: Record<string, string> = {
   "Chọn chủ đề": "Choose a topic",
+  "Chọn mảng kiến thức trước, rồi chọn chủ đề bên dưới.": "Choose an area of knowledge, then a topic below.",
+  "Chọn chủ đề để lọc module. Bấm một module để mở các cách học ngay tại đó.": "Choose a topic to filter modules. Tap a module to see its study options right there.",
   "Hồ sơ": "Profile", "Hồ sơ của bạn": "Your profile",
   "Cập nhật tên hiển thị và ảnh đại diện.": "Update your display name and profile picture.",
   "Quản lý thông tin cá nhân và bảo mật tài khoản.": "Manage your personal information and account security.",

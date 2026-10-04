@@ -35,7 +35,7 @@ function UsersWorkspace() {
       setReason(""); setMessage(c("Đã cập nhật và ghi nhật ký quản trị.", "Updated and recorded in the audit log.")); directory.reload();
     } catch (err) { setError(err); } finally { setBusy(false); }
   }
-  return <div>
+  return <div className="kg-page">
     <PageHeading title={c("Quản lý tài khoản", "Account management")} description={c("Tìm người dùng, quản lý quyền và bảo vệ phiên đăng nhập. Mọi thay đổi cần lý do.", "Find users, manage roles and secure sessions. Every change requires a reason.")} />
     <form className="mb-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" onSubmit={event => { event.preventDefault(); setPage(1); setSearch(query.trim()); }}>
       <AdminField label={c("Email hoặc tên", "Email or name")}><input className="kg-field" value={query} maxLength={200} onChange={event => setQuery(event.target.value)} /></AdminField>
@@ -48,7 +48,6 @@ function UsersWorkspace() {
     <div className="grid min-w-0 gap-7 xl:grid-cols-[minmax(0,1fr)_340px]">
       <section aria-label={c("Danh sách tài khoản", "Account directory")}>
         {directory.loading ? <p role="status">{c("Đang tải…", "Loading…")}</p> : directory.data && !directory.data.items.length ? <p>{c("Không tìm thấy tài khoản phù hợp.", "No matching accounts.")}</p> : <ul className="divide-y divide-line">{directory.data?.items.map(user => <li key={user.id}><button className={`w-full min-w-0 p-4 text-left hover:bg-muted ${selected?.id === user.id ? "bg-sage" : ""}`} disabled={busy} aria-pressed={selected?.id === user.id} onClick={() => { setSelected(user); setNextRole(user.role); setReason(""); setError(null); setMessage(""); }}><span className="block font-semibold text-strong">{user.displayName}</span><span className="block break-all text-sm">{user.email}</span><span className="mt-2 block text-sm text-subtle">{user.role} · {user.blocked ? c("Đã khóa", "Blocked") : c("Hoạt động", "Active")} · {user.emailVerified ? c("Email đã xác minh", "Verified email") : c("Email chưa xác minh", "Unverified email")}</span></button></li>)}</ul>}
-        <Pagination page={page} totalPages={directory.data?.totalPages ?? 0} onChange={setPage} disabled={directory.loading || busy} />
       </section>
       <section className="min-w-0 border-t border-line pt-5 xl:border-t-0 xl:pt-0" aria-label={c("Chi tiết tài khoản", "Account details")}>
         {!selected ? <p className="text-subtle">{c("Chọn tài khoản để quản lý.", "Select an account to manage.")}</p> : <div className="space-y-5"><h2 className="text-xl">{selected.displayName}</h2><p className="break-all text-sm">{selected.email}</p><dl className="grid grid-cols-2 gap-3 text-sm"><dt>{c("Đăng nhập bằng", "Login provider")}</dt><dd>{selected.authProvider}</dd><dt>XP</dt><dd className="tabular-nums">{selected.xp}</dd><dt>{c("Trạng thái", "Status")}</dt><dd>{selected.blocked ? c("Đã khóa", "Blocked") : c("Hoạt động", "Active")}</dd></dl>
@@ -60,6 +59,7 @@ function UsersWorkspace() {
         </div>}
       </section>
     </div>
+    <Pagination page={page} totalPages={directory.data?.totalPages ?? 0} onChange={setPage} disabled={directory.loading || busy} />
   </div>;
 }
 export default function AdminUsersPage() { return <RequireAdmin><UsersWorkspace /></RequireAdmin>; }

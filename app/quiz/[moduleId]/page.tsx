@@ -53,16 +53,16 @@ function QuizFlow({ moduleId }: { moduleId: string }) {
   if (quiz && !result && remaining === 0 && !expiredSubmitted.current) { expiredSubmitted.current = true; void finish(); }
  }, [remaining, quiz, result, finish]);
  const answered = Object.keys(answers).length;
- return <div className="space-y-6">
+ return <div className="kg-page gap-6">
   <Link href={`/questions?moduleId=${encodeURIComponent(moduleId)}`} className="text-subtle underline">{t("← Câu hỏi module")}</Link>
   <h1 className="font-display text-3xl">{t("Luyện trắc nghiệm")}</h1>
   <p className="text-subtle">{t("Số câu thực tế phụ thuộc nội dung hiện có. Hết giờ, bài được tự động nộp; câu bỏ trống tính là sai.")}</p>
   {error && <p role="alert" className="text-warning">{t(error)}</p>}
-  {!quiz || result ? <form onSubmit={e => {e.preventDefault(); void start();}} className="grid gap-4 sm:grid-cols-4">
-   <label>{t("Số câu")}<input type="number" min={1} max={50} required value={count} onChange={e => setCount(Number(e.target.value))} className={inputClass} /></label>
-   <label>{t("Chiến lược")}<select value={strategy} onChange={e => setStrategy(e.target.value as QuizStrategy)} className={inputClass}><option value="RANDOM">{t("Ngẫu nhiên")}</option><option value="WEAKNESS">{t("Điểm yếu")}</option><option value="INTERVIEW">{t("Phỏng vấn")}</option><option value="SPACED">{t("Đến hạn ôn")}</option></select></label>
-   <label>{t("Độ khó")}<select value={difficulty} onChange={e => setDifficulty(e.target.value)} className={inputClass}><option value="">{t("Tất cả")}</option>{["JUNIOR", "MID", "SENIOR"].map(d => <option key={d}>{d}</option>)}</select></label>
-   <button disabled={busy} className="rounded-sm bg-accent p-3 text-on-accent disabled:opacity-50">{busy ? t("Đang tạo…") : t("Bắt đầu quiz")}</button>
+  {!quiz || result ? <form onSubmit={e => {e.preventDefault(); void start();}} className="grid items-end gap-4 sm:grid-cols-2 xl:grid-cols-4">
+   <label>{t("Số câu")}<input type="number" min={1} max={50} required value={count} onChange={e => setCount(Number(e.target.value))} className={inputClass + " h-11 py-2"} /></label>
+   <label>{t("Chiến lược")}<select value={strategy} onChange={e => setStrategy(e.target.value as QuizStrategy)} className={inputClass + " h-11 py-2"}><option value="RANDOM">{t("Ngẫu nhiên")}</option><option value="WEAKNESS">{t("Điểm yếu")}</option><option value="INTERVIEW">{t("Phỏng vấn")}</option><option value="SPACED">{t("Đến hạn ôn")}</option></select></label>
+   <label>{t("Độ khó")}<select value={difficulty} onChange={e => setDifficulty(e.target.value)} className={inputClass + " h-11 py-2"}><option value="">{t("Tất cả")}</option>{["JUNIOR", "MID", "SENIOR"].map(d => <option key={d}>{d}</option>)}</select></label>
+   <button type="submit" disabled={busy} className="kg-button h-11 self-end">{busy ? t("Đang tạo…") : t("Bắt đầu quiz")}</button>
   </form> : null}
   {quiz && <>
    {result ? <p className="font-display text-2xl">{t("Kết quả: ")}{result.score}{t("% · ")}{result.correctCount}{t("/")}{result.total} {t(" câu đúng")}</p> : <><p role="timer">{t("Còn ")}{Math.floor(remaining / 60)}{t(":")}{String(remaining % 60).padStart(2, "0")} {t(" · Đã chọn ")}{answered}{t("/")}{quiz.total}</p><progress aria-label={t("Tiến độ trả lời")} max={quiz.total} value={answered} className="w-full" /></>}
@@ -71,8 +71,8 @@ function QuizFlow({ moduleId }: { moduleId: string }) {
   </>}
   <section className="space-y-3 border-t border-line pt-6"><h2 className="font-display text-xl">{t("Lịch sử quiz")}</h2>
    {historyError ? <p role="alert">{t(historyError)} <button onClick={() => setHistoryTick(n => n + 1)} className="underline">{t("Thử lại")}</button></p> : history.length === 0 ? <p className="text-subtle">{t("Chưa có phiên quiz.")}</p> : history.map(h => <p key={h.id}>{new Date(h.startedAt).toLocaleString(formatLocale)} {t(" · ")}{h.strategy} {t(" · ")}{h.total} {t(" câu · ")}{h.finishedAt ? `${h.score}%` : t("Chưa nộp")}</p>)}
-   <Pagination page={page} totalPages={pages} onChange={setPage} disabled={Boolean(historyError)} />
   </section>
+  <Pagination page={page} totalPages={pages} onChange={setPage} disabled={Boolean(historyError)} />
  </div>;
 }
 export default function QuizPage() {

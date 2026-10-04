@@ -131,7 +131,7 @@ function InterviewFlow() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="kg-page gap-6">
       <PageHeading
         title={t("Luyện phỏng vấn")}
         description={t(
@@ -293,8 +293,8 @@ function InterviewFlow() {
             ))}
           </ul>
         )}
-        <Pagination page={page} totalPages={pages} onChange={setPage} disabled={Boolean(historyError)} />
       </section>
+      <Pagination page={page} totalPages={pages} onChange={setPage} disabled={Boolean(historyError)} />
     </div>
   );
 }
