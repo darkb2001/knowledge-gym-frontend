@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowUpRightIcon as ArrowUpRight } from "@phosphor-icons/react";
 import { ApiError } from "@/lib/api-client";
 import { QUALITY, reviewCard, type DueCard } from "@/lib/srs";
-import { summarizeAnswer } from "@/lib/flashcard-summary";
+import { extractKeyAnswer } from "@/lib/flashcard-summary";
 import { formatReviewInterval } from "@/lib/i18n";
 
 type Rating = {
@@ -79,8 +79,9 @@ export function FlashcardDeck({
   const shownAtRef = useRef<number>(Date.now());
   const inFlight = useRef(false);
   const card = cards[index];
-  // Mặt sau chỉ là bản tóm tắt: nội dung đầy đủ nằm ở trang câu hỏi (mở tab mới, không rời phiên ôn).
-  const summary = useMemo(() => summarizeAnswer(card?.answerHtml), [card?.answerHtml]);
+  // Mặt sau là câu trả lời trọng tâm (đoạn đầu khối `ans-block` của bài), KHÔNG cắt ngang;
+  // bài đầy đủ nằm ở trang câu hỏi mở tab mới nên phiên ôn thẻ không bị gián đoạn.
+  const keyAnswer = useMemo(() => extractKeyAnswer(card?.answerHtml), [card?.answerHtml]);
 
   // Thời gian đo từ lúc thẻ được hiển thị — mỗi thẻ mới bắt đầu lại đồng hồ.
   useEffect(() => {
@@ -181,8 +182,7 @@ export function FlashcardDeck({
           <div className="flex flex-wrap items-center justify-between gap-3"><p className="text-sm font-medium text-positive">{t("Đáp án")}</p><button type="button" className="kg-secondary" aria-label={t("Lật về mặt câu hỏi")} onClick={() => setFlipped(false)}>{locale === "en" ? "Back to question" : "Về câu hỏi"}</button></div>
           <h2 className="break-words text-xl">{card.title}</h2>
           <div className="border-t border-line pt-5">
-            <p className="text-lg leading-relaxed text-body">{summary || t("Thẻ này chưa có đáp án tóm tắt — mở bài viết đầy đủ bên dưới.")}</p>
-            <p className="mt-4 text-xs uppercase tracking-wide text-subtle">{t("Nội dung đầy đủ")}</p>
+            <p className="text-lg leading-relaxed text-body">{keyAnswer || t("Thẻ này chưa có đáp án — mở bài viết đầy đủ bên dưới.")}</p>
             <Link
               href={`/questions/${card.questionId}`}
               target="_blank"
