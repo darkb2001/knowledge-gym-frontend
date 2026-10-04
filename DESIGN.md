@@ -1,29 +1,52 @@
 ---
 version: alpha
-name: Knowledge Gym — Study Commons
-description: A warm, readable workspace for learning IT knowledge.
+name: Knowledge Gym — Alpine Commons
+description: A scenic day-and-night learning workspace with quiet reading surfaces.
 colors:
-  canvas: "#f3eee4"
-  surface: "#fffcf6"
-  sand: "#e8dfcd"
-  muted: "#ede7db"
-  line: "#d5cdbf"
-  control: "#7d877f"
-  strong: "#273c4a"
-  body: "#43525a"
-  subtle: "#59635f"
-  accent: "#345f73"
-  accent-hover: "#284d60"
-  accent-soft: "#e3edf0"
-  sage: "#dce7d9"
-  positive: "#386345"
-  warning: "#99512e"
-  danger: "#a33e35"
-  on-accent: "#fffcf6"
+  canvas: "#bfd1d8"
+  surface: "#eff5f5"
+  sand: "#cddde0"
+  muted: "#dce8eb"
+  line: "#aabfc5"
+  control: "#55717b"
+  strong: "#193642"
+  body: "#304f5b"
+  subtle: "#3f5965"
+  accent: "#12657a"
+  accent-hover: "#0e5366"
+  accent-soft: "#d2e7ed"
+  sage: "#cfe1dd"
+  positive: "#27624f"
+  warning: "#874821"
+  danger: "#a63844"
+  on-accent: "#f4fbfb"
+  dark-canvas: "#09141e"
+  dark-surface: "#111f2a"
+  dark-sand: "#142732"
+  dark-muted: "#1a2f3c"
+  dark-line: "#354c59"
+  dark-control: "#718995"
+  dark-strong: "#edf5f8"
+  dark-body: "#cad9df"
+  dark-subtle: "#a7bdc7"
+  dark-accent: "#8bd6dc"
+  dark-accent-hover: "#b1e9ed"
+  dark-accent-soft: "#173c48"
+  dark-sage: "#1d3d3c"
+  dark-positive: "#97d9b7"
+  dark-warning: "#f4c593"
+  dark-danger: "#ffb5be"
+  dark-on-accent: "#102b34"
 typography:
   headline:
     fontFamily: "var(--font-geist), system-ui, sans-serif"
-    fontSize: "30px"
+    fontSize: "26px"
+    fontWeight: 600
+    lineHeight: 1.25
+    letterSpacing: "-0.02em"
+  auth-title:
+    fontFamily: "var(--font-geist), system-ui, sans-serif"
+    fontSize: "32px"
     fontWeight: 600
     lineHeight: 1.15
     letterSpacing: "-0.035em"
@@ -35,28 +58,24 @@ typography:
   reading:
     fontFamily: "var(--font-geist), system-ui, sans-serif"
     fontSize: "16px"
-    fontWeight: 400
     lineHeight: 1.8
   label:
     fontFamily: "var(--font-geist), system-ui, sans-serif"
     fontSize: "14px"
     fontWeight: 500
-  button:
-    fontFamily: "var(--font-geist), system-ui, sans-serif"
-    fontSize: "14px"
-    fontWeight: 600
-    lineHeight: "20px"
   nav:
     fontFamily: "var(--font-geist), system-ui, sans-serif"
     fontSize: "13px"
     fontWeight: 500
-    lineHeight: 1.5
   mono:
     fontFamily: "var(--font-geist-mono), ui-monospace, monospace"
 rounded:
   control: "8px"
   notice: "12px"
   panel: "16px"
+  auth-story: "18px"
+  auth-mobile: "22px"
+  auth-window: "28px"
   pill: "9999px"
 spacing:
   micro: "4px"
@@ -70,22 +89,25 @@ components:
   button-primary:
     backgroundColor: "{colors.accent}"
     textColor: "{colors.on-accent}"
-    typography: "{typography.button}"
+    typography: "{typography.label}"
     rounded: "{rounded.control}"
     padding: "10px 20px"
-  button-primary-hover:
-    backgroundColor: "{colors.accent-hover}"
+    height: "44px"
   button-secondary:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.strong}"
     rounded: "{rounded.control}"
     padding: "10px 16px"
-    typography: "{typography.label}"
   field:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.strong}"
     rounded: "{rounded.control}"
     padding: "10px 14px"
+    height: "44px"
+  auth-field:
+    textColor: "{colors.strong}"
+    rounded: "{rounded.control}"
+    height: "48px"
   panel:
     backgroundColor: "{colors.surface}"
     rounded: "{rounded.panel}"
@@ -93,112 +115,100 @@ components:
   nav-active:
     backgroundColor: "{colors.sage}"
     textColor: "{colors.strong}"
-    typography: "{typography.nav}"
     rounded: "{rounded.control}"
-    padding: "10px 14px"
   topic-selected:
     backgroundColor: "{colors.accent}"
     textColor: "{colors.on-accent}"
     rounded: "{rounded.pill}"
-    padding: "10px 20px"
 ---
 
 # Design System: Knowledge Gym
 
 ## Overview
 
-**Creative North Star: "Study Commons"**
+**Creative North Star: "Alpine Commons"**
 
-A shared study space: warm, clear and quietly encouraging. The interface feels approachable to beginners without infantilizing working developers. Typography, generous task grouping and restrained color do the work; it does not imitate physical paper or decorate a learning task with a marketing spectacle.
+A quiet learning workspace in an original layered mountain landscape. Daylight uses mist-blue surfaces and deep teal actions; night uses navy surfaces and pale aqua actions. The owner supplied light/dark login references and explicitly requested replacing the former beige background without changing fields or authentication behavior.
 
-This is an extracted, code-led system, not an approved image comp. The owner confirmed bright beige, Vietnamese/English UI, learner and admin coverage and delegated the remaining choices. Source authority is `tailwind.config.ts`, `app/globals.css`, `app/layout.tsx`, `components/ui.tsx` and the current captures referenced by `docs/design/VERIFICATION.md`.
+The atmosphere belongs behind the task. Authentication uses a translucent window and an illustrated side panel; learning and administration retain near-opaque reading planes, native controls and the existing task hierarchy. Source authority is app/scenic.css, lib/theme.ts, tailwind.config.ts and components/ui.tsx. This is a code-led interpretation of the supplied references, not a pixel-for-pixel screenshot recreation.
 
 **Key Characteristics:**
-
-- Warm light ground with cream reading surfaces.
-- Deep-blue actions and sage selection.
-- Local workhorse typography and genuine Phosphor SVG icons.
-- Flat, comfortably spaced work areas with native web controls.
+- Original layered mountain, pine forest, river and day/night sky artwork.
+- Persistent light/dark preference, with daylight as the initial default.
+- Locally bundled Geist typography and genuine Phosphor icons.
+- Translucent authentication, quiet near-opaque learning surfaces.
 
 ## Colors
 
-The sidecar's eight-step OKLCH strips are generated preview ramps, not additional application CSS tokens.
+The base color keys describe daylight; dark-prefixed keys are their nighttime counterparts. Runtime utilities resolve through RGB custom properties so opacity variants remain supported. The CSS palettes and contrast-test palettes are checked for synchronization.
 
 ### Primary
 
-Deep blue **accent** identifies committed actions, links and focus. **accent-hover** deepens that action; **accent-soft** supports selected form options and informational callouts. Cream **on-accent** is the readable foreground on filled actions.
+Teal identifies actions and focus in daylight. Pale aqua takes that role at night, with a dark action foreground rather than white text. The sign-in action uses a restrained same-hue gradient between accent and accent-hover.
 
 ### Secondary
 
-Pale **sage** identifies selection and progress context. Forest **positive** communicates success. Clay **warning** and brick **danger** describe actual caution/error states, not decoration.
+Sage/forest tones remain selection and success cues. Warning/danger are semantic colors only, with theme-appropriate foregrounds.
 
 ### Neutral
 
-Oat **canvas** is the page field; cream **surface** is the working/reading plane; pale **sand** carries quieter adjacent areas; **muted** gently groups secondary content. **strong**, **body** and **subtle** separate heading, reading and supporting text. **line** is a divider, while the stronger **control** is the actual input boundary.
+Mist-blue light surfaces and navy night surfaces support the same heading/body/supporting-text hierarchy. Learning planes are 93% surface; the header and rail use 80–82% surface. Auth fields are translucent, with a stronger control boundary.
 
-**The Boundary Rule.** Use control for editable-field borders; line is intentionally too quiet to substitute for that boundary.
+**The Boundary Rule.** Editable controls use control, not the quieter line color.
 
 ## Typography
 
-Local Geist is both the heading and body face; Geist Mono is for code and technical material. Interface text uses sentence case and modest negative tracking on headings, not uppercase ornamental labels.
+The existing local Geist family stays shared across authentication, learner and admin screens. Geist Mono remains reserved for code. Task headings are 26px on narrow screens and 30px from the small breakpoint. Auth headings are 30px mobile / 32px desktop; the auth-story statement is 28–38px. Reading retains 16px type with 1.8 line-height.
 
-Task headlines are (30px) on mobile and (36px) from the small breakpoint. Their weight and spacing follow headline above. Reading text follows reading; ordinary interface body follows body. Supporting labels use label, while navigation deliberately uses the smaller nav role. The large auth-side message is a surface-specific (48px), medium-weight exception, not a required hero on every screen.
-
-**The Workhorse Rule.** Preserve the same locally bundled interface family across learner and admin screens; do not add a decorative display font merely to make a new screen feel different.
+**The Workhorse Rule.** Preserve the locally served type family and source-language learning content.
 
 ## Layout
 
-The application has a (232px) desktop rail from (1024px), with an independently scrollable rail on short screens. The main area is fluid, capped at (1320px); horizontal padding is (20px), then (32px), then (48px) at the wider breakpoint. On mobile the rail becomes a disclosure menu under a compact header. Do not substitute a fixed bottom dock that consumes the reading viewport.
+The app retains its 232px desktop rail from 1024px, its 1320px main cap and its 16/32/48px responsive main gutters. Pagination and learning-choice placement remain unchanged.
 
-Related controls share a flat group, using the observed spacing scale rather than equal-sized nested cards. A reading container caps at (78ch) including its padding, which narrows the actual text measure. Its padding is (20px), then (40px). Module selection keeps the next action near its source; responsive reflow may move related controls into the selected row rather than beneath a long list.
+Authentication is a centered 1032px-max window with a .88 / 1.12 split. At 767px and below the story is hidden and the form becomes one column, capped at 460px. There is no fixed viewport-height form: short/landscape viewports can scroll. Auth controls are at least 48px high, with 16px input text to avoid sub-16px iOS focus zoom. The mobile frame includes safe-area padding and prefixed Safari blur support. The login form fits the checked 390×844 portrait viewport.
+
+The mobile app theme control sits next to the navigation disclosure; from 640px it sits in the header. This preserves space for the product name on narrow screens.
 
 ## Elevation & Depth
 
-No structural box-shadow is used. Depth comes from canvas/sand/surface contrast, whitespace and quiet boundaries. Selection is a tonal change, not a floating card. Focus rings are interaction signals rather than elevation.
+The landscape establishes real compositional depth through mountain facets, forest silhouettes and mist layers. The auth window has a diffuse downward shadow, a refracted light edge and 24px backdrop blur; the scene beneath remains distinct. Ordinary study panels stay flat.
 
-**The Flat-at-Rest Rule.** Keep working planes flat; do not introduce glass, gradients, heavy shadows or fake paper texture.
+**The Reading Plane Rule.** Atmosphere stays behind tasks; reading/editor surfaces do not inherit the auth window's transparency.
 
 ## Shapes
 
-Controls and navigation have gently curved corners; notices and working panels use the larger radii in frontmatter. Topic filters are pills. Shared module rows form a continuous directory, with interior dividers rather than separately elevated cards. Native checkboxes/radios remain recognizable.
+Existing controls retain 8px corners, notices 12px and study panels 16px. Auth uses a 28px desktop window, 22px mobile window and 18px story frame. Theme switching is a circular 44px control with a real SVG icon.
 
 ## Components
 
-### Buttons
+### Authentication
 
-Filled deep-blue primary actions pair with cream text; secondary controls use cream, warm-dark text and a quiet border. Minimum interaction height is (44px); states use background-color changes. Disabled controls reduce opacity and retain native disabled semantics. Links/buttons use a visible (2px) focus outline with (4px) offset.
+AuthShell supplies the shared scenic frame for login, registration, password recovery and verification. It preserves route-specific children and copy. The form remains steady while scenic layers move; full desktop composition is not squeezed into a mobile screen.
 
-### Inputs / Fields
+### Scenic background
 
-Cream fields use the stronger control boundary and (44px) minimum height. Focus changes the border to accent and adds a (2px), 15%-accent ring. Labels stay visible above the field; placeholders never replace labels. Error text remains actionable and preserves the user's input.
+MountainScene is authored SVG geometry, not a remotely sourced image or a stretched reference screenshot. IDs are instance-specific. A single fixed background serves all routes; auth adds a portrait composition. Small transform-only drift takes 29–38 seconds and fog takes 25–33 seconds. Daylight adds six distant birds with staggered wingbeats on a 42-second passage; night pauses the flock and adds two sparse meteor tracks with 19/27-second cycles and staggered 2/11-second starts. Reduced motion freezes birds, disables scenic drift and hides meteors. Snow-cap boundaries are derived from the actual ridge edges, with clipped shading on the same facet as the mountain. No pointer listeners, canvas loop, scrolling hijack or external graphics library is required.
 
-### Navigation
+### Theme preference
 
-The active row is sage with strong text and a filled Phosphor icon; inactive rows use ordinary icons and quieter text. Icons are actual package SVGs with text labels, not Unicode glyphs. Main navigation exposes learning work; admin links appear only for the application's recognized admin role. Mobile navigation closes on route choice.
+Light is the default. The kg.theme preference persists locally and synchronizes across tabs. The pre-paint bootstrap reads only this preference, never authentication data. Native form color-scheme follows the selected theme. Theme changes do not trigger auth/learning mutations.
 
-### Chips
+### Fields and actions
 
-Topic filters are native buttons: filled accent when selected, cream with a quiet border otherwise. Content tags are smaller metadata labels, not action substitutes. State is also communicated by text/native pressed semantics, not color alone.
+Labels, types, autocomplete, required flags, busy/error states and route destinations remain intact. Auth errors sit on a stable readable surface. Ordinary buttons retain 44px minimum targets; auth fields/buttons use 48px. Focus/caret/selection stay themed.
 
-### Cards / Containers
+### Learning containers and navigation
 
-A cream panel uses a quiet border and panel radius. Padding grows from (20px) to (24px). Notices use smaller radius and restrained semantic tones. Avoid arbitrary cards-inside-cards; only meaningful task boundaries warrant a panel.
-
-### Module directory
-
-Selection is the signature: a sage row, a real module title/description/count and context-local practice links. On desktop the action panel can sit beside the directory; on mobile those same actions sit inside the selected row. This is a learning workflow component, not a site-wide mandatory composition.
-
-### Motion
-
-Color changes use the Tailwind standard (150ms) transition. Existing small entrance motion is (240ms), with cubic-bezier(0.16,1,0.3,1). Reduced motion collapses animation/transitions and disables smooth scrolling. No continuous pulse, scroll hijack or animated study statistics.
+Keep the existing module hierarchy, progressive display limits, mobile-local practice region and full-main-width footer pagination. Theme colors apply to shared controls and text. Diagram labels use semantic fills; mastery numbers remain dark on their existing light circles.
 
 ## Do's and Don'ts
 
-- Do reuse semantic tokens and the existing shared controls.
-- Do preserve clear labels, keyboard focus and native disabled states.
-- Do keep actual learning content in its source language while localizing interface controls.
-- Do test real desktop, small-laptop and narrow-mobile viewports.
-- Don't invent progress, achievements, capabilities or translated course content.
-- Don't turn the light-only identity into a dark-mode default.
-- Don't use gradients, fake texture, glass or ornamental analytics to manufacture personality.
-- Don't hide practice actions far from the selected module on a small screen.
+- Do reuse semantic colors in both themes, including SVG text labels.
+- Do keep authentication fields, validation, API calls and redirects unchanged.
+- Do keep continuous scenic movement behind content and honor reduced motion.
+- Do check iPhone 13 portrait/landscape and narrow mobile layouts.
+- Don't ship the reference screenshots as backgrounds or call this a literal recreation.
+- Don't put transparent reading text directly on moving terrain.
+- Don't introduce fixed-height mobile forms or prevent native page scrolling.
+- Don't invent study statistics, outcomes or translated learning content.

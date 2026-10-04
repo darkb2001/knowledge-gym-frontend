@@ -8,6 +8,8 @@ import { ApiError, clearSession, ensureAccessToken, getAccessToken, hasUsableAcc
 import { logout, readStoredUser, verifySession } from "@/lib/auth";
 import { LanguageSwitch, useLocale } from "@/components/locale";
 import type { User } from "@/lib/types";
+import { MountainScene } from "./MountainScene";
+import { ThemeToggle } from "./theme";
 
 const navigation = [
   { href: "/learn", label: "Chọn chủ đề", icon: Compass },
@@ -83,11 +85,12 @@ export function AppHeader({ user }: { user: User | null }) {
     try { await logout(); } catch { setError(t("Không kết nối được máy chủ. Thử lại.")); }
     finally { setBusy(false); router.replace("/login"); }
   }
-  return <header className="border-b border-line/70 bg-canvas">
+  return <header className="scenic-app-header border-b border-line/70">
     <div className="flex min-h-[64px] items-center justify-between gap-2 px-4 sm:min-h-[76px] sm:gap-3 sm:px-8 xl:px-12">
       <div className="min-w-0 lg:hidden"><Brand /></div>
       <p className="hidden text-sm text-subtle lg:block">{t("Không gian học của bạn")}</p>
       <div className="flex shrink-0 items-center gap-2 sm:gap-5">
+        <div className="hidden sm:block"><ThemeToggle /></div>
         <LanguageSwitch />
         {user ? <><span className="hidden max-w-40 truncate text-sm font-medium text-strong sm:inline">{user.displayName}</span><button type="button" onClick={onLogout} disabled={busy} aria-label={t("Đăng xuất")} title={t("Đăng xuất")} className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-subtle hover:bg-muted disabled:opacity-50"><SignOut size={20} aria-hidden /></button></> : <Link href="/login" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-accent hover:bg-muted" aria-label={t("Đăng nhập")}><UserCircle size={21} className="sm:hidden" aria-hidden /><span className="hidden text-sm font-medium sm:inline">{t("Đăng nhập")}</span></Link>}
       </div>
@@ -117,7 +120,7 @@ export function AppFrame({ user, children }: { user: User | null; children: Reac
     </aside>
     <div className="flex min-h-[100dvh] min-w-0 flex-col">
       <AppHeader user={currentUser} />
-      <div className="border-b border-line/70 px-5 py-2 lg:hidden"><button type="button" aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(open => !open)} className="flex min-h-11 items-center gap-2 text-sm font-medium text-strong"><TextAlignLeft size={20} aria-hidden />{t(menuOpen ? "Đóng điều hướng" : "Mở điều hướng")}</button>{menuOpen && <div id="mobile-navigation" className="pb-3"><Navigation user={currentUser} onNavigate={() => setMenuOpen(false)} /></div>}</div>
+      <div className="scenic-mobile-nav border-b border-line/70 px-5 py-2 lg:hidden"><div className="flex items-center justify-between gap-3"><button type="button" aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(open => !open)} className="flex min-h-11 items-center gap-2 text-sm font-medium text-strong"><TextAlignLeft size={20} aria-hidden />{t(menuOpen ? "Đóng điều hướng" : "Mở điều hướng")}</button><div className="sm:hidden"><ThemeToggle /></div></div>{menuOpen && <div id="mobile-navigation" className="pb-3"><Navigation user={currentUser} onNavigate={() => setMenuOpen(false)} /></div>}</div>
       <main id="main-content" tabIndex={-1} className="kg-main outline-none">{children}</main>
     </div>
   </div>;
@@ -207,16 +210,12 @@ export function RequireAdmin({ children }: { children: ReactNode }) {
 
 export function AuthShell({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
   const { t } = useLocale();
-  return <div className="min-h-[100dvh] bg-canvas lg:grid lg:grid-cols-[1fr_1.1fr]">
-    <aside className="hidden flex-col justify-between border-r border-line/70 bg-sand/55 px-12 py-10 lg:flex xl:px-20">
-      <Brand />
-      <div className="py-16"><h2 className="max-w-md text-5xl font-medium leading-[1.15] tracking-[-0.035em]">{t("Học theo cách của bạn.")}</h2><p className="mt-7 max-w-sm text-lg leading-relaxed text-body">{t("Một nơi để ôn kiến thức, thử sức và lưu lại những điều bạn học được.")}</p><div className="mt-12 flex items-center gap-3 text-sm text-accent"><BookOpen size={21} aria-hidden /><span>{t("Đọc một chút. Hiểu thêm một chút.")}</span></div></div>
-      <p className="text-sm text-subtle">Knowledge Gym</p>
-    </aside>
-    <main className="flex flex-col px-5 py-6 sm:px-10 sm:py-9">
-      <div className="flex items-center justify-between gap-4"><div className="lg:hidden"><Brand /></div><div className="ml-auto"><LanguageSwitch /></div></div>
-      <div className="mx-auto flex w-full max-w-[420px] flex-1 flex-col justify-center py-14"><h1 className="text-3xl sm:text-4xl">{t(title)}</h1>{subtitle && <p className="mt-3 text-sm leading-relaxed text-subtle">{t(subtitle)}</p>}<div className="mt-8">{children}</div></div>
-    </main>
+  return <div className="auth-layout">
+    <header className="auth-header"><Brand /><div className="auth-tools"><ThemeToggle /><LanguageSwitch /></div></header>
+    <div className="auth-stage"><div className="auth-card">
+      <aside className="auth-story"><MountainScene portrait /><div className="auth-story-copy"><h2>{t("Học theo cách của bạn.")}</h2><p>{t("Một nơi để ôn kiến thức, thử sức và lưu lại những điều bạn học được.")}</p><div className="auth-story-note"><BookOpen size={18} aria-hidden /><span>{t("Đọc một chút. Hiểu thêm một chút.")}</span></div></div></aside>
+      <main className="auth-form"><h1>{t(title)}</h1>{subtitle && <p className="auth-subtitle">{t(subtitle)}</p>}<div className="auth-fields">{children}</div></main>
+    </div></div>
   </div>;
 }
 

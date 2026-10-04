@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { LocaleProvider } from "@/components/locale";
+import { ThemeProvider } from "@/components/theme";
+import { MountainScene } from "@/components/MountainScene";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "./globals.css";
+import "./scenic.css";
 
 const geist = localFont({ src: "./fonts/GeistVF.woff", variable: "--font-geist", weight: "100 900", display: "swap" });
 const geistMono = localFont({ src: "./fonts/GeistMonoVF.woff", variable: "--font-geist-mono", weight: "100 900", display: "swap" });
@@ -17,8 +21,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi">
-      <body className={`${geist.variable} ${geistMono.variable} min-h-[100dvh] antialiased`}><LocaleProvider>{children}</LocaleProvider></body>
+    <html lang="vi" suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} /></head>
+      <body className={`${geist.variable} ${geistMono.variable} min-h-[100dvh] antialiased`}><MountainScene /><LocaleProvider><ThemeProvider>{children}</ThemeProvider></LocaleProvider></body>
     </html>
   );
 }

@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
 const AxeBuilder = require('@axe-core/playwright').default;
 const base = process.env.KG_UI_URL || 'http://127.0.0.1:3216';
-const output = '.impeccable/review/growing-lists';
+const output = process.env.KG_THEME === 'dark' ? '.impeccable/review/growing-lists-dark' : '.impeccable/review/growing-lists';
 fs.mkdirSync(output, { recursive: true });
 const id = n => `11111111-1111-4111-8111-${String(n).padStart(12, '0')}`;
 const user = { id: id(1), email: 'fixture@example.test', displayName: 'Fixture learner', role: 'USER', authProvider: 'LOCAL', xp: 100, emailVerified: true };
@@ -20,6 +20,7 @@ const browser = await chromium.launch({ headless: true, ...(process.platform ===
 try {
   for (const [device, width, height] of [['desktop',1440,900],['iphone13',390,844],['iphone13-landscape',844,390]]) {
     const context = await browser.newContext({ viewport: { width, height }, ...(device !== 'desktop' ? { isMobile: true, hasTouch: true } : {}), reducedMotion: 'reduce' });
+    if (process.env.KG_THEME === 'dark') await context.addInitScript(() => localStorage.setItem('kg.theme', 'dark'));
     await context.addCookies([{ name: 'kg_session', value: '1', url: base }]);
     const page = await context.newPage(); page.setDefaultTimeout(30000);
     page.on('pageerror', e => report.errors.push(e.message));

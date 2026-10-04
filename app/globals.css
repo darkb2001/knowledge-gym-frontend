@@ -46,7 +46,7 @@
   .kg-page-heading { @apply text-[26px] font-semibold leading-tight tracking-[-0.02em] text-strong sm:text-3xl; }
   .kg-intro { @apply mt-3 max-w-2xl text-base leading-relaxed text-subtle; }
   .kg-notice { @apply rounded-xl border border-line bg-surface p-4 text-sm leading-relaxed; }
-  .kg-shell { @apply min-h-[100dvh] bg-canvas; }
+  .kg-shell { @apply min-h-[100dvh]; }
   .kg-main { @apply mx-auto flex w-full min-w-0 max-w-[1320px] flex-1 flex-col px-4 py-6 sm:px-8 sm:py-8 xl:px-12; }
   .kg-main > :first-child { @apply min-w-0 flex-1; }
   .kg-page { @apply flex min-w-0 flex-1 flex-col; }
@@ -55,7 +55,7 @@
   .kg-main form > label, .kg-main label.space-y-1 { @apply text-sm font-medium; }
   .kg-main label > input, .kg-main label > select, .kg-main label > textarea { margin-top: 6px; }
   .kg-main section > h2 { margin-bottom: 8px; }
-  .kg-main [role="alert"] { @apply rounded-xl border border-danger/25 bg-[#fbefea] p-4 text-danger; }
+  .kg-main [role="alert"] { @apply rounded-xl border border-danger/25 bg-danger/10 p-4 text-danger; }
   .kg-main [role="status"] { @apply rounded-xl border border-line bg-muted/50 p-4 text-body; }
   .kg-main fieldset { @apply rounded-xl bg-surface; }
   .kg-main fieldset label:has(input:checked):not([data-result]) { @apply border-accent bg-accent-soft; }

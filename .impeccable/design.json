@@ -1,245 +1,483 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-02T15:31:52.436Z",
-  "title": "Design System: Knowledge Gym",
+  "generatedAt": "2026-10-04T15:21:06.742Z",
+  "title": "Design System: Knowledge Gym — Alpine Commons",
   "extensions": {
     "colorMeta": {
       "canvas": {
-        "displayName": "Oat canvas",
+        "displayName": "Day canvas",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0143 84.6)",
-          "oklch(25% 0.0143 84.6)",
-          "oklch(35% 0.0143 84.6)",
-          "oklch(45% 0.0143 84.6)",
-          "oklch(55% 0.0143 84.6)",
-          "oklch(70% 0.0143 84.6)",
-          "oklch(85% 0.0143 84.6)",
-          "oklch(95% 0.0143 84.6)"
+          "oklch(15% 0.0218 223.0)",
+          "oklch(25% 0.0218 223.0)",
+          "oklch(35% 0.0218 223.0)",
+          "oklch(45% 0.0218 223.0)",
+          "oklch(55% 0.0218 223.0)",
+          "oklch(70% 0.0218 223.0)",
+          "oklch(85% 0.0218 223.0)",
+          "oklch(95% 0.0218 223.0)"
         ]
       },
       "surface": {
-        "displayName": "Cream work surface",
+        "displayName": "Day surface",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0085 84.6)",
-          "oklch(25% 0.0085 84.6)",
-          "oklch(35% 0.0085 84.6)",
-          "oklch(45% 0.0085 84.6)",
-          "oklch(55% 0.0085 84.6)",
-          "oklch(70% 0.0085 84.6)",
-          "oklch(85% 0.0085 84.6)",
-          "oklch(95% 0.0085 84.6)"
+          "oklch(15% 0.0064 197.1)",
+          "oklch(25% 0.0064 197.1)",
+          "oklch(35% 0.0064 197.1)",
+          "oklch(45% 0.0064 197.1)",
+          "oklch(55% 0.0064 197.1)",
+          "oklch(70% 0.0064 197.1)",
+          "oklch(85% 0.0064 197.1)",
+          "oklch(95% 0.0064 197.1)"
         ]
       },
       "sand": {
-        "displayName": "Pale sand",
+        "displayName": "Day sand",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0260 84.6)",
-          "oklch(25% 0.0260 84.6)",
-          "oklch(35% 0.0260 84.6)",
-          "oklch(45% 0.0260 84.6)",
-          "oklch(55% 0.0260 84.6)",
-          "oklch(70% 0.0260 84.6)",
-          "oklch(85% 0.0260 84.6)",
-          "oklch(95% 0.0260 84.6)"
+          "oklch(15% 0.0177 210.2)",
+          "oklch(25% 0.0177 210.2)",
+          "oklch(35% 0.0177 210.2)",
+          "oklch(45% 0.0177 210.2)",
+          "oklch(55% 0.0177 210.2)",
+          "oklch(70% 0.0177 210.2)",
+          "oklch(85% 0.0177 210.2)",
+          "oklch(95% 0.0177 210.2)"
         ]
       },
       "muted": {
-        "displayName": "Quiet neutral",
+        "displayName": "Day muted",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0173 84.6)",
-          "oklch(25% 0.0173 84.6)",
-          "oklch(35% 0.0173 84.6)",
-          "oklch(45% 0.0173 84.6)",
-          "oklch(55% 0.0173 84.6)",
-          "oklch(70% 0.0173 84.6)",
-          "oklch(85% 0.0173 84.6)",
-          "oklch(95% 0.0173 84.6)"
+          "oklch(15% 0.0135 214.4)",
+          "oklch(25% 0.0135 214.4)",
+          "oklch(35% 0.0135 214.4)",
+          "oklch(45% 0.0135 214.4)",
+          "oklch(55% 0.0135 214.4)",
+          "oklch(70% 0.0135 214.4)",
+          "oklch(85% 0.0135 214.4)",
+          "oklch(95% 0.0135 214.4)"
         ]
       },
       "line": {
-        "displayName": "Quiet divider",
+        "displayName": "Day line",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0210 81.8)",
-          "oklch(25% 0.0210 81.8)",
-          "oklch(35% 0.0210 81.8)",
-          "oklch(45% 0.0210 81.8)",
-          "oklch(55% 0.0210 81.8)",
-          "oklch(70% 0.0210 81.8)",
-          "oklch(85% 0.0210 81.8)",
-          "oklch(95% 0.0210 81.8)"
+          "oklch(15% 0.0245 216.8)",
+          "oklch(25% 0.0245 216.8)",
+          "oklch(35% 0.0245 216.8)",
+          "oklch(45% 0.0245 216.8)",
+          "oklch(55% 0.0245 216.8)",
+          "oklch(70% 0.0245 216.8)",
+          "oklch(85% 0.0245 216.8)",
+          "oklch(95% 0.0245 216.8)"
         ]
       },
       "control": {
-        "displayName": "Visible field boundary",
+        "displayName": "Day control",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0167 151.6)",
-          "oklch(25% 0.0167 151.6)",
-          "oklch(35% 0.0167 151.6)",
-          "oklch(45% 0.0167 151.6)",
-          "oklch(55% 0.0167 151.6)",
-          "oklch(70% 0.0167 151.6)",
-          "oklch(85% 0.0167 151.6)",
-          "oklch(95% 0.0167 151.6)"
+          "oklch(15% 0.0361 221.8)",
+          "oklch(25% 0.0361 221.8)",
+          "oklch(35% 0.0361 221.8)",
+          "oklch(45% 0.0361 221.8)",
+          "oklch(55% 0.0361 221.8)",
+          "oklch(70% 0.0361 221.8)",
+          "oklch(85% 0.0361 221.8)",
+          "oklch(95% 0.0361 221.8)"
         ]
       },
       "strong": {
-        "displayName": "Warm dark ink",
+        "displayName": "Day strong",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0363 238.4)",
-          "oklch(25% 0.0363 238.4)",
-          "oklch(35% 0.0363 238.4)",
-          "oklch(45% 0.0363 238.4)",
-          "oklch(55% 0.0363 238.4)",
-          "oklch(70% 0.0363 238.4)",
-          "oklch(85% 0.0363 238.4)",
-          "oklch(95% 0.0363 238.4)"
+          "oklch(15% 0.0409 227.2)",
+          "oklch(25% 0.0409 227.2)",
+          "oklch(35% 0.0409 227.2)",
+          "oklch(45% 0.0409 227.2)",
+          "oklch(55% 0.0409 227.2)",
+          "oklch(70% 0.0409 227.2)",
+          "oklch(85% 0.0409 227.2)",
+          "oklch(95% 0.0409 227.2)"
         ]
       },
       "body": {
-        "displayName": "Reading ink",
+        "displayName": "Day body",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0231 231.3)",
-          "oklch(25% 0.0231 231.3)",
-          "oklch(35% 0.0231 231.3)",
-          "oklch(45% 0.0231 231.3)",
-          "oklch(55% 0.0231 231.3)",
-          "oklch(70% 0.0231 231.3)",
-          "oklch(85% 0.0231 231.3)",
-          "oklch(95% 0.0231 231.3)"
+          "oklch(15% 0.0418 224.5)",
+          "oklch(25% 0.0418 224.5)",
+          "oklch(35% 0.0418 224.5)",
+          "oklch(45% 0.0418 224.5)",
+          "oklch(55% 0.0418 224.5)",
+          "oklch(70% 0.0418 224.5)",
+          "oklch(85% 0.0418 224.5)",
+          "oklch(95% 0.0418 224.5)"
         ]
       },
       "subtle": {
-        "displayName": "Supporting ink",
+        "displayName": "Day subtle",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0139 169.8)",
-          "oklch(25% 0.0139 169.8)",
-          "oklch(35% 0.0139 169.8)",
-          "oklch(45% 0.0139 169.8)",
-          "oklch(55% 0.0139 169.8)",
-          "oklch(70% 0.0139 169.8)",
-          "oklch(85% 0.0139 169.8)",
-          "oklch(95% 0.0139 169.8)"
+          "oklch(15% 0.0369 228.2)",
+          "oklch(25% 0.0369 228.2)",
+          "oklch(35% 0.0369 228.2)",
+          "oklch(45% 0.0369 228.2)",
+          "oklch(55% 0.0369 228.2)",
+          "oklch(70% 0.0369 228.2)",
+          "oklch(85% 0.0369 228.2)",
+          "oklch(95% 0.0369 228.2)"
         ]
       },
       "accent": {
-        "displayName": "Deep-blue action",
+        "displayName": "Day accent",
         "role": "primary",
         "tonalRamp": [
-          "oklch(15% 0.0578 229.8)",
-          "oklch(25% 0.0578 229.8)",
-          "oklch(35% 0.0578 229.8)",
-          "oklch(45% 0.0578 229.8)",
-          "oklch(55% 0.0578 229.8)",
-          "oklch(70% 0.0578 229.8)",
-          "oklch(85% 0.0578 229.8)",
-          "oklch(95% 0.0578 229.8)"
+          "oklch(15% 0.0802 220.1)",
+          "oklch(25% 0.0802 220.1)",
+          "oklch(35% 0.0802 220.1)",
+          "oklch(45% 0.0802 220.1)",
+          "oklch(55% 0.0802 220.1)",
+          "oklch(70% 0.0802 220.1)",
+          "oklch(85% 0.0802 220.1)",
+          "oklch(95% 0.0802 220.1)"
         ]
       },
       "accent-hover": {
-        "displayName": "Deepened action",
+        "displayName": "Day accent hover",
         "role": "primary",
         "tonalRamp": [
-          "oklch(15% 0.0532 232.6)",
-          "oklch(25% 0.0532 232.6)",
-          "oklch(35% 0.0532 232.6)",
-          "oklch(45% 0.0532 232.6)",
-          "oklch(55% 0.0532 232.6)",
-          "oklch(70% 0.0532 232.6)",
-          "oklch(85% 0.0532 232.6)",
-          "oklch(95% 0.0532 232.6)"
+          "oklch(15% 0.0706 221.8)",
+          "oklch(25% 0.0706 221.8)",
+          "oklch(35% 0.0706 221.8)",
+          "oklch(45% 0.0706 221.8)",
+          "oklch(55% 0.0706 221.8)",
+          "oklch(70% 0.0706 221.8)",
+          "oklch(85% 0.0706 221.8)",
+          "oklch(95% 0.0706 221.8)"
         ]
       },
       "accent-soft": {
-        "displayName": "Soft blue context",
+        "displayName": "Day accent soft",
         "role": "primary",
         "tonalRamp": [
-          "oklch(15% 0.0114 217.5)",
-          "oklch(25% 0.0114 217.5)",
-          "oklch(35% 0.0114 217.5)",
-          "oklch(45% 0.0114 217.5)",
-          "oklch(55% 0.0114 217.5)",
-          "oklch(70% 0.0114 217.5)",
-          "oklch(85% 0.0114 217.5)",
-          "oklch(95% 0.0114 217.5)"
+          "oklch(15% 0.0238 216.7)",
+          "oklch(25% 0.0238 216.7)",
+          "oklch(35% 0.0238 216.7)",
+          "oklch(45% 0.0238 216.7)",
+          "oklch(55% 0.0238 216.7)",
+          "oklch(70% 0.0238 216.7)",
+          "oklch(85% 0.0238 216.7)",
+          "oklch(95% 0.0238 216.7)"
         ]
       },
       "sage": {
-        "displayName": "Sage selection",
-        "role": "secondary",
+        "displayName": "Day sage",
+        "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0221 139.0)",
-          "oklch(25% 0.0221 139.0)",
-          "oklch(35% 0.0221 139.0)",
-          "oklch(45% 0.0221 139.0)",
-          "oklch(55% 0.0221 139.0)",
-          "oklch(70% 0.0221 139.0)",
-          "oklch(85% 0.0221 139.0)",
-          "oklch(95% 0.0221 139.0)"
+          "oklch(15% 0.0200 181.1)",
+          "oklch(25% 0.0200 181.1)",
+          "oklch(35% 0.0200 181.1)",
+          "oklch(45% 0.0200 181.1)",
+          "oklch(55% 0.0200 181.1)",
+          "oklch(70% 0.0200 181.1)",
+          "oklch(85% 0.0200 181.1)",
+          "oklch(95% 0.0200 181.1)"
         ]
       },
       "positive": {
-        "displayName": "Forest success",
-        "role": "secondary",
+        "displayName": "Day positive",
+        "role": "semantic",
         "tonalRamp": [
-          "oklch(15% 0.0688 152.6)",
-          "oklch(25% 0.0688 152.6)",
-          "oklch(35% 0.0688 152.6)",
-          "oklch(45% 0.0688 152.6)",
-          "oklch(55% 0.0688 152.6)",
-          "oklch(70% 0.0688 152.6)",
-          "oklch(85% 0.0688 152.6)",
-          "oklch(95% 0.0688 152.6)"
+          "oklch(15% 0.0694 169.1)",
+          "oklch(25% 0.0694 169.1)",
+          "oklch(35% 0.0694 169.1)",
+          "oklch(45% 0.0694 169.1)",
+          "oklch(55% 0.0694 169.1)",
+          "oklch(70% 0.0694 169.1)",
+          "oklch(85% 0.0694 169.1)",
+          "oklch(95% 0.0694 169.1)"
         ]
       },
       "warning": {
-        "displayName": "Clay warning",
+        "displayName": "Day warning",
         "role": "semantic",
         "tonalRamp": [
-          "oklch(15% 0.1076 45.3)",
-          "oklch(25% 0.1076 45.3)",
-          "oklch(35% 0.1076 45.3)",
-          "oklch(45% 0.1076 45.3)",
-          "oklch(55% 0.1076 45.3)",
-          "oklch(70% 0.1076 45.3)",
-          "oklch(85% 0.1076 45.3)",
-          "oklch(95% 0.1076 45.3)"
+          "oklch(15% 0.1003 49.9)",
+          "oklch(25% 0.1003 49.9)",
+          "oklch(35% 0.1003 49.9)",
+          "oklch(45% 0.1003 49.9)",
+          "oklch(55% 0.1003 49.9)",
+          "oklch(70% 0.1003 49.9)",
+          "oklch(85% 0.1003 49.9)",
+          "oklch(95% 0.1003 49.9)"
         ]
       },
       "danger": {
-        "displayName": "Brick error",
+        "displayName": "Day danger",
         "role": "semantic",
         "tonalRamp": [
-          "oklch(15% 0.1358 28.0)",
-          "oklch(25% 0.1358 28.0)",
-          "oklch(35% 0.1358 28.0)",
-          "oklch(45% 0.1358 28.0)",
-          "oklch(55% 0.1358 28.0)",
-          "oklch(70% 0.1358 28.0)",
-          "oklch(85% 0.1358 28.0)",
-          "oklch(95% 0.1358 28.0)"
+          "oklch(15% 0.1443 17.7)",
+          "oklch(25% 0.1443 17.7)",
+          "oklch(35% 0.1443 17.7)",
+          "oklch(45% 0.1443 17.7)",
+          "oklch(55% 0.1443 17.7)",
+          "oklch(70% 0.1443 17.7)",
+          "oklch(85% 0.1443 17.7)",
+          "oklch(95% 0.1443 17.7)"
         ]
       },
       "on-accent": {
-        "displayName": "Cream action foreground",
+        "displayName": "Day on accent",
+        "role": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.0074 197.0)",
+          "oklch(25% 0.0074 197.0)",
+          "oklch(35% 0.0074 197.0)",
+          "oklch(45% 0.0074 197.0)",
+          "oklch(55% 0.0074 197.0)",
+          "oklch(70% 0.0074 197.0)",
+          "oklch(85% 0.0074 197.0)",
+          "oklch(95% 0.0074 197.0)"
+        ]
+      },
+      "dark-canvas": {
+        "displayName": "Night canvas",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0085 84.6)",
-          "oklch(25% 0.0085 84.6)",
-          "oklch(35% 0.0085 84.6)",
-          "oklch(45% 0.0085 84.6)",
-          "oklch(55% 0.0085 84.6)",
-          "oklch(70% 0.0085 84.6)",
-          "oklch(85% 0.0085 84.6)",
-          "oklch(95% 0.0085 84.6)"
+          "oklch(15% 0.0261 247.0)",
+          "oklch(25% 0.0261 247.0)",
+          "oklch(35% 0.0261 247.0)",
+          "oklch(45% 0.0261 247.0)",
+          "oklch(55% 0.0261 247.0)",
+          "oklch(70% 0.0261 247.0)",
+          "oklch(85% 0.0261 247.0)",
+          "oklch(95% 0.0261 247.0)"
+        ]
+      },
+      "dark-surface": {
+        "displayName": "Night surface",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0289 243.1)",
+          "oklch(25% 0.0289 243.1)",
+          "oklch(35% 0.0289 243.1)",
+          "oklch(45% 0.0289 243.1)",
+          "oklch(55% 0.0289 243.1)",
+          "oklch(70% 0.0289 243.1)",
+          "oklch(85% 0.0289 243.1)",
+          "oklch(95% 0.0289 243.1)"
+        ]
+      },
+      "dark-sand": {
+        "displayName": "Night sand",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0324 235.3)",
+          "oklch(25% 0.0324 235.3)",
+          "oklch(35% 0.0324 235.3)",
+          "oklch(45% 0.0324 235.3)",
+          "oklch(55% 0.0324 235.3)",
+          "oklch(70% 0.0324 235.3)",
+          "oklch(85% 0.0324 235.3)",
+          "oklch(95% 0.0324 235.3)"
+        ]
+      },
+      "dark-muted": {
+        "displayName": "Night muted",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0359 236.9)",
+          "oklch(25% 0.0359 236.9)",
+          "oklch(35% 0.0359 236.9)",
+          "oklch(45% 0.0359 236.9)",
+          "oklch(55% 0.0359 236.9)",
+          "oklch(70% 0.0359 236.9)",
+          "oklch(85% 0.0359 236.9)",
+          "oklch(95% 0.0359 236.9)"
+        ]
+      },
+      "dark-line": {
+        "displayName": "Night line",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0358 233.6)",
+          "oklch(25% 0.0358 233.6)",
+          "oklch(35% 0.0358 233.6)",
+          "oklch(45% 0.0358 233.6)",
+          "oklch(55% 0.0358 233.6)",
+          "oklch(70% 0.0358 233.6)",
+          "oklch(85% 0.0358 233.6)",
+          "oklch(95% 0.0358 233.6)"
+        ]
+      },
+      "dark-control": {
+        "displayName": "Night control",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0330 229.6)",
+          "oklch(25% 0.0330 229.6)",
+          "oklch(35% 0.0330 229.6)",
+          "oklch(45% 0.0330 229.6)",
+          "oklch(55% 0.0330 229.6)",
+          "oklch(70% 0.0330 229.6)",
+          "oklch(85% 0.0330 229.6)",
+          "oklch(95% 0.0330 229.6)"
+        ]
+      },
+      "dark-strong": {
+        "displayName": "Night strong",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0094 222.1)",
+          "oklch(25% 0.0094 222.1)",
+          "oklch(35% 0.0094 222.1)",
+          "oklch(45% 0.0094 222.1)",
+          "oklch(55% 0.0094 222.1)",
+          "oklch(70% 0.0094 222.1)",
+          "oklch(85% 0.0094 222.1)",
+          "oklch(95% 0.0094 222.1)"
+        ]
+      },
+      "dark-body": {
+        "displayName": "Night body",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0182 223.6)",
+          "oklch(25% 0.0182 223.6)",
+          "oklch(35% 0.0182 223.6)",
+          "oklch(45% 0.0182 223.6)",
+          "oklch(55% 0.0182 223.6)",
+          "oklch(70% 0.0182 223.6)",
+          "oklch(85% 0.0182 223.6)",
+          "oklch(95% 0.0182 223.6)"
+        ]
+      },
+      "dark-subtle": {
+        "displayName": "Night subtle",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0280 226.9)",
+          "oklch(25% 0.0280 226.9)",
+          "oklch(35% 0.0280 226.9)",
+          "oklch(45% 0.0280 226.9)",
+          "oklch(55% 0.0280 226.9)",
+          "oklch(70% 0.0280 226.9)",
+          "oklch(85% 0.0280 226.9)",
+          "oklch(95% 0.0280 226.9)"
+        ]
+      },
+      "dark-accent": {
+        "displayName": "Night accent",
+        "role": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.0747 202.3)",
+          "oklch(25% 0.0747 202.3)",
+          "oklch(35% 0.0747 202.3)",
+          "oklch(45% 0.0747 202.3)",
+          "oklch(55% 0.0747 202.3)",
+          "oklch(70% 0.0747 202.3)",
+          "oklch(85% 0.0747 202.3)",
+          "oklch(95% 0.0747 202.3)"
+        ]
+      },
+      "dark-accent-hover": {
+        "displayName": "Night accent hover",
+        "role": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.0571 201.7)",
+          "oklch(25% 0.0571 201.7)",
+          "oklch(35% 0.0571 201.7)",
+          "oklch(45% 0.0571 201.7)",
+          "oklch(55% 0.0571 201.7)",
+          "oklch(70% 0.0571 201.7)",
+          "oklch(85% 0.0571 201.7)",
+          "oklch(95% 0.0571 201.7)"
+        ]
+      },
+      "dark-accent-soft": {
+        "displayName": "Night accent soft",
+        "role": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.0468 222.2)",
+          "oklch(25% 0.0468 222.2)",
+          "oklch(35% 0.0468 222.2)",
+          "oklch(45% 0.0468 222.2)",
+          "oklch(55% 0.0468 222.2)",
+          "oklch(70% 0.0468 222.2)",
+          "oklch(85% 0.0468 222.2)",
+          "oklch(95% 0.0468 222.2)"
+        ]
+      },
+      "dark-sage": {
+        "displayName": "Night sage",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0379 192.9)",
+          "oklch(25% 0.0379 192.9)",
+          "oklch(35% 0.0379 192.9)",
+          "oklch(45% 0.0379 192.9)",
+          "oklch(55% 0.0379 192.9)",
+          "oklch(70% 0.0379 192.9)",
+          "oklch(85% 0.0379 192.9)",
+          "oklch(95% 0.0379 192.9)"
+        ]
+      },
+      "dark-positive": {
+        "displayName": "Night positive",
+        "role": "semantic",
+        "tonalRamp": [
+          "oklch(15% 0.0824 161.5)",
+          "oklch(25% 0.0824 161.5)",
+          "oklch(35% 0.0824 161.5)",
+          "oklch(45% 0.0824 161.5)",
+          "oklch(55% 0.0824 161.5)",
+          "oklch(70% 0.0824 161.5)",
+          "oklch(85% 0.0824 161.5)",
+          "oklch(95% 0.0824 161.5)"
+        ]
+      },
+      "dark-warning": {
+        "displayName": "Night warning",
+        "role": "semantic",
+        "tonalRamp": [
+          "oklch(15% 0.0842 68.0)",
+          "oklch(25% 0.0842 68.0)",
+          "oklch(35% 0.0842 68.0)",
+          "oklch(45% 0.0842 68.0)",
+          "oklch(55% 0.0842 68.0)",
+          "oklch(70% 0.0842 68.0)",
+          "oklch(85% 0.0842 68.0)",
+          "oklch(95% 0.0842 68.0)"
+        ]
+      },
+      "dark-danger": {
+        "displayName": "Night danger",
+        "role": "semantic",
+        "tonalRamp": [
+          "oklch(15% 0.0868 11.0)",
+          "oklch(25% 0.0868 11.0)",
+          "oklch(35% 0.0868 11.0)",
+          "oklch(45% 0.0868 11.0)",
+          "oklch(55% 0.0868 11.0)",
+          "oklch(70% 0.0868 11.0)",
+          "oklch(85% 0.0868 11.0)",
+          "oklch(95% 0.0868 11.0)"
+        ]
+      },
+      "dark-on-accent": {
+        "displayName": "Night on accent",
+        "role": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.0366 222.5)",
+          "oklch(25% 0.0366 222.5)",
+          "oklch(35% 0.0366 222.5)",
+          "oklch(45% 0.0366 222.5)",
+          "oklch(55% 0.0366 222.5)",
+          "oklch(70% 0.0366 222.5)",
+          "oklch(85% 0.0366 222.5)",
+          "oklch(95% 0.0366 222.5)"
         ]
       }
     },
@@ -261,7 +499,13 @@
         "purpose": "Compact labelled learning/admin routes."
       }
     },
-    "shadows": [],
+    "shadows": [
+      {
+        "name": "auth-window",
+        "value": "0 30px 90px rgb(12 34 49 / .25)",
+        "purpose": "Daylight authentication window only; night uses a darker .5-opacity shadow."
+      }
+    ],
     "motion": [
       {
         "name": "state-color",
@@ -272,6 +516,26 @@
         "name": "entrance",
         "value": "240ms cubic-bezier(0.16,1,0.3,1)",
         "purpose": "Existing quiet entrance; disabled by reduced motion."
+      },
+      {
+        "name": "mountain-drift",
+        "value": "29–38s ease-in-out infinite alternate",
+        "purpose": "Small transform-only decorative scenic movement; disabled by reduced motion."
+      },
+      {
+        "name": "mist-drift",
+        "value": "25–33s ease-in-out infinite alternate",
+        "purpose": "Slow fog, behind controls and reading planes; disabled by reduced motion."
+      },
+      {
+        "name": "daytime-flock",
+        "value": "42s linear infinite; wingbeats 1.6s alternate",
+        "purpose": "Six small distant birds, paused at night and frozen by reduced motion."
+      },
+      {
+        "name": "nighttime-meteors",
+        "value": "19s / 27s linear cycles, 2s / 11s staggered starts",
+        "purpose": "Short flight followed by a long quiet interval; paused in daylight, hidden by reduced motion."
       }
     ],
     "breakpoints": [
@@ -286,6 +550,10 @@
       {
         "name": "xl",
         "value": "1280px"
+      },
+      {
+        "name": "auth-single-column",
+        "value": "767px"
       }
     ]
   },
@@ -296,15 +564,15 @@
       "refersTo": "button-primary",
       "description": "Committed action, with native disabled and visible keyboard focus.",
       "html": "<button type=\"button\" class=\"ds-primary\">Lưu hồ sơ</button>",
-      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-size:14px;line-height:20px;border-radius:8px;font-family:var(--font-geist, Geist),system-ui,sans-serif;transition:background-color 150ms cubic-bezier(.4,0,.2,1);border:0;padding:10px 20px;font-weight:600;background:var(--accent,#345f73);color:var(--surface,#fffcf6);cursor:pointer}.ds-primary:hover{background:#284d60}.ds-primary:focus-visible{outline:2px solid var(--accent,#345f73);outline-offset:4px;}.ds-primary:disabled{opacity:.5;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-size:14px;line-height:20px;border-radius:8px;font-family:var(--font-geist, Geist),system-ui,sans-serif;transition:background-color 150ms cubic-bezier(.4,0,.2,1);border:0;padding:10px 20px;font-weight:600;background:var(--accent,rgb(var(--kg-accent,18 101 122)));color:rgb(var(--kg-on-accent,244 251 251));cursor:pointer}.ds-primary:hover{background:rgb(var(--kg-accent-hover,14 83 102))}.ds-primary:focus-visible{outline:2px solid var(--accent,rgb(var(--kg-accent,18 101 122)));outline-offset:4px;}.ds-primary:disabled{opacity:.5;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
     },
     {
       "name": "Secondary button",
       "kind": "button",
       "refersTo": "button-secondary",
       "description": "Quieter companion action.",
-      "html": "<button type=\"button\" class=\"ds-secondary\">Đổi ảnh đại diện</button>",
-      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-size:14px;line-height:20px;border-radius:8px;font-family:var(--font-geist, Geist),system-ui,sans-serif;transition:background-color 150ms cubic-bezier(.4,0,.2,1);border:1px solid var(--line,#d5cdbf);padding:10px 16px;font-weight:500;background:var(--surface,#fffcf6);color:var(--foreground,#273c4a);cursor:pointer}.ds-secondary:hover{background:#ede7db}.ds-secondary:focus-visible{outline:2px solid var(--accent,#345f73);outline-offset:4px;}.ds-secondary:disabled{opacity:.5;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-secondary{transition:none}}"
+      "html": "<button type=\"button\" class=\"ds-secondary\">Chọn chủ đề</button>",
+      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-size:14px;line-height:20px;border-radius:8px;font-family:var(--font-geist, Geist),system-ui,sans-serif;transition:background-color 150ms cubic-bezier(.4,0,.2,1);border:1px solid var(--line,rgb(var(--kg-line,170 191 197)));padding:10px 16px;font-weight:500;background:var(--surface,rgb(var(--kg-surface,239 245 245)));color:var(--foreground,rgb(var(--kg-strong,25 54 66)));cursor:pointer}.ds-secondary:hover{background:rgb(var(--kg-muted,220 232 235))}.ds-secondary:focus-visible{outline:2px solid var(--accent,rgb(var(--kg-accent,18 101 122)));outline-offset:4px;}.ds-secondary:disabled{opacity:.5;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-secondary{transition:none}}"
     },
     {
       "name": "Editable field",
@@ -312,15 +580,15 @@
       "refersTo": "field",
       "description": "Persistent label, stronger boundary and accent focus.",
       "html": "<label class=\"ds-field-label\" for=\"ds-name\">Tên hiển thị</label><input id=\"ds-name\" class=\"ds-field\" autocomplete=\"nickname\" placeholder=\"Tên của bạn\">",
-      "css": ".ds-field-label{display:block;margin-bottom:8px;font-size:14px;font-weight:500;color:#273c4a;font-family:var(--font-geist, Geist),system-ui,sans-serif;}.ds-field{width:100%;min-height:44px;padding:10px 14px;border:1px solid #7d877f;border-radius:8px;background:var(--surface,#fffcf6);color:var(--foreground,#273c4a);font-size:16px;font-family:var(--font-geist, Geist),system-ui,sans-serif;outline:none;transition:border-color 150ms cubic-bezier(.4,0,.2,1)}.ds-field::placeholder{color:#59635f;opacity:1}.ds-field:focus{border-color:var(--accent,#345f73);box-shadow:0 0 0 2px rgb(52 95 115 / 15%)}@media(prefers-reduced-motion:reduce){.ds-field{transition:none}}"
+      "css": ".ds-field-label{display:block;margin-bottom:8px;font-size:14px;font-weight:500;color:rgb(var(--kg-strong,25 54 66));font-family:var(--font-geist, Geist),system-ui,sans-serif;}.ds-field{width:100%;min-height:44px;padding:10px 14px;border:1px solid rgb(var(--kg-control,85 113 123));border-radius:8px;background:var(--surface,rgb(var(--kg-surface,239 245 245)));color:var(--foreground,rgb(var(--kg-strong,25 54 66)));font-size:16px;font-family:var(--font-geist, Geist),system-ui,sans-serif;outline:none;transition:border-color 150ms cubic-bezier(.4,0,.2,1)}.ds-field::placeholder{color:rgb(var(--kg-subtle,63 89 101));opacity:1}.ds-field:focus{border-color:var(--accent,rgb(var(--kg-accent,18 101 122)));box-shadow:0 0 0 2px rgb(52 95 115 / 15%)}@media(prefers-reduced-motion:reduce){.ds-field{transition:none}}"
     },
     {
       "name": "Active navigation row",
       "kind": "nav",
       "refersTo": "nav-active",
-      "description": "Sage current-page state and a real filled Phosphor Compass SVG.",
+      "description": "Current-page selection with a genuine Phosphor SVG.",
       "html": "<nav aria-label=\"Điều hướng chính\"><a href=\"#learn\" aria-current=\"page\" class=\"ds-nav\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"19\" height=\"19\" fill=\"currentColor\" viewBox=\"0 0 256 256\" aria-hidden=\"true\"><path d=\"M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm51.58,57.79-32,64a4.08,4.08,0,0,1-1.79,1.79l-64,32a4,4,0,0,1-5.37-5.37l32-64a4.08,4.08,0,0,1,1.79-1.79l64-32A4,4,0,0,1,179.58,81.79Z\"></path></svg><span>Chọn chủ đề</span></a></nav>",
-      "css": ".ds-nav{display:flex;align-items:center;gap:12px;min-height:44px;padding:10px 14px;border-radius:8px;background:#dce7d9;color:#273c4a;font-size:13px;line-height:1.5;font-weight:500;text-decoration:none;font-family:var(--font-geist, Geist),system-ui,sans-serif;transition:color 150ms cubic-bezier(.4,0,.2,1)}.ds-nav svg{flex-shrink:0}.ds-nav:hover{color:#273c4a}.ds-nav:focus-visible{outline:2px solid var(--accent,#345f73);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-nav{transition:none}}"
+      "css": ".ds-nav{display:flex;align-items:center;gap:12px;min-height:44px;padding:10px 14px;border-radius:8px;background:rgb(var(--kg-sage,207 225 221));color:rgb(var(--kg-strong,25 54 66));font-size:13px;line-height:1.5;font-weight:500;text-decoration:none;font-family:var(--font-geist, Geist),system-ui,sans-serif;transition:color 150ms cubic-bezier(.4,0,.2,1)}.ds-nav svg{flex-shrink:0}.ds-nav:hover{color:rgb(var(--kg-strong,25 54 66))}.ds-nav:focus-visible{outline:2px solid var(--accent,rgb(var(--kg-accent,18 101 122)));outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-nav{transition:none}}"
     },
     {
       "name": "Selected topic filter",
@@ -328,54 +596,54 @@
       "refersTo": "topic-selected",
       "description": "An actual button, not a decorative content tag.",
       "html": "<button type=\"button\" aria-pressed=\"true\" class=\"ds-topic\">Java</button>",
-      "css": ".ds-topic{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-size:14px;line-height:20px;border-radius:8px;font-family:var(--font-geist, Geist),system-ui,sans-serif;transition:background-color 150ms cubic-bezier(.4,0,.2,1);border:1px solid #345f73;padding:10px 20px;border-radius:9999px;background:var(--accent,#345f73);color:var(--surface,#fffcf6);font-weight:500;cursor:pointer}.ds-topic:hover{border-color:#345f73}.ds-topic:focus-visible{outline:2px solid var(--accent,#345f73);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-topic{transition:none}}"
+      "css": ".ds-topic{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-size:14px;line-height:20px;border-radius:8px;font-family:var(--font-geist, Geist),system-ui,sans-serif;transition:background-color 150ms cubic-bezier(.4,0,.2,1);border:1px solid rgb(var(--kg-accent,18 101 122));padding:10px 20px;border-radius:9999px;background:var(--accent,rgb(var(--kg-accent,18 101 122)));color:rgb(var(--kg-on-accent,244 251 251));font-weight:500;cursor:pointer}.ds-topic:hover{border-color:rgb(var(--kg-accent,18 101 122))}.ds-topic:focus-visible{outline:2px solid var(--accent,rgb(var(--kg-accent,18 101 122)));outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-topic{transition:none}}"
     },
     {
       "name": "Working panel",
       "kind": "card",
       "refersTo": "panel",
-      "description": "Cream and flat, with a quiet boundary and responsive padding.",
+      "description": "Quiet reading surface in either theme, with a tonal boundary.",
       "html": "<section class=\"ds-panel\"><h2>Ghi chú của bạn</h2><p>Lưu điều bạn muốn nhớ.</p></section>",
-      "css": ".ds-panel{border:1px solid #d5cdbfcc;border-radius:16px;padding:20px;background:var(--surface,#fffcf6);color:#43525a;font-family:var(--font-geist, Geist),system-ui,sans-serif;}.ds-panel h2{margin:0 0 8px;color:#273c4a;font-size:18px;font-weight:600;letter-spacing:-.02em}.ds-panel p{margin:0;color:#59635f;font-size:16px;line-height:1.5}@media(min-width:640px){.ds-panel{padding:24px}}"
+      "css": ".ds-panel{border:1px solid rgb(var(--kg-line,170 191 197) / 0.80);border-radius:16px;padding:20px;background:var(--surface,rgb(var(--kg-surface,239 245 245)));color:rgb(var(--kg-body,48 79 91));font-family:var(--font-geist, Geist),system-ui,sans-serif;}.ds-panel h2{margin:0 0 8px;color:rgb(var(--kg-strong,25 54 66));font-size:18px;font-weight:600;letter-spacing:-.02em}.ds-panel p{margin:0;color:rgb(var(--kg-subtle,63 89 101));font-size:16px;line-height:1.5}@media(min-width:640px){.ds-panel{padding:24px}}"
     }
   ],
   "narrative": {
-    "northStar": "Study Commons",
-    "overview": "A shared study space: warm, clear and quietly encouraging. The interface feels approachable to beginners without infantilizing working developers. Typography, generous task grouping and restrained color do the work; it does not imitate physical paper or decorate a learning task with a marketing spectacle.\n\nThis is an extracted, code-led system, not an approved image comp. The owner confirmed bright beige, Vietnamese/English UI, learner and admin coverage and delegated the remaining choices. Source authority is `tailwind.config.ts`, `app/globals.css`, `app/layout.tsx`, `components/ui.tsx` and the current captures referenced by `docs/design/VERIFICATION.md`.",
+    "northStar": "Alpine Commons",
+    "overview": "A quiet learning workspace in an original layered mountain landscape. Daylight uses mist-blue surfaces and deep teal actions; night uses navy surfaces and pale aqua actions. The owner supplied light/dark login references and explicitly requested replacing the former beige background without changing fields or authentication behavior.\n\nThe atmosphere belongs behind the task. Authentication uses a translucent window and an illustrated side panel; learning and administration retain near-opaque reading planes, native controls and the existing task hierarchy. Source authority is app/scenic.css, lib/theme.ts, tailwind.config.ts and components/ui.tsx. This is a code-led interpretation of the supplied references, not a pixel-for-pixel screenshot recreation.",
     "keyCharacteristics": [
-      "Warm light ground with cream reading surfaces.",
-      "Deep-blue actions and sage selection.",
-      "Local workhorse typography and genuine Phosphor SVG icons.",
-      "Flat, comfortably spaced work areas with native web controls."
+      "Original layered mountain, pine forest, river and day/night sky artwork.",
+      "Persistent light/dark preference, with daylight as the initial default.",
+      "Locally bundled Geist typography and genuine Phosphor icons.",
+      "Translucent authentication, quiet near-opaque learning surfaces."
     ],
     "rules": [
       {
         "name": "The Boundary Rule",
-        "body": "Use control for editable-field borders; line is intentionally too quiet to substitute for that boundary.",
+        "body": "Editable controls use control, not the quieter line color.",
         "section": "colors"
       },
       {
         "name": "The Workhorse Rule",
-        "body": "Preserve the same locally bundled interface family across learner and admin screens; do not add a decorative display font merely to make a new screen feel different.",
+        "body": "Preserve the locally served type family and source-language learning content.",
         "section": "typography"
       },
       {
-        "name": "The Flat-at-Rest Rule",
-        "body": "Keep working planes flat; do not introduce glass, gradients, heavy shadows or fake paper texture.",
+        "name": "The Reading Plane Rule",
+        "body": "Atmosphere stays behind tasks; reading/editor surfaces do not inherit the auth window's transparency.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "Do reuse semantic tokens and the existing shared controls.",
-      "Do preserve clear labels, keyboard focus and native disabled states.",
-      "Do keep actual learning content in its source language while localizing interface controls.",
-      "Do test real desktop, small-laptop and narrow-mobile viewports."
+      "Do reuse semantic colors in both themes, including SVG text labels.",
+      "Do keep authentication fields, validation, API calls and redirects unchanged.",
+      "Do keep continuous scenic movement behind content and honor reduced motion.",
+      "Do check iPhone 13 portrait/landscape and narrow mobile layouts."
     ],
     "donts": [
-      "Don't invent progress, achievements, capabilities or translated course content.",
-      "Don't turn the light-only identity into a dark-mode default.",
-      "Don't use gradients, fake texture, glass or ornamental analytics to manufacture personality.",
-      "Don't hide practice actions far from the selected module on a small screen."
+      "Don't ship the reference screenshots as backgrounds or call this a literal recreation.",
+      "Don't put transparent reading text directly on moving terrain.",
+      "Don't introduce fixed-height mobile forms or prevent native page scrolling.",
+      "Don't invent study statistics, outcomes or translated learning content."
     ]
   }
 }

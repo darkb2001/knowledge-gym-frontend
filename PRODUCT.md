@@ -29,7 +29,7 @@ Existing application routes cover authentication, questions and answers, module-
 
 ## Brand Commitments
 
-Keep the Knowledge Gym product name. The owner requested a completely new visual identity, friendliness, creativity and appeal without a generic AI-generated aesthetic. A bright beige palette is preferred; a very dark interface is explicitly unwanted. Other color choices are delegated. These constraints apply to learner and admin interfaces.
+Keep the Knowledge Gym product name, friendliness, creativity and approachable learning hierarchy. The owner initially preferred bright beige, then explicitly superseded that palette with supplied light/dark mountain-login references: an original scenic mountain/forest background, optional slow motion and both daylight/night modes. The background should be shared across the web, while reading surfaces remain legible. Login fields, validation and authentication functionality must not change. iPhone 13 portrait/landscape quality is an explicit requirement. Daylight remains the initial default; dark mode is a user choice.
 
 ## Evidence on Hand
 

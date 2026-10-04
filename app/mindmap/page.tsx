@@ -84,8 +84,8 @@ function Mindmap() {
           return <g key={node.id} role="button" tabIndex={0} aria-label={`${node.name}, ${t("Mức độ nắm vững")} ${mastery}%, ${node.questionCount} ${t("câu hỏi")}`} onClick={() => router.push(`/quiz/${node.id}`)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); router.push(`/quiz/${node.id}`); } }} className="cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"><title>{node.name}</title>
             <circle cx={point.x} cy={point.y} r={radius} fill={fill} stroke="#7d877f" strokeWidth="1" />
             <text x={point.x} y={point.y + 5} textAnchor="middle" fill="#273c4a" fontSize="18" fontWeight="600">{mastery.toFixed(0)}%</text>
-            <text x={point.x} y={point.y + radius + 22} textAnchor="middle" fill="#273c4a" fontSize="13" fontWeight="600">{node.name.length > 22 ? `${node.name.slice(0, 20)}…` : node.name}</text>
-            <text x={point.x} y={point.y + radius + 40} textAnchor="middle" fill="#43525a" fontSize="12">{node.questionCount} {t("câu hỏi")}</text>
+            <text x={point.x} y={point.y + radius + 22} textAnchor="middle" className="fill-body" fontSize="13" fontWeight="600">{node.name.length > 22 ? `${node.name.slice(0, 20)}…` : node.name}</text>
+            <text x={point.x} y={point.y + radius + 40} textAnchor="middle" className="fill-body" fontSize="12">{node.questionCount} {t("câu hỏi")}</text>
           </g>;
         })}
       </svg>
