@@ -24,14 +24,19 @@ function AccountsWorkspace() {
   const [selected, setSelected] = useState<AdminUser | null>(null);
   const [nextRole, setNextRole] = useState<UserRole>("USER");
   const [reason, setReason] = useState("");
+  const [reasonError, setReasonError] = useState(false);
   const [busy, setBusy] = useState(false);
+  const reasonRef = useRef<HTMLTextAreaElement | null>(null);
   const [error, setError] = useState<unknown>(null);
   const [message, setMessage] = useState("");
   const params = new URLSearchParams({ page: String(page), size: "20" });
   if (search) params.set("q", search); if (role) params.set("role", role); if (blocked) params.set("blocked", blocked);
   const directory = useAdminDirectory<AdminUser>(`/admin/users?${params}`);
   async function act(action: "role" | "status" | "sessions") {
-    if (!selected || busy || !reason.trim()) return;
+    if (!selected || busy) return;
+    if (!reason.trim()) { setReasonError(true); setMessage(""); reasonRef.current?.focus(); return; }
+    if (action === "role" && nextRole === selected.role) { setMessage(c("Chọn quyền khác với quyền hiện tại của tài khoản.", "Pick a role different from the account's current role.")); return; }
+    setReasonError(false);
     if (!window.confirm(c(`Thực hiện thao tác trên tài khoản ${selected.email}? Các phiên đăng nhập hiện tại sẽ bị thu hồi.`, `Apply this action to ${selected.email}? Current sessions will be revoked.`))) return;
     setBusy(true); setError(null); setMessage("");
     try {
@@ -52,15 +57,15 @@ function AccountsWorkspace() {
     {message && <p role="status" className="mb-5">{message}</p>}
     <div className="grid min-w-0 gap-7 xl:grid-cols-[minmax(0,1fr)_340px]">
       <section aria-label={c("Danh sách tài khoản", "Account directory")}>
-        {directory.loading ? <p role="status">{c("Đang tải…", "Loading…")}</p> : directory.data && !directory.data.items.length ? <p>{c("Không tìm thấy tài khoản phù hợp.", "No matching accounts.")}</p> : <ul className="divide-y divide-line">{directory.data?.items.map(user => <li key={user.id}><button className={`w-full min-w-0 p-4 text-left hover:bg-muted ${selected?.id === user.id ? "bg-sage" : ""}`} disabled={busy} aria-pressed={selected?.id === user.id} onClick={() => { setSelected(user); setNextRole(user.role); setReason(""); setError(null); setMessage(""); }}><span className="block font-semibold text-strong">{user.displayName}</span><span className="block break-all text-sm">{user.email}</span><span className="mt-2 block text-sm text-subtle">{user.role} · {user.blocked ? c("Đã khóa", "Blocked") : c("Hoạt động", "Active")} · {user.emailVerified ? c("Email đã xác minh", "Verified email") : c("Email chưa xác minh", "Unverified email")}</span></button></li>)}</ul>}
+        {directory.loading ? <p role="status">{c("Đang tải…", "Loading…")}</p> : directory.data && !directory.data.items.length ? <p>{c("Không tìm thấy tài khoản phù hợp.", "No matching accounts.")}</p> : <ul className="divide-y divide-line">{directory.data?.items.map(user => <li key={user.id}><button className={`w-full min-w-0 p-4 text-left hover:bg-muted ${selected?.id === user.id ? "bg-sage" : ""}`} disabled={busy} aria-pressed={selected?.id === user.id} onClick={() => { setSelected(user); setNextRole(user.role); setReason(""); setReasonError(false); setError(null); setMessage(""); }}><span className="block font-semibold text-strong">{user.displayName}</span><span className="block break-all text-sm">{user.email}</span><span className="mt-2 block text-sm text-subtle">{user.role} · {user.blocked ? c("Đã khóa", "Blocked") : c("Hoạt động", "Active")} · {user.emailVerified ? c("Email đã xác minh", "Verified email") : c("Email chưa xác minh", "Unverified email")}</span></button></li>)}</ul>}
       </section>
       <section className="min-w-0 border-t border-line pt-5 xl:border-t-0 xl:pt-0" aria-label={c("Chi tiết tài khoản", "Account details")}>
-        {!selected ? <p className="text-subtle">{c("Chọn tài khoản để quản lý.", "Select an account to manage.")}</p> : <div className="space-y-5"><h2 className="text-xl">{selected.displayName}</h2><p className="break-all text-sm">{selected.email}</p><dl className="grid grid-cols-2 gap-3 text-sm"><dt>{c("Đăng nhập bằng", "Login provider")}</dt><dd>{selected.authProvider}</dd><dt>XP</dt><dd className="tabular-nums">{selected.xp}</dd><dt>{c("Trạng thái", "Status")}</dt><dd>{selected.blocked ? c("Đã khóa", "Blocked") : c("Hoạt động", "Active")}</dd></dl>
+        {!selected ? <p className="text-subtle">{c("Chọn tài khoản để quản lý.", "Select an account to manage.")}</p> : <div className="space-y-5"><h2 className="text-xl">{selected.displayName}</h2><p className="break-all text-sm">{selected.email}</p><dl className="grid grid-cols-2 gap-3 text-sm"><dt>{c("Đăng nhập bằng", "Login provider")}</dt><dd>{selected.authProvider}</dd><dt>{c("Quyền", "Role")}</dt><dd>{selected.role}</dd><dt>XP</dt><dd className="tabular-nums">{selected.xp}</dd><dt>{c("Trạng thái", "Status")}</dt><dd>{selected.blocked ? c("Đã khóa", "Blocked") : c("Hoạt động", "Active")}</dd></dl>
           <Link className="kg-secondary" href={`/admin/users?tab=learning&userId=${selected.id}`}>{c("Xem dữ liệu học", "View learning data")}</Link>
-          <AdminField label={c("Lý do thay đổi", "Reason for change")} hint={c("Bắt buộc; được lưu trong nhật ký quản trị.", "Required; recorded in the audit log.")}><textarea className="kg-field min-h-24" maxLength={500} disabled={busy} value={reason} onChange={event => setReason(event.target.value)}></textarea></AdminField>
+          <AdminField label={c("Lý do thay đổi", "Reason for change")} hint={c("Bắt buộc — nhập lý do để bật các hành động bên dưới; lý do được lưu trong nhật ký quản trị.", "Required — enter a reason to enable the actions below; it is recorded in the audit log.")}><textarea ref={reasonRef} className="kg-field min-h-24" maxLength={500} disabled={busy} aria-invalid={reasonError || undefined} value={reason} onChange={event => { setReason(event.target.value); if (reasonError) setReasonError(false); }}></textarea>{reasonError ? <p role="alert" className="mt-2 text-sm font-normal text-danger">{c("Nhập lý do trước khi thực hiện thay đổi.", "Enter a reason before applying a change.")}</p> : null}</AdminField>
           <AdminField label={c("Quyền mới", "New role")}><select className="kg-field" disabled={busy} value={nextRole} onChange={event => setNextRole(event.target.value as UserRole)}>{["USER", "PREMIUM", "ADMIN"].map(value => <option key={value}>{value}</option>)}</select></AdminField>
-          <div className="flex flex-wrap gap-2"><button className="kg-secondary" disabled={busy || !reason.trim() || nextRole === selected.role} onClick={() => void act("role")}>{c("Đổi quyền", "Change role")}</button><button className="kg-secondary" disabled={busy || !reason.trim()} onClick={() => void act("status")}>{selected.blocked ? c("Mở khóa", "Unblock") : c("Khóa tài khoản", "Block account")}</button><button className="kg-secondary" disabled={busy || !reason.trim()} onClick={() => void act("sessions")}>{c("Thu hồi phiên", "Revoke sessions")}</button></div>
-          <p className="text-sm text-subtle">{c("Không thể tự khóa/hạ quyền hoặc loại bỏ admin cuối cùng.", "You cannot block/demote yourself or remove the last active admin.")}</p>
+          <div className="flex flex-wrap gap-2"><button type="button" className="kg-secondary" disabled={busy} onClick={() => void act("role")}>{c("Đổi quyền", "Change role")}</button><button type="button" className="kg-secondary" disabled={busy} onClick={() => void act("status")}>{selected.blocked ? c("Mở khóa", "Unblock") : c("Khóa tài khoản", "Block account")}</button><button type="button" className="kg-secondary" disabled={busy} onClick={() => void act("sessions")}>{c("Thu hồi phiên", "Revoke sessions")}</button></div>
+          <p className="text-sm text-subtle">{c("Mọi thao tác cần lý do (bắt buộc) và được ghi nhật ký. Không thể tự khóa/hạ quyền hoặc loại bỏ admin cuối cùng.", "Every action needs a reason (required) and is written to the audit log. You cannot block/demote yourself or remove the last active admin.")}</p>
         </div>}
       </section>
     </div>
