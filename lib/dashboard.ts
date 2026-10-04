@@ -13,15 +13,19 @@ export type DashboardData = {
   leaderboard: LeaderboardUser[];
 };
 
+export function topLeaderboard(users: LeaderboardUser[]): LeaderboardUser[] {
+  return [...users].sort((a, b) => a.rank - b.rank).slice(0, 10);
+}
+
 export async function loadDashboard(signal?: AbortSignal): Promise<DashboardData> {
   const [radar, heatmap, progress, stats, leaderboard] = await Promise.all([
     apiRequest<{ modules: RadarModule[] }>("/dashboard/radar", { signal }),
     apiRequest<HeatmapDay[]>("/dashboard/heatmap?days=90", { signal }),
     apiRequest<ProgressModule[]>("/users/me/progress", { signal }),
     apiRequest<UserStats>("/users/me/stats", { signal }),
-    apiRequest<LeaderboardUser[]>("/dashboard/leaderboard", { signal }),
+    apiRequest<LeaderboardUser[]>("/dashboard/leaderboard?limit=10", { signal }),
   ]);
-  return { radar: radar.modules, heatmap: fillHeatmap(heatmap, 90), progress, stats, leaderboard };
+  return { radar: radar.modules, heatmap: fillHeatmap(heatmap, 90), progress, stats, leaderboard: topLeaderboard(leaderboard) };
 }
 
 /** Fill missing dates from the API's last date so the calendar remains in the configured server zone. */

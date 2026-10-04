@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { RequireAuth, inputClass } from "@/components/ui";
 import QuizQuestion from "@/components/QuizQuestion";
 import { Pagination } from "@/components/Pagination";
+import { HistoryControls } from "@/components/HistoryControls";
 import { generateQuiz, submitQuiz, quizHistory, type Quiz, type QuizResult, type QuizStrategy, type QuizSummary } from "@/lib/quiz";
 function QuizFlow({ moduleId }: { moduleId: string }) {
   const { t, formatLocale } = useLocale();
@@ -23,14 +24,18 @@ function QuizFlow({ moduleId }: { moduleId: string }) {
  const [pages, setPages] = useState(0);
  const [historyTick, setHistoryTick] = useState(0);
  const [historyError, setHistoryError] = useState("");
+ const [historySize, setHistorySize] = useState(5);
+ const [historyTotal, setHistoryTotal] = useState(0);
+ const [historyLoading, setHistoryLoading] = useState(true);
  const deadline = useRef(0);
  const submitting = useRef(false);
  const expiredSubmitted = useRef(false);
  useEffect(() => {
   const ac = new AbortController();
-  quizHistory(page, ac.signal).then(h => { if (!ac.signal.aborted) { setHistory(h.items); setPages(h.totalPages); setHistoryError(""); } }).catch(e => { if (!ac.signal.aborted) setHistoryError(e instanceof Error ? e.message : "Không tải được lịch sử"); });
+  setHistoryLoading(true); setHistoryError("");
+  quizHistory(page, ac.signal, historySize).then(h => { if (!ac.signal.aborted) { setHistory(h.items); setPages(h.totalPages); setHistoryTotal(h.totalElements); } }).catch(e => { if (!ac.signal.aborted) setHistoryError(e instanceof Error ? e.message : "Không tải được lịch sử"); }).finally(() => { if (!ac.signal.aborted) setHistoryLoading(false); });
   return () => ac.abort();
- }, [page, historyTick]);
+ }, [page, historyTick, historySize]);
  async function start() {
   setBusy(true); setError("");
   try { const q = await generateQuiz(moduleId, count, strategy, difficulty); setQuiz(q); setAnswers({}); setResult(null); deadline.current = Date.now() + q.timeLimit * 1000; setRemaining(q.timeLimit); expiredSubmitted.current = false; }
@@ -70,9 +75,10 @@ function QuizFlow({ moduleId }: { moduleId: string }) {
    {!result && <button disabled={busy} onClick={() => void finish()} className="rounded-sm bg-accent px-5 py-3 text-on-accent disabled:opacity-50">{busy ? t("Đang nộp…") : t("Nộp bài")}</button>}
   </>}
   <section className="space-y-3 border-t border-line pt-6"><h2 className="font-display text-xl">{t("Lịch sử quiz")}</h2>
-   {historyError ? <p role="alert">{t(historyError)} <button onClick={() => setHistoryTick(n => n + 1)} className="underline">{t("Thử lại")}</button></p> : history.length === 0 ? <p className="text-subtle">{t("Chưa có phiên quiz.")}</p> : history.map(h => <p key={h.id}>{new Date(h.startedAt).toLocaleString(formatLocale)} {t(" · ")}{h.strategy} {t(" · ")}{h.total} {t(" câu · ")}{h.finishedAt ? `${h.score}%` : t("Chưa nộp")}</p>)}
+   <HistoryControls size={historySize} total={historyTotal} count={history.length} page={page} loading={historyLoading} onSizeChange={size => { setHistorySize(size); setPage(1); }} />
+   {historyLoading ? <p role="status">{t("Đang tải…")}</p> : historyError ? <p role="alert">{t(historyError)} <button onClick={() => setHistoryTick(n => n + 1)} className="underline">{t("Thử lại")}</button></p> : history.length === 0 ? <p className="text-subtle">{t("Chưa có phiên quiz.")}</p> : history.map(h => <p key={h.id}>{new Date(h.startedAt).toLocaleString(formatLocale)} {t(" · ")}{h.strategy} {t(" · ")}{h.total} {t(" câu · ")}{h.finishedAt ? `${h.score}%` : t("Chưa nộp")}</p>)}
   </section>
-  <Pagination page={page} totalPages={pages} onChange={setPage} disabled={Boolean(historyError)} />
+  <Pagination page={page} totalPages={pages} onChange={setPage} disabled={historyLoading || Boolean(historyError)} />
  </div>;
 }
 export default function QuizPage() {

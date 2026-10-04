@@ -88,11 +88,12 @@ try {
     empty = false;
     await page.goto(base + '/learn'); await page.locator('[data-module-card]').first().waitFor();
     const track = page.getByRole('group', { name: 'Loại nội dung', exact: true });
-    const topic = page.locator('[role="group"][aria-labelledby="learn-topic-title"]');
+    const topic = page.getByRole('group', { name: 'Chủ đề', exact: true });
     assert.equal(await track.count(), 1); assert.equal(await topic.count(), 1);
     if (device !== 'desktop') await track.getByRole('button', { name: 'Java', exact: true }).tap();
     else await track.getByRole('button', { name: 'Java', exact: true }).click();
     assert.equal(await page.locator('[data-module-card]').count(), 3);
+    await page.getByRole('button', { name: /Xem thêm/ }).click();
     await page.getByRole('button', { name: /Xem thêm/ }).click();
     const verifyLocal = async n => {
       const card = page.locator(`[data-module-card="${modules[n].id}"]`), button = card.locator('button').first();

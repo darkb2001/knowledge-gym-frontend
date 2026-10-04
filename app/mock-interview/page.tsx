@@ -7,6 +7,7 @@ import { ArrowRightIcon, CheckCircleIcon, ClockIcon } from "@phosphor-icons/reac
 import { PageHeading, RequireAuth, inputClass } from "@/components/ui";
 import InterviewQuestionCard from "@/components/InterviewQuestionCard";
 import { Pagination } from "@/components/Pagination";
+import { HistoryControls } from "@/components/HistoryControls";
 import { useLocale } from "@/components/locale";
 import { listTopics } from "@/lib/questions";
 import type { Topic } from "@/lib/types";
@@ -39,6 +40,9 @@ function InterviewFlow() {
   const [pages, setPages] = useState(0);
   const [tick, setTick] = useState(0);
   const [historyError, setHistoryError] = useState("");
+  const [historySize, setHistorySize] = useState(5);
+  const [historyTotal, setHistoryTotal] = useState(0);
+  const [historyLoading, setHistoryLoading] = useState(true);
 
   useEffect(() => {
     const ac = new AbortController();
@@ -56,18 +60,20 @@ function InterviewFlow() {
 
   useEffect(() => {
     const ac = new AbortController();
-    interviewHistory(page, 10, ac.signal)
+    setHistoryLoading(true); setHistoryError("");
+    interviewHistory(page, historySize, ac.signal)
       .then(result => {
         if (ac.signal.aborted) return;
         setHistory(result.items);
         setPages(result.totalPages);
+        setHistoryTotal(result.totalElements);
         setHistoryError("");
       })
       .catch(e => {
         if (!ac.signal.aborted) setHistoryError(e instanceof Error ? e.message : t("Không tải được lịch sử"));
-      });
+      }).finally(() => { if (!ac.signal.aborted) setHistoryLoading(false); });
     return () => ac.abort();
-  }, [page, tick, t]);
+  }, [page, tick, t, historySize]);
 
   // Khôi phục nháp khi mở lại trang giữa chừng (F5, chuyển tab, mất mạng).
   useEffect(() => {
@@ -262,7 +268,8 @@ function InterviewFlow() {
 
       <section className="space-y-3 border-t border-line pt-6">
         <h2 className="font-display text-xl text-strong">{t("Lịch sử phỏng vấn")}</h2>
-        {historyError ? (
+        <HistoryControls size={historySize} total={historyTotal} count={history.length} page={page} loading={historyLoading} onSizeChange={size => { setHistorySize(size); setPage(1); }} />
+        {historyLoading ? <p role="status">{t("Đang tải…")}</p> : historyError ? (
           <p role="alert" className="text-sm text-warning">
             {t(historyError)}{" "}
             <button type="button" onClick={() => setTick(value => value + 1)} className="underline">
@@ -294,7 +301,7 @@ function InterviewFlow() {
           </ul>
         )}
       </section>
-      <Pagination page={page} totalPages={pages} onChange={setPage} disabled={Boolean(historyError)} />
+      <Pagination page={page} totalPages={pages} onChange={setPage} disabled={historyLoading || Boolean(historyError)} />
     </div>
   );
 }

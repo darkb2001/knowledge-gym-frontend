@@ -7,4 +7,4 @@ export type Quiz = QuizSummary & { questions: QuizQuestion[]; timeLimit: number 
 export type QuizResult = { sessionId: string; score: number; correctCount: number; total: number; breakdown: { questionId: string; correct: boolean; selectedOptionId: string | null; correctOptionId: string | null }[] };
 export const generateQuiz = (moduleId: string, count: number, strategy: QuizStrategy, difficulty?: string) => apiRequest<Quiz>("/quiz/generate", { method: "POST", body: { moduleId, count, strategy, difficulty: difficulty || undefined } });
 export const submitQuiz = (id: string, answers: { questionId: string; selectedOptionId: string | null }[]) => apiRequest<QuizResult>(`/quiz/${encodeURIComponent(id)}/submit`, { method: "POST", body: { answers } });
-export const quizHistory = (page = 1, signal?: AbortSignal) => apiRequest<PageResponse<QuizSummary>>(`/quiz/history?page=${page}&size=10`, { signal });
+export const quizHistory = (page = 1, signal?: AbortSignal, size = 10) => apiRequest<PageResponse<QuizSummary>>(`/quiz/history?page=${page}&size=${[5, 10, 20].includes(size) ? size : 10}`, { signal });

@@ -1,0 +1,140 @@
+/* Synthetic large-data fixtures: not live persistence, Safari, or physical-device evidence. */
+import { createRequire } from 'node:module';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const require = createRequire(import.meta.url);
+const { chromium } = require('playwright');
+const AxeBuilder = require('@axe-core/playwright').default;
+const base = process.env.KG_UI_URL || 'http://127.0.0.1:3216';
+const output = '.impeccable/review/growing-lists';
+fs.mkdirSync(output, { recursive: true });
+const id = n => `11111111-1111-4111-8111-${String(n).padStart(12, '0')}`;
+const user = { id: id(1), email: 'fixture@example.test', displayName: 'Fixture learner', role: 'USER', authProvider: 'LOCAL', xp: 100, emailVerified: true };
+const token = ['eyJhbGciOiJIUzI1NiJ9', Buffer.from(JSON.stringify({ sub: user.id, exp: Math.floor(Date.now() / 1000) + 3600 })).toString('base64url'), 'synthetic'].join('.');
+const tracks = Array.from({ length: 10 }, (_, i) => ({ slug: `track-${i}`, name: `Content track ${i}`, displayOrder: i }));
+const topics = Array.from({ length: 30 }, (_, i) => ({ id: id(100+i), name: `Topic ${i}`, slug: `topic-${i}`, track: tracks[Math.floor(i/3)].slug, displayOrder: i, moduleCount: 13 }));
+const modules = topics.flatMap((topic, i) => Array.from({ length: 13 }, (_, n) => ({ id: id(1000+i*13+n), name: n % 2 ? `Module ${i}-${n}: understanding very long interview-oriented learning content and architectural tradeoffs` : `Module ${i}-${n}`, slug: `module-${i}-${n}`, topicId: topic.id, topicSlug: topic.slug, description: n % 3 === 0 ? null : 'A detailed description of concepts, practical applications, tradeoffs and examples. '.repeat(n % 3), displayOrder: n, questionCount: 10 })));
+const nodes = modules.map((m, i) => ({ ...m, masteryPct: i % 101 }));
+const report = { evidence: 'Chromium large-data fixtures only', checks: [], errors: [], unmatched: [], accessibility: [], requests: [] };
+const browser = await chromium.launch({ headless: true, ...(process.platform === 'darwin' ? { executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' } : {}) });
+try {
+  for (const [device, width, height] of [['desktop',1440,900],['iphone13',390,844],['iphone13-landscape',844,390]]) {
+    const context = await browser.newContext({ viewport: { width, height }, ...(device !== 'desktop' ? { isMobile: true, hasTouch: true } : {}), reducedMotion: 'reduce' });
+    await context.addCookies([{ name: 'kg_session', value: '1', url: base }]);
+    const page = await context.newPage(); page.setDefaultTimeout(30000);
+    page.on('pageerror', e => report.errors.push(e.message));
+    let empty = false, failHistory = false;
+    await page.route('**/api/v1/**', async route => {
+      const url = new URL(route.request().url()), path = url.pathname.replace('/api/v1', '');
+      const headers = { 'access-control-allow-origin': base, 'access-control-allow-credentials': 'true', 'access-control-allow-headers': 'Authorization,Content-Type', 'access-control-allow-methods': 'GET,POST,OPTIONS' };
+      if (route.request().method() === 'OPTIONS') return route.fulfill({ status: 204, headers });
+      let data;
+      if (path === '/auth/refresh') data = { accessToken: token, user };
+      else if (path === '/users/me') data = user;
+      else if (path === '/tracks') data = tracks;
+      else if (path === '/topics') data = topics;
+      else if (path === '/modules') data = modules;
+      else if (path === '/mindmap') data = { nodes: empty ? [] : nodes, edges: nodes.slice(1).map((node, i) => ({ source: nodes[i].id, target: node.id, relation: 'same-topic' })) };
+      else if (path === '/dashboard/radar') data = { modules: nodes.slice(0,20).map(node => ({ moduleId: node.id, name: node.name, masteryPct: node.masteryPct })) };
+      else if (path === '/dashboard/heatmap' || path === '/users/me/progress') data = [];
+      else if (path === '/users/me/stats') data = { xp:100, currentStreak:1, longestStreak:1, badges:[] };
+      else if (path === '/dashboard/leaderboard') {
+        assert.equal(url.searchParams.get('limit'), '10');
+        // Deliberately emulate the old backend to prove the UI remains bounded before rollout.
+        data = Array.from({ length:100 }, (_, i) => ({ rank:i+1, userId:id(5000+i), displayName:`Learner ${i+1}`, xp:1000-i }));
+      } else if (path === '/quiz/history' || path === '/mock-interview/history') {
+        const size = Number(url.searchParams.get('size')), p = Number(url.searchParams.get('page'));
+        assert.ok([5,10,20].includes(size));
+        report.requests.push({ device, path, page:p, size });
+        if (failHistory) return route.fulfill({ status:503, headers, json:{ detail:'History temporarily unavailable' } });
+        const total = empty ? 0 : 250;
+        data = { page:p, size, totalElements:total, totalPages:Math.ceil(total/size), items: Array.from({ length:Math.min(size,Math.max(0,total-(p-1)*size)) }, (_, i) => ({ id:id(6000+(p-1)*size+i), startedAt:'2026-10-03T00:00:00Z', finishedAt:'2026-10-03T01:00:00Z', score:80, strategy:'RANDOM', total:10, questionCount:10, status:'FINISHED' })) };
+      } else { report.unmatched.push(path); return route.fulfill({ status:404, headers, json:{ detail:'Unhandled fixture' } }); }
+      return route.fulfill({ headers, json:data });
+    });
+    const check = (name, actual, expected) => { assert.equal(actual, expected, `${device}: ${name}`); report.checks.push({ device, name }); };
+    const capture = async name => {
+      check(`${name}: no overflow`, await page.evaluate(() => document.documentElement.scrollWidth > innerWidth+1), false);
+      await page.screenshot({ path:`${output}/${device}-${name}.png`, fullPage:true });
+      const a = await new AxeBuilder({ page }).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
+      report.accessibility.push({ device, name, violations:a.violations.map(v => ({ id:v.id, targets:v.nodes.map(n => n.target) })) });
+    };
+    const visit = async path => { await page.goto(base+path); await page.waitForLoadState('networkidle'); };
+    await visit('/learn');
+    check('large catalogs use native track selection', await page.getByRole('combobox', {name:'Loại nội dung',exact:true}).count(), 1);
+    check('large catalogs use native topic selection', await page.getByRole('combobox', {name:'Chủ đề',exact:true}).count(), 1);
+    check('four topic previews only', await page.locator('[data-module-card]').count(), 12);
+    const heights = await page.locator('[data-module-card] > button').evaluateAll(items => items.map(el => el.getBoundingClientRect().height));
+    assert.ok(Math.max(...heights)-Math.min(...heights) < 1, 'equal card heights despite varied copy'); report.checks.push({device,name:'equal module-card heights'});
+    await capture('learn-large');
+    await page.getByLabel('Tìm chủ đề', {exact:true}).fill('Topic 29');
+    check('topic search narrows dropdown', await page.getByRole('combobox', {name:'Chủ đề',exact:true}).locator('option').count(), 2);
+    await page.getByRole('combobox', {name:'Chủ đề',exact:true}).selectOption(topics[29].id);
+    check('selected topic initially six modules', await page.locator('[data-module-card]').count(), 6);
+    await page.getByRole('button',{name:'Xem thêm 6 module',exact:true}).click();
+    check('progressive module expansion', await page.locator('[data-module-card]').count(), 12);
+    const last = page.locator('[data-module-card]').last(); await last.locator('button').first().click();
+    check('practice links still available', width < 1280 ? await last.getByRole('group',{name:'Bạn chọn cách học'}).getByRole('link').count() : await page.locator('#practice-options .space-y-4 a').count(), 3);
+    await capture('learn-expanded-practice');
+    await last.screenshot({ path:`${output}/${device}-module-detail.png` });
+    await page.getByRole('button',{name:'Thu gọn',exact:true}).click();
+    check('collapse restores module budget', await page.locator('[data-module-card]').count(), 6);
+    await visit('/mindmap');
+    check('map directory budget', await page.locator('[data-map-list] > li').count(),12);
+    await page.getByText('Xem sơ đồ kết nối module',{exact:true}).click();
+    check('diagram node budget',await page.locator('svg g[role="button"]').count(),12);
+    await page.getByRole('button',{name:'Trang 5',exact:true}).click();
+    check('map page changes',await page.locator('.kg-pagination [aria-current="page"]').textContent(),'5');
+    await page.getByRole('combobox', { name: /^Mức độ nắm vững/ }).selectOption('strong');
+    check('map filter resets page',await page.locator('.kg-pagination [aria-current="page"]').textContent(),'1');
+    const masteryText = await page.locator('[data-map-list] li p').allTextContents();
+    assert.ok(masteryText.every(value => Number(value.match(/(\d+)%/)?.[1]) >= 75)); report.checks.push({device,name:'mastery filter applies to directory'});
+    await capture('map-filtered');
+    await page.getByLabel('Tìm module',{exact:true}).fill('not-found-anywhere');
+    check('empty filtered directory',await page.locator('[data-map-list] > li').count(),0);
+    check('no empty diagram',await page.locator('svg g[role="button"]').count(),0);
+    await capture('map-no-results');
+    await page.getByLabel('Tìm module',{exact:true}).fill('module-29-12');
+    check('search finds a module beyond the initial page',await page.locator('[data-map-list] > li').count(),1);
+    empty=true; await visit('/mindmap'); await capture('map-empty'); empty=false;
+    for (const path of [`/quiz/${modules[0].id}`, '/mock-interview']) {
+      const historyPath = path.startsWith('/quiz') ? '/quiz/history' : '/mock-interview/history';
+      const historyAction = async action => { await Promise.all([page.waitForResponse(r => new URL(r.url()).pathname.endsWith(historyPath) && r.request().method() === 'GET'), action()]); await page.waitForLoadState('networkidle'); };
+      await visit(path);
+      check(`${path}: five sessions requested`,report.requests.at(-1).size,5);
+      await historyAction(() => page.getByRole('button',{name:'Trang 5',exact:true}).click());
+      check(`${path}: bounded page five`,report.requests.at(-1).page,5);
+      await historyAction(() => page.getByRole('button',{name:'Xem thêm phiên',exact:true}).click());
+      check(`${path}: more sessions resets page`,report.requests.at(-1).page,1);
+      check(`${path}: more requests ten`,report.requests.at(-1).size,10);
+      await historyAction(() => page.getByLabel('Số phiên mỗi trang').selectOption('20'));
+      check(`${path}: explicit maximum twenty`,report.requests.at(-1).size,20);
+      await capture(path.startsWith('/quiz')?'quiz-history':'interview-history');
+      empty=true; await visit(path); await capture(path.startsWith('/quiz')?'quiz-history-empty':'interview-history-empty'); empty=false;
+      failHistory=true; await visit(path); check(`${path}: retry available`,await page.getByRole('button',{name:'Thử lại',exact:true}).count(),1);
+      failHistory=false; await historyAction(() => page.getByRole('button',{name:'Thử lại',exact:true}).click());
+      await page.locator('#main-content [role="alert"]').waitFor({ state:'hidden' });
+      check(`${path}: retry recovers`,await page.locator('#main-content [role="alert"]').count(),0);
+    }
+    await visit('/dashboard');
+    check('leaderboard preview budget',await page.locator('[data-leaderboard] li').count(),5);
+    await page.getByRole('button',{name:'Xem top 10',exact:true}).click();
+    check('leaderboard expanded budget',await page.locator('[data-leaderboard] li').count(),10);
+    await capture('leaderboard-top10');
+    await page.getByRole('button',{name:'English',exact:true}).click();
+    await visit('/learn');
+    check('English track picker',await page.getByRole('combobox',{name:'Content track',exact:true}).count(),1);
+    check('English topic search',await page.getByLabel('Search topic',{exact:true}).count(),1);
+    await capture('english-learn');
+    await visit(`/quiz/${modules[0].id}`);
+    check('English bounded history control',await page.getByRole('combobox',{name:/^Sessions per page/}).count(),1);
+    await capture('english-history');
+    await visit('/mindmap');
+    check('English mastery filter',await page.getByRole('combobox',{name:/^Mastery level/}).count(),1);
+    await capture('english-map');
+    await context.close();
+  }
+  assert.equal(report.errors.length,0,'page errors'); assert.equal(report.unmatched.length,0,'unmatched fixture requests');
+  assert.equal(report.accessibility.flatMap(a => a.violations).length,0,'Axe violations');
+} finally { await browser.close(); fs.writeFileSync(`${output}/report.json`,JSON.stringify(report,null,2)); }
+console.log(JSON.stringify({ checks:report.checks.length, captures:report.accessibility.length, errors:report.errors, unmatched:report.unmatched, axeViolations:report.accessibility.flatMap(a=>a.violations).length },null,2));
