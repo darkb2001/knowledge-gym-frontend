@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
-import { ArrowRightIcon as ArrowRight, BookOpenIcon as BookOpen, CheckIcon as Check, ChartLineIcon as ChartLine, CirclesThreeIcon as CirclesThree, CompassIcon as Compass, GearSixIcon as GearSix, NotebookIcon as Notebook, SignOutIcon as SignOut, StackIcon as Stack, TextAlignLeftIcon as TextAlignLeft, UserCircleIcon as UserCircle, UsersThreeIcon as UsersThree } from "@phosphor-icons/react";
+import { ArrowRightIcon as ArrowRight, BookOpenIcon as BookOpen, CheckIcon as Check, ChartLineIcon as ChartLine, MagnifyingGlassIcon as MagnifyingGlass, RepeatIcon as Repeat, CompassIcon as Compass, GearSixIcon as GearSix, NotebookIcon as Notebook, SignOutIcon as SignOut, StackIcon as Stack, TextAlignLeftIcon as TextAlignLeft, UserCircleIcon as UserCircle, UsersThreeIcon as UsersThree } from "@phosphor-icons/react";
 import { ApiError, clearSession, ensureAccessToken, getAccessToken, hasUsableAccessToken, RefreshUnreachableError } from "@/lib/api-client";
 import { logout, readStoredUser, verifySession } from "@/lib/auth";
 import { LanguageSwitch, useLocale } from "@/components/locale";
@@ -14,11 +14,12 @@ import { ThemeToggle } from "./theme";
 const navigation = [
   { href: "/learn", label: "Chọn chủ đề", icon: Compass },
   { href: "/questions", label: "Thư viện câu hỏi", icon: BookOpen },
+  { href: "/search", label: "Tìm kiếm", icon: MagnifyingGlass },
+  { href: "/review", label: "Ôn tập hôm nay", icon: Repeat },
   { href: "/mock-interview", label: "Luyện phỏng vấn", icon: UsersThree },
   { href: "/dashboard", label: "Tiến độ học tập", icon: ChartLine },
   { href: "/profile", label: "Hồ sơ", icon: UserCircle },
   { href: "/notes", label: "Ghi chú", icon: Notebook },
-  { href: "/mindmap", label: "Sơ đồ kiến thức", icon: CirclesThree },
   { href: "/blog", label: "Bài viết", icon: TextAlignLeft },
 ];
 
@@ -32,7 +33,7 @@ function Brand() {
 function Navigation({ user, onNavigate }: { user: User | null; onNavigate?: () => void }) {
   const pathname = usePathname();
   const { t, locale } = useLocale();
-  const adminLabels: Record<string, string> = { "/admin/content": "Content library", "/admin/posts": "Blog editor", "/admin/users": "Accounts", "/admin/comments": "Comments", "/admin/learning": "Learning administration", "/admin/knowledge": "AI knowledge intake", "/admin/knowledge/drafts": "AI learning drafts", "/admin/writer": "AI writer", "/admin/search": "Search administration" };
+  const adminLabels: Record<string, string> = { "/admin/content": "Content library", "/admin/blog": "Blog & AI drafts", "/admin/users": "Accounts, comments & learning", "/admin/knowledge": "AI knowledge intake", "/admin/knowledge/drafts": "AI learning drafts", "/admin/system": "System administration" };
   const admin = user?.role === "ADMIN" || user?.role === "ROLE_ADMIN";
   const links = (items: typeof navigation) => items.map(({ href, label, icon: Icon }) => {
     const active = (pathname === href || pathname.startsWith(href + "/")) && !items.some(item => item.href !== href && item.href.startsWith(href + "/") && (pathname === item.href || pathname.startsWith(item.href + "/")));
@@ -45,23 +46,20 @@ function Navigation({ user, onNavigate }: { user: User | null; onNavigate?: () =
       label: "Thư viện & người học",
       items: [
         { href: "/admin/content", label: "Quản trị thư viện", icon: BookOpen },
-        { href: "/admin/users", label: "Quản lý tài khoản", icon: UserCircle },
-        { href: "/admin/learning", label: "Quản trị dữ liệu học", icon: ChartLine },
+        { href: "/admin/users", label: "Tài khoản, bình luận & dữ liệu học", icon: UserCircle },
       ],
     },
     {
       label: "Nội dung & AI",
       items: [
-        { href: "/admin/posts", label: "Biên tập bài viết", icon: Notebook },
-        { href: "/admin/writer", label: "Quản trị nội dung", icon: TextAlignLeft },
-        { href: "/admin/comments", label: "Kiểm duyệt bình luận", icon: TextAlignLeft },
+        { href: "/admin/blog", label: "Bài viết & hàng chờ AI", icon: Notebook },
         { href: "/admin/knowledge", label: "AI thu nạp kiến thức", icon: GearSix },
         { href: "/admin/knowledge/drafts", label: "Duyệt nội dung AI", icon: Check },
       ],
     },
     {
       label: "Hệ thống",
-      items: [{ href: "/admin/search", label: "Quản trị tìm kiếm", icon: GearSix }],
+      items: [{ href: "/admin/system", label: "Hệ thống & tìm kiếm", icon: GearSix }],
     },
   ];
   return <nav aria-label={t("Điều hướng chính")} className="space-y-1">

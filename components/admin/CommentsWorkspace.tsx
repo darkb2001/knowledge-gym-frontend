@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { PageHeading, RequireAdmin } from "@/components/ui";
 import { Pagination } from "@/components/Pagination";
 import { AdminField, adminError, useAdminCopy } from "@/components/admin/shared";
 import { useAdminDirectory } from "@/components/admin/use-directory";
 import { moderateComment, type AdminComment, type CommentStatus } from "@/lib/admin-platform";
 
-function CommentsWorkspace() {
+/** Nội dung tab Bình luận trong hub /admin/users. Không còn page shell/heading/guard — hub cung cấp. */
+export function CommentsWorkspace() {
   const { c, locale } = useAdminCopy();
   const [query, setQuery] = useState(""); const [search, setSearch] = useState("");
   const [status, setStatus] = useState(""); const [page, setPage] = useState(1);
@@ -24,8 +24,7 @@ function CommentsWorkspace() {
     try { setSelected(await moderateComment(selected.id, action, reason)); setReason(""); setMessage(c("Đã cập nhật bình luận.", "Comment updated.")); directory.reload(); }
     catch (err) { setError(err); } finally { setBusy(false); }
   }
-  return <div className="kg-page">
-    <PageHeading title={c("Kiểm duyệt bình luận", "Comment moderation")} description={c("Ẩn nội dung không phù hợp, xóa mềm và khôi phục có kiểm soát.", "Hide inappropriate content, soft-delete and restore with control.")} />
+  return <>
     <form className="mb-7 flex flex-wrap items-end gap-4" onSubmit={event => { event.preventDefault(); setPage(1); setSearch(query.trim()); }}><AdminField label={c("Nội dung bình luận", "Comment content")}><input className="kg-field" maxLength={200} value={query} onChange={event => setQuery(event.target.value)} /></AdminField><AdminField label={c("Trạng thái", "Status")}><select className="kg-field" value={status} onChange={event => { setStatus(event.target.value); setPage(1); }}><option value="">{c("Tất cả", "All")}</option>{["VISIBLE", "HIDDEN", "DELETED"].map(value => <option key={value}>{value}</option>)}</select></AdminField><button className="kg-secondary" disabled={directory.loading}>{c("Tìm bình luận", "Search comments")}</button></form>
     {Boolean(error || directory.error) && <p role="alert" className="mb-5 text-danger">{adminError(error || directory.error, locale === "en")} <button className="underline" onClick={directory.reload}>{c("Thử lại", "Retry")}</button></p>}
     {message && <p role="status" className="mb-5">{message}</p>}
@@ -38,6 +37,5 @@ function CommentsWorkspace() {
       </section>
     </div>
     <Pagination page={page} totalPages={directory.data?.totalPages ?? 0} onChange={setPage} disabled={directory.loading || busy} />
-  </div>;
+  </>;
 }
-export default function AdminCommentsPage() { return <RequireAdmin><CommentsWorkspace /></RequireAdmin>; }

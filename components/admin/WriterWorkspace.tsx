@@ -1,23 +1,23 @@
 "use client";
 import { useLocale } from "@/components/locale";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { LearningContent } from "@/components/LearningContent";
 import { apiRequest } from "@/lib/api-client";
-import { RequireAdmin, PageHeading, ContentLanguageNotice } from "@/components/ui";
+import { ContentLanguageNotice } from "@/components/ui";
 import { supportedTimezones } from "@/lib/timezones";
 
 type Settings = { enabled: boolean; localTime: string; timezone: string; dailyLimit: number; policy: "MANUAL_REVIEW" | "AUTO_PUBLISH_QUALIFIED"; qualityThreshold: number; lastScheduledDate: string | null; lastRunAt: string | null };
 type WriterRun = { id: string; status: string; attempts: number; errorMessage: string | null };
 type WriterStats = { pendingReview: number; generatedToday: number; tokensToday: number; costToday: number; costThisMonth: number; failedJobs: number };
-type BlogPost = { id: string; title: string; slug: string; body: string; excerpt: string | null; status: string; createdAt: string; tags: string[] };
+type BlogPost = { id: string; title: string; slug: string; body: string; excerpt: string | null; status: string; createdAt: string; tags: string[]; questionId?: string | null };
 type Revision = { id: string; version: number; title: string; body: string; excerpt: string | null; seoTitle: string | null; seoDescription: string | null; seoKeywords: string[]; instruction: string | null; sourceIds: string[]; model: string | null; qualityScore: number | null; tokensUsed: number | null; costUsd: number | null; createdAt: string };
 type Draft = { title: string; body: string; excerpt: string };
 
 const initial: Settings = { enabled: false, localTime: "06:00:00", timezone: "Asia/Jakarta", dailyLimit: 1, policy: "MANUAL_REVIEW", qualityThreshold: 85, lastScheduledDate: null, lastRunAt: null };
 const TIMEZONES = supportedTimezones();
 
-function WriterAdmin() {
+export function WriterWorkspace({ questionId }: { questionId?: string } = {}) {
   const { t, formatLocale } = useLocale();
   const [settings, setSettings] = useState<Settings>(initial);
   const [loaded, setLoaded] = useState(false);
@@ -37,6 +37,7 @@ function WriterAdmin() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const deepLinkApplied = useRef(false);
 
   const load = useCallback(async () => {
     try {
@@ -61,6 +62,14 @@ function WriterAdmin() {
 
   useEffect(() => { void load(); }, [load]);
   useEffect(() => { const timer = window.setInterval(() => void load(), 12000); return () => window.clearInterval(timer); }, [load]);
+  useEffect(() => {
+    if (deepLinkApplied.current || !questionId || !posts.length) return;
+    const match = posts.find((item) => item.questionId === questionId);
+    if (!match) return;
+    deepLinkApplied.current = true;
+    setSelected(match); setDraft({ title: match.title, body: match.body, excerpt: match.excerpt ?? "" });
+    void apiRequest<Revision[]>(`/admin/blog/writer/posts/${match.id}/revisions`).then(setRevisions).catch(() => {});
+  }, [questionId, posts]);
   const activeRunId=run?.id;
   const activeRunStatus=run?.status;
   useEffect(() => {
@@ -130,14 +139,13 @@ function WriterAdmin() {
     } catch (e) { setError(e instanceof Error ? e.message : "Không khôi phục được phiên bản"); }
   }
 
-  if (!loaded) return <div><PageHeading title="Quản trị nội dung" description="Theo dõi lịch tạo bài, duyệt nội dung và quản lý các phiên bản." />{error ? <p role="alert">{t(error)}<button type="button" onClick={() => void load()} className="ml-4 underline">{t("Thử lại")}</button></p> : <p role="status">{t("Đang tải cấu hình…")}</p>}</div>;
+  if (!loaded) return <div>{error ? <p role="alert">{t(error)}<button type="button" onClick={() => void load()} className="ml-4 underline">{t("Thử lại")}</button></p> : <p role="status">{t("Đang tải cấu hình…")}</p>}</div>;
   return <div className="space-y-7">
-    <PageHeading title="Quản trị nội dung" description="Theo dõi lịch tạo bài, duyệt nội dung và quản lý các phiên bản." />
     {!configured && <p className="kg-notice text-warning">{t("OPENAI_API_KEY chưa được cấu hình ở backend. Không gửi khóa bí mật từ trình duyệt.")}</p>}
     {configured && !writerEnabled && <p className="kg-notice text-warning">{t("Worker AI writer đang tắt (`app.blog.writer.enabled=false`). Lượt Generate now sẽ bị từ chối cho đến khi bật worker.")}</p>}
     {error && <p role="alert">{t(error)}</p>}
     {message && <p role="status">{t(message)}</p>}
-    {stats && <dl className="grid grid-cols-2 gap-x-6 gap-y-5 border-y border-line/70 py-5 sm:grid-cols-3 xl:grid-cols-6">{[
+    {stats && <dl className="grid grid-cols-2 gap-x-6 gap-y-5 border-y border-line/70 py-5 sm:grid-cols-3 xl:grid-cols-6">{[ 
       ["Chờ duyệt", stats.pendingReview], ["Lượt AI hôm nay", stats.generatedToday], ["Tokens hôm nay", stats.tokensToday.toLocaleString(formatLocale)], ["Chi phí hôm nay", `$${stats.costToday.toFixed(4)}`], ["Chi phí tháng này", `$${stats.costThisMonth.toFixed(2)}`], ["Run lỗi", stats.failedJobs],
     ].map(([label, value]) => <div key={String(label)}><dt className="text-xs text-subtle">{t(String(label))}</dt><dd className="mt-1 text-lg font-semibold tabular-nums text-strong">{value}</dd></div>)}</dl>}
     {stats && stats.costThisMonth > monthlyAlert && <p role="alert">{t("Chi phí AI tháng này đã vượt ngưỡng cảnh báo $")}{monthlyAlert.toFixed(2)}.</p>}
@@ -182,5 +190,3 @@ function WriterAdmin() {
     </>}
   </div>;
 }
-
-export default function AdminWriterPage(){return <RequireAdmin><WriterAdmin/></RequireAdmin>;}

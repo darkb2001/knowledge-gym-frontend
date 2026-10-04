@@ -6,6 +6,7 @@ import { FormEvent, useState } from "react";
 import { AuthShell, Field, inputClass, primaryBtnClass } from "@/components/ui";
 import { ApiError } from "@/lib/api-client";
 import { requestEmailVerification, verifyEmail } from "@/lib/auth";
+import CodeStep from "@/components/auth/CodeStep";
 
 type Step = 1 | 2;
 
@@ -56,6 +57,19 @@ export default function VerifyEmailPage() {
     }
   }
 
+  async function resendCode() {
+    setError(null);
+    setMessage(null);
+    setBusy(true);
+    try {
+      setMessage(await requestEmailVerification(email.trim()));
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Không gửi được mã");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <AuthShell
       title={t("Xác minh email")}
@@ -74,36 +88,20 @@ export default function VerifyEmailPage() {
       ) : null}
 
       {step === 1 ? (
-        <form onSubmit={onConfirmCode} className="animate-fade-up-delay">
-          <Field label={t("Email")}>
-            <input
-              className={inputClass}
-              type="email"
-              autoComplete="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Field>
-          <Field label={t("Mã 6 số")}>
-            <input
-              className={inputClass}
-              inputMode="numeric"
-              pattern="\d{6}"
-              maxLength={6}
-              required
-              value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-            />
-          </Field>
-          {error ? (
-            <p className="mb-4 text-sm text-warning" role="alert">
-              {t(error)}
-            </p>
-          ) : null}
-          <button type="submit" className={primaryBtnClass}>
-            {t("Tiếp tục")}</button>
-        </form>
+        <CodeStep
+          email={email}
+          code={code}
+          onCodeChange={setCode}
+          emailEditable
+          onEmailChange={setEmail}
+          error={error}
+          busy={busy}
+          submitLabel={t("Tiếp tục")}
+          onSubmit={onConfirmCode}
+          onResend={() => void resendCode()}
+          resendBusy={busy}
+          resendDisabled={!/^[^@\s]+@[^@\s]+$/.test(email.trim())}
+        />
       ) : (
         <form onSubmit={onVerify} className="animate-fade-up-delay">
           <p className="mb-4 text-sm text-subtle">{t("Nhập mã trong email và đặt mật khẩu mới.")}</p>
@@ -143,25 +141,6 @@ export default function VerifyEmailPage() {
       )}
 
       <div className="mt-6 flex flex-col gap-3 text-sm text-subtle">
-        <button
-          type="button"
-          className="text-left text-positive underline underline-offset-4 hover:text-strong"
-          disabled={busy || !/^[^@\s]+@[^@\s]+$/.test(email.trim())}
-          onClick={async () => {
-            setError(null);
-            setMessage(null);
-            setBusy(true);
-            try {
-              setMessage(await requestEmailVerification(email.trim()));
-            } catch (err) {
-              setError(err instanceof ApiError ? err.message : "Không gửi được mã");
-            } finally {
-              setBusy(false);
-            }
-          }}
-        >
-          {t("Gửi lại mã")}
-        </button>
         <Link href="/login" className="hover:text-warning">
           {t("← Quay lại đăng nhập")}</Link>
       </div>

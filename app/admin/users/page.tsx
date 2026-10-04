@@ -1,14 +1,20 @@
 "use client";
 
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { ChartLineIcon, ChatCircleTextIcon, UserCircleIcon } from "@phosphor-icons/react";
 import { PageHeading, RequireAdmin } from "@/components/ui";
 import { Pagination } from "@/components/Pagination";
 import { AdminField, adminError, useAdminCopy } from "@/components/admin/shared";
 import { useAdminDirectory } from "@/components/admin/use-directory";
+import { CommentsWorkspace } from "@/components/admin/CommentsWorkspace";
+import { LearningWorkspace } from "@/components/admin/LearningWorkspace";
+import { isUuid } from "@/lib/admin-content";
 import { changeUserRole, changeUserStatus, revokeUserSessions, type AdminUser, type UserRole } from "@/lib/admin-platform";
 
-function UsersWorkspace() {
+/* Tab "Tài khoản" giữ nguyên chức năng cũ: tìm kiếm, danh sách, đổi quyền/trạng thái/thu hồi phiên. */
+function AccountsWorkspace() {
   const { c, locale } = useAdminCopy();
   const [query, setQuery] = useState("");
   const [search, setSearch] = useState("");
@@ -35,8 +41,7 @@ function UsersWorkspace() {
       setReason(""); setMessage(c("Đã cập nhật và ghi nhật ký quản trị.", "Updated and recorded in the audit log.")); directory.reload();
     } catch (err) { setError(err); } finally { setBusy(false); }
   }
-  return <div className="kg-page">
-    <PageHeading title={c("Quản lý tài khoản", "Account management")} description={c("Tìm người dùng, quản lý quyền và bảo vệ phiên đăng nhập. Mọi thay đổi cần lý do.", "Find users, manage roles and secure sessions. Every change requires a reason.")} />
+  return <>
     <form className="mb-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" onSubmit={event => { event.preventDefault(); setPage(1); setSearch(query.trim()); }}>
       <AdminField label={c("Email hoặc tên", "Email or name")}><input className="kg-field" value={query} maxLength={200} onChange={event => setQuery(event.target.value)} /></AdminField>
       <AdminField label={c("Quyền", "Role")}><select className="kg-field" value={role} onChange={event => { setPage(1); setRole(event.target.value); }}><option value="">{c("Tất cả", "All")}</option>{["USER", "PREMIUM", "ADMIN"].map(value => <option key={value}>{value}</option>)}</select></AdminField>
@@ -51,8 +56,8 @@ function UsersWorkspace() {
       </section>
       <section className="min-w-0 border-t border-line pt-5 xl:border-t-0 xl:pt-0" aria-label={c("Chi tiết tài khoản", "Account details")}>
         {!selected ? <p className="text-subtle">{c("Chọn tài khoản để quản lý.", "Select an account to manage.")}</p> : <div className="space-y-5"><h2 className="text-xl">{selected.displayName}</h2><p className="break-all text-sm">{selected.email}</p><dl className="grid grid-cols-2 gap-3 text-sm"><dt>{c("Đăng nhập bằng", "Login provider")}</dt><dd>{selected.authProvider}</dd><dt>XP</dt><dd className="tabular-nums">{selected.xp}</dd><dt>{c("Trạng thái", "Status")}</dt><dd>{selected.blocked ? c("Đã khóa", "Blocked") : c("Hoạt động", "Active")}</dd></dl>
-          <Link className="kg-secondary" href={`/admin/learning?userId=${selected.id}`}>{c("Xem dữ liệu học", "View learning data")}</Link>
-          <AdminField label={c("Lý do thay đổi", "Reason for change")} hint={c("Bắt buộc; được lưu trong nhật ký quản trị.", "Required; recorded in the audit log.")}><textarea className="kg-field min-h-24" maxLength={500} disabled={busy} value={reason} onChange={event => setReason(event.target.value)} /></AdminField>
+          <Link className="kg-secondary" href={`/admin/users?tab=learning&userId=${selected.id}`}>{c("Xem dữ liệu học", "View learning data")}</Link>
+          <AdminField label={c("Lý do thay đổi", "Reason for change")} hint={c("Bắt buộc; được lưu trong nhật ký quản trị.", "Required; recorded in the audit log.")}><textarea className="kg-field min-h-24" maxLength={500} disabled={busy} value={reason} onChange={event => setReason(event.target.value)}></textarea></AdminField>
           <AdminField label={c("Quyền mới", "New role")}><select className="kg-field" disabled={busy} value={nextRole} onChange={event => setNextRole(event.target.value as UserRole)}>{["USER", "PREMIUM", "ADMIN"].map(value => <option key={value}>{value}</option>)}</select></AdminField>
           <div className="flex flex-wrap gap-2"><button className="kg-secondary" disabled={busy || !reason.trim() || nextRole === selected.role} onClick={() => void act("role")}>{c("Đổi quyền", "Change role")}</button><button className="kg-secondary" disabled={busy || !reason.trim()} onClick={() => void act("status")}>{selected.blocked ? c("Mở khóa", "Unblock") : c("Khóa tài khoản", "Block account")}</button><button className="kg-secondary" disabled={busy || !reason.trim()} onClick={() => void act("sessions")}>{c("Thu hồi phiên", "Revoke sessions")}</button></div>
           <p className="text-sm text-subtle">{c("Không thể tự khóa/hạ quyền hoặc loại bỏ admin cuối cùng.", "You cannot block/demote yourself or remove the last active admin.")}</p>
@@ -60,6 +65,62 @@ function UsersWorkspace() {
       </section>
     </div>
     <Pagination page={page} totalPages={directory.data?.totalPages ?? 0} onChange={setPage} disabled={directory.loading || busy} />
+  </>;
+}
+
+const tabs = [
+  { id: "accounts", label: ["Tài khoản", "Accounts"], icon: UserCircleIcon },
+  { id: "comments", label: ["Bình luận", "Comments"], icon: ChatCircleTextIcon },
+  { id: "learning", label: ["Dữ liệu học", "Learning data"], icon: ChartLineIcon },
+] as const;
+type TabId = (typeof tabs)[number]["id"];
+
+function UsersHub() {
+  const { c } = useAdminCopy();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const userId = searchParams.get("userId") ?? "";
+  const requested = searchParams.get("tab");
+  // Có ?userId= thì luôn mở tab Dữ liệu học và truyền tài khoản đó sang.
+  const active: TabId = isUuid(userId) ? "learning" : requested === "comments" || requested === "learning" ? requested : "accounts";
+  const [visited, setVisited] = useState<Record<TabId, boolean>>({ accounts: true, comments: false, learning: false });
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  useEffect(() => { setVisited(previous => previous[active] ? previous : { ...previous, [active]: true }); }, [active]);
+  function setTab(next: TabId) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", next);
+    if (next !== "learning") params.delete("userId");
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }
+  function onTabKey(event: React.KeyboardEvent<HTMLButtonElement>, index: number) {
+    const last = tabs.length - 1;
+    let nextIndex = index;
+    if (event.key === "ArrowRight") nextIndex = index === last ? 0 : index + 1;
+    else if (event.key === "ArrowLeft") nextIndex = index === 0 ? last : index - 1;
+    else if (event.key === "Home") nextIndex = 0;
+    else if (event.key === "End") nextIndex = last;
+    else return;
+    event.preventDefault();
+    setTab(tabs[nextIndex].id);
+    tabRefs.current[nextIndex]?.focus();
+  }
+  return <div className="kg-page">
+    <PageHeading title={c("Quản trị người học", "Learner administration")} description={c("Tài khoản, bình luận và dữ liệu học trong cùng một không gian.", "Accounts, comments and learning data in one workspace.")} />
+    <nav aria-label={c("Các khu vực quản trị người học", "Learner administration sections")}>
+      <div role="tablist" className="mb-7 flex flex-wrap gap-2 border-b border-line pb-4">
+        {tabs.map(({ id, label, icon: Icon }, index) => {
+          const selectedTab = active === id;
+          return <button key={id} type="button" role="tab" id={`tab-${id}`} ref={element => { tabRefs.current[index] = element; }} aria-selected={selectedTab} aria-controls={`panel-${id}`} tabIndex={selectedTab ? 0 : -1} onKeyDown={event => onTabKey(event, index)} onClick={() => setTab(id)} className={`inline-flex min-h-11 items-center gap-2 rounded-lg px-4 text-sm font-medium transition-colors ${selectedTab ? "bg-accent text-on-accent" : "text-body hover:bg-muted"}`}><Icon size={19} aria-hidden />{c(label[0], label[1])}</button>;
+        })}
+      </div>
+    </nav>
+    {tabs.map(({ id }) => <div key={id} role="tabpanel" id={`panel-${id}`} aria-labelledby={`tab-${id}`} tabIndex={-1} hidden={active !== id} className="focus:outline-none">
+      {visited[id] && (id === "accounts" ? <AccountsWorkspace /> : id === "comments" ? <CommentsWorkspace /> : <LearningWorkspace userId={isUuid(userId) ? userId : undefined} />)}
+    </div>)}
   </div>;
 }
-export default function AdminUsersPage() { return <RequireAdmin><UsersWorkspace /></RequireAdmin>; }
+
+export default function AdminUsersPage() {
+  return <RequireAdmin><Suspense fallback={<div className="kg-page"><p role="status">{/* query params hydrate */}Đang tải…</p></div>}><UsersHub /></Suspense></RequireAdmin>;
+}

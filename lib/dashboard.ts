@@ -17,12 +17,22 @@ export function topLeaderboard(users: LeaderboardUser[]): LeaderboardUser[] {
   return [...users].sort((a, b) => a.rank - b.rank).slice(0, 10);
 }
 
+/** Per-topic mastery + attempt counts. Throws `ApiError` (e.g. 404) when the endpoint is unavailable. */
+export async function getProgress(signal?: AbortSignal): Promise<ProgressModule[]> {
+  return apiRequest<ProgressModule[]>("/users/me/progress", { signal });
+}
+
+/** Aggregate XP / streak / level / badges. Throws `ApiError` (e.g. 404) when the endpoint is unavailable. */
+export async function getStats(signal?: AbortSignal): Promise<UserStats> {
+  return apiRequest<UserStats>("/users/me/stats", { signal });
+}
+
 export async function loadDashboard(signal?: AbortSignal): Promise<DashboardData> {
   const [radar, heatmap, progress, stats, leaderboard] = await Promise.all([
     apiRequest<{ modules: RadarModule[] }>("/dashboard/radar", { signal }),
     apiRequest<HeatmapDay[]>("/dashboard/heatmap?days=90", { signal }),
-    apiRequest<ProgressModule[]>("/users/me/progress", { signal }),
-    apiRequest<UserStats>("/users/me/stats", { signal }),
+    getProgress(signal),
+    getStats(signal),
     apiRequest<LeaderboardUser[]>("/dashboard/leaderboard?limit=10", { signal }),
   ]);
   return { radar: radar.modules, heatmap: fillHeatmap(heatmap, 90), progress, stats, leaderboard: topLeaderboard(leaderboard) };

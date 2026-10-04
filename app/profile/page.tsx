@@ -8,7 +8,7 @@ import { useLocale } from "@/components/locale";
 import { apiRequest } from "@/lib/api-client";
 import { uploadAvatar, validateAvatar } from "@/lib/storage";
 import { readStoredUser, storeUser } from "@/lib/auth";
-import type { UserStats } from "@/lib/dashboard";
+import { getProgress, getStats, type ProgressModule, type UserStats } from "@/lib/dashboard";
 
 type Profile = {
   id: string;
@@ -21,6 +21,74 @@ type Profile = {
   hasPassword: boolean;
   stats: UserStats;
 };
+
+type ProgressState = "loading" | "ready" | "empty" | "hidden";
+
+/**
+ * Tiến độ học tập trên trang hồ sơ. Gọi `/users/me/progress` + `/users/me/stats`
+ * (đã có ở backend nhưng trước đây chưa hiển thị). Nếu endpoint lỗi/404 thì ẩn
+ * cả mục — không được làm hỏng phần còn lại của trang hồ sơ.
+ */
+function ProgressSection() {
+  const { t, formatLocale } = useLocale();
+  const [progress, setProgress] = useState<ProgressModule[]>([]);
+  const [stats, setStats] = useState<UserStats | null>(null);
+  const [state, setState] = useState<ProgressState>("loading");
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setState("loading");
+    Promise.all([getProgress(controller.signal), getStats(controller.signal)])
+      .then(([nextProgress, nextStats]) => {
+        if (controller.signal.aborted) return;
+        const modules = Array.isArray(nextProgress) ? nextProgress : [];
+        setProgress(modules);
+        setStats(nextStats ?? null);
+        setState(modules.length ? "ready" : "empty");
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setState("hidden");
+      });
+    return () => controller.abort();
+  }, []);
+
+  if (state === "hidden") return null;
+
+  const totalAnswered = progress.reduce((sum, item) => sum + (Number.isFinite(item.totalAttempts) ? item.totalAttempts : 0), 0);
+
+  return <section className="kg-panel mt-6" aria-labelledby="learning-progress-heading">
+    <div className="flex flex-wrap items-start justify-between gap-3">
+      <div className="min-w-0">
+        <h2 id="learning-progress-heading" className="text-xl text-strong">{t("Tiến độ học tập")}</h2>
+        <p className="mt-1 text-sm text-subtle">{t("Mức độ nắm vững")} · tổng số câu đã trả lời</p>
+      </div>
+      <Link href="/dashboard" className="kg-secondary min-h-11 px-4 text-sm">{t("Xem trên bảng điều khiển")}</Link>
+    </div>
+    {state === "loading" && <p role="status" className="mt-4 text-sm text-subtle">Đang tải tiến độ…</p>}
+    {state === "empty" && <p className="mt-4 text-sm text-subtle">Chưa có dữ liệu tiến độ — làm vài câu để bắt đầu</p>}
+    {state === "ready" && <>
+      <p className="mt-4 flex flex-wrap gap-x-6 gap-y-2 border-y border-line/70 py-3 text-sm text-subtle">
+        <span>Tổng số câu đã trả lời: <strong className="tabular-nums text-strong">{totalAnswered.toLocaleString(formatLocale)}</strong></span>
+        {stats ? <span>{t("Kinh nghiệm tích lũy")}: <strong className="tabular-nums text-strong">{stats.xp.toLocaleString(formatLocale)} XP</strong></span> : null}
+        {stats?.level ? <span>Cấp {stats.level}</span> : null}
+      </p>
+      <ul className="mt-5 space-y-4">
+        {progress.map(item => {
+          const pct = Math.max(0, Math.min(100, Math.round(item.masteryPct)));
+          return <li key={item.moduleId}>
+            <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+              <span className="break-all font-medium text-strong">{item.moduleId}</span>
+              <span className="tabular-nums text-subtle">{pct}%</span>
+            </div>
+            <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={item.moduleId}>
+              <span className="block h-full rounded-full bg-accent" style={{ width: `${pct}%` }} />
+            </div>
+          </li>;
+        })}
+      </ul>
+    </>}
+  </section>;
+}
 
 function ProfilePage() {
   const { t, formatLocale } = useLocale();
@@ -116,6 +184,7 @@ function ProfilePage() {
         <PasswordPanel hasPassword={profile.hasPassword} />
       </section>
     </section>}
+    <ProgressSection />
   </div>;
 }
 

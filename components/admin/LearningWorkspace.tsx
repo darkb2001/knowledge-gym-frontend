@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { RequireAdmin, PageHeading } from "@/components/ui";
 import { AdminField, adminError, useAdminCopy } from "@/components/admin/shared";
-import { useAdminDirectory } from "@/components/admin/use-directory";
+import { useAdminDirectory, useDebouncedValue } from "@/components/admin/use-directory";
 import { Pagination } from "@/components/Pagination";
 import { apiRequest } from "@/lib/api-client";
 import { isUuid } from "@/lib/admin-content";
 import type { AdminUser } from "@/lib/admin-platform";
 
 type Entry = { id: string; label: string; status: string; score: number | null; total: number | null; nextReview: string | null; occurredAt: string | null };
+
+type SelectedAccount = { id: string; displayName?: string; email?: string; role?: string };
+
 function LearningRecords({ userId }: { userId: string }) {
   const { c, locale } = useAdminCopy();
   const [kind, setKind] = useState("QUIZ"); const [page, setPage] = useState(1);
@@ -32,26 +33,43 @@ function LearningRecords({ userId }: { userId: string }) {
     <Pagination page={page} totalPages={directory.data?.totalPages ?? 0} onChange={setPage} disabled={busy || directory.loading} />
   </section>;
 }
+
+/** Bộ chọn tài khoản: tìm theo tên/email (debounce) rồi bấm để mở dữ liệu học. Không cần dán UUID. */
 function AccountPicker({ onSelect }: { onSelect: (user: AdminUser) => void }) {
   const { c, locale } = useAdminCopy();
-  const [query, setQuery] = useState(""); const [search, setSearch] = useState(""); const [page, setPage] = useState(1);
-  const directory = useAdminDirectory<AdminUser>(`/admin/users?q=${encodeURIComponent(search)}&page=${page}&size=10`);
+  const [query, setQuery] = useState(""); const [page, setPage] = useState(1);
+  const debouncedQuery = useDebouncedValue(query.trim(), 350);
+  const params = new URLSearchParams({ page: String(page), size: "10" });
+  if (debouncedQuery) params.set("q", debouncedQuery);
+  const directory = useAdminDirectory<AdminUser>(`/admin/users?${params}`);
   return <section className="flex flex-1 flex-col gap-5">
-    <form className="grid max-w-2xl items-end gap-3 sm:grid-cols-[minmax(0,1fr)_auto]" onSubmit={e => { e.preventDefault(); setSearch(query.trim()); setPage(1); }}><AdminField label={c("Tìm tài khoản bằng tên hoặc email", "Find an account by name or email")}><input type="search" className="kg-field" maxLength={200} value={query} onChange={e => setQuery(e.target.value)} /></AdminField><button className="kg-button" disabled={directory.loading}>{c("Tìm tài khoản", "Search accounts")}</button></form>
+    <form className="grid max-w-2xl items-end gap-3 sm:grid-cols-[minmax(0,1fr)_auto]" onSubmit={event => { event.preventDefault(); setPage(1); }}><AdminField label={c("Tìm tài khoản bằng tên hoặc email", "Find an account by name or email")}><input type="search" className="kg-field" maxLength={200} value={query} onChange={event => { setQuery(event.target.value); setPage(1); }} /></AdminField><button className="kg-button" disabled={directory.loading}>{c("Tìm tài khoản", "Search accounts")}</button></form>
     {directory.error ? <p role="alert">{adminError(directory.error, locale === "en")} <button className="underline" onClick={directory.reload}>{c("Thử lại", "Retry")}</button></p> : directory.loading ? <p role="status">{c("Đang tải tài khoản…", "Loading accounts…")}</p> : <>
       <p className="text-sm text-subtle">{c("Chọn người học bên dưới để xem lịch sử và hỗ trợ lịch ôn. Không cần nhập ID tài khoản.", "Select a learner below to inspect history and help with review schedules. No account ID needed.")}</p>
-      {!directory.data?.items.length ? <p className="kg-notice">{c("Không tìm thấy tài khoản. Thử tên hoặc email khác.", "No accounts found. Try another name or email.")}</p> : <ul className="divide-y divide-line rounded-xl border border-line bg-surface">{directory.data.items.map(user => <li key={user.id}><button type="button" className="flex min-h-11 w-full flex-wrap items-center justify-between gap-3 p-5 text-left hover:bg-muted" onClick={() => onSelect(user)}><span className="min-w-0"><strong className="block break-words text-strong">{user.displayName}</strong><span className="mt-1 block break-all text-sm text-subtle">{user.email}</span></span><span className="text-sm font-medium text-accent">{c("Xem dữ liệu học", "View learning data")}</span></button></li>)}</ul>}
+      {!directory.data?.items.length ? <p className="kg-notice">{c("Không tìm thấy tài khoản. Thử tên hoặc email khác.", "No accounts found. Try another name or email.")}</p> : <ul className="divide-y divide-line rounded-xl border border-line bg-surface">{directory.data.items.map(user => <li key={user.id}><button type="button" className="flex min-h-11 w-full flex-wrap items-center justify-between gap-3 p-5 text-left hover:bg-muted" onClick={() => onSelect(user)}><span className="min-w-0"><strong className="block break-words text-strong">{user.displayName}</strong><span className="mt-1 block break-all text-sm text-subtle">{user.email}</span><span className="mt-1 block text-sm text-subtle">{user.role}</span></span><span className="text-sm font-medium text-accent">{c("Xem dữ liệu học", "View learning data")}</span></button></li>)}</ul>}
     </>}
     <Pagination page={page} totalPages={directory.data?.totalPages ?? 0} onChange={setPage} disabled={directory.loading || Boolean(directory.error)} />
   </section>;
 }
-function LearningWorkspace() {
-  const { c } = useAdminCopy(); const [input, setInput] = useState(""); const [userId, setUserId] = useState(""); const [account, setAccount] = useState<AdminUser | null>(null);
-  useEffect(() => { const id = new URLSearchParams(window.location.search).get("userId") ?? ""; if (isUuid(id)) { setInput(id); setUserId(id); } }, []);
-  return <div className="kg-page">
-    <PageHeading title={c("Quản trị dữ liệu học", "Learning administration")} description={c("Chọn người học để kiểm tra trắc nghiệm, flashcard, phỏng vấn và tiến độ. Điểm và lịch sử học được giữ nguyên.", "Choose a learner to inspect quizzes, flashcards, interviews and progress. Scores and learning history are preserved.")} action={<Link className="kg-secondary" href="/admin/users">{c("Quản lý tài khoản", "Manage accounts")}</Link>} />
-    {!userId && <details className="mb-6"><summary>{c("Tra cứu bằng ID (nâng cao)", "Look up by ID (advanced)")}</summary><form className="mt-4 grid max-w-2xl items-end gap-3 sm:grid-cols-[minmax(0,1fr)_auto]" onSubmit={e => { e.preventDefault(); if (isUuid(input.trim())) { setUserId(input.trim()); setAccount(null); } }}><AdminField label={c("ID tài khoản", "Account ID")}><input className="kg-field" value={input} onChange={e => setInput(e.target.value)} /></AdminField><button className="kg-secondary" disabled={!isUuid(input.trim())}>{c("Xem dữ liệu", "View records")}</button></form></details>}
-    {userId ? <><div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-y border-line py-4"><div><h2 className="text-lg">{account?.displayName ?? c("Tài khoản đang xem", "Selected account")}</h2><p className="mt-1 break-all text-sm text-subtle">{account?.email ?? userId}</p></div><button type="button" className="kg-secondary" onClick={() => { setUserId(""); setAccount(null); }}>{c("Chọn người học khác", "Choose another learner")}</button></div><LearningRecords key={userId} userId={userId} /></> : <AccountPicker onSelect={user => { setAccount(user); setUserId(user.id); }} />}
-  </div>;
+
+/** Nội dung tab Dữ liệu học. Nhận `userId` từ deep-link ?userId= để tự mở đúng tài khoản. */
+export function LearningWorkspace({ userId }: { userId?: string }) {
+  const { c } = useAdminCopy();
+  const [selected, setSelected] = useState<SelectedAccount | null>(null);
+  useEffect(() => {
+    if (userId && isUuid(userId)) setSelected(previous => previous?.id === userId ? previous : { id: userId });
+  }, [userId]);
+  return <section className="flex flex-col gap-6">
+    {selected ? <>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-y border-line py-4">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-line bg-surface px-4 py-2">
+          <strong className="break-words text-strong">{selected.displayName ?? c("Tài khoản đang xem", "Selected account")}</strong>
+          <span className="break-all text-sm text-subtle">{selected.email ?? selected.id}</span>
+          {selected.role && <span className="text-sm text-subtle">{selected.role}</span>}
+        </div>
+        <button type="button" className="kg-secondary" onClick={() => setSelected(null)}>{c("Bỏ chọn", "Clear selection")}</button>
+      </div>
+      <LearningRecords key={selected.id} userId={selected.id} />
+    </> : <AccountPicker onSelect={user => setSelected({ id: user.id, displayName: user.displayName, email: user.email, role: user.role })} />}
+  </section>;
 }
-export default function AdminLearningPage() { return <RequireAdmin><LearningWorkspace /></RequireAdmin>; }

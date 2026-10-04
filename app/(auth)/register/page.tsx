@@ -13,6 +13,7 @@ import {
 } from "@/components/ui";
 import { ApiError } from "@/lib/api-client";
 import { register, requestEmailVerification, startGoogleLogin } from "@/lib/auth";
+import CodeStep from "@/components/auth/CodeStep";
 
 type Step = 1 | 2;
 
@@ -134,49 +135,24 @@ export default function RegisterPage() {
           </button>
         </form>
       ) : (
-        <form onSubmit={onSubmit} className="animate-fade-up-delay">
-          {message ? <p className="mb-4 text-sm text-subtle">{t(message)}</p> : null}
-          <Field label={t("Mã 6 số")}>
-            <input
-              className={inputClass}
-              inputMode="numeric"
-              pattern="\d{6}"
-              maxLength={6}
-              required
-              value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-            />
-          </Field>
-          {error ? (
-            <p className="mb-4 text-sm text-warning" role="alert">
-              {t(error)}
-            </p>
-          ) : null}
-          <button type="submit" className={primaryBtnClass} disabled={busy}>
-            {busy ? t("Đang tạo…") : t("Đăng ký")}
-          </button>
-          <div className="mt-3 flex flex-wrap items-center gap-4 text-sm">
-            <button
-              type="button"
-              className="text-positive underline underline-offset-4 hover:text-strong"
-              disabled={busy}
-              onClick={() => void sendCode()}
-            >
-              {t("Gửi lại mã")}
-            </button>
-            <button
-              type="button"
-              className="text-subtle underline underline-offset-4 hover:text-strong"
-              disabled={busy}
-              onClick={() => {
-                setStep(1);
-                setError(null);
-              }}
-            >
-              {t("Đổi email")}
-            </button>
-          </div>
-        </form>
+        <CodeStep
+          email={email}
+          code={code}
+          onCodeChange={setCode}
+          message={message}
+          error={error}
+          busy={busy}
+          submitLabel={t("Đăng ký")}
+          submitBusyLabel={t("Đang tạo…")}
+          onSubmit={onSubmit}
+          onResend={() => void sendCode()}
+          resendBusy={busy}
+          backLabel={t("Đổi email")}
+          onBack={() => {
+            setStep(1);
+            setError(null);
+          }}
+        />
       )}
 
       <button type="button" className={`${ghostBtnClass} mt-3`} onClick={startGoogleLogin}>

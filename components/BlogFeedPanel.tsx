@@ -2,22 +2,26 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowLeftIcon as ArrowLeft, CheckIcon as Check, CopyIcon as Copy, RssIcon as Rss } from "@phosphor-icons/react";
+import { CheckIcon as Check, CopyIcon as Copy, RssIcon as Rss } from "@phosphor-icons/react";
 import { getApiBase } from "@/lib/api-client";
 import { useLocale } from "@/components/locale";
-import { PublicShell, PageHeading } from "@/components/ui";
 
 type FeedPost = { id: string; title: string; slug: string; publishedAt: string };
 
 const FALLBACK_ORIGIN = "https://app.darkb-tech.io.vn";
 
-export default function BlogRssPage() {
+/**
+ * Nội dung nguồn tin RSS, tách khỏi trang `/blog/rss` (đã gộp vào `/blog`).
+ * Không kèm shell/heading của trang — trang blog tự bọc trong mục có thể thu gọn.
+ */
+export default function BlogFeedPanel() {
   const { t, formatLocale } = useLocale();
   const [posts, setPosts] = useState<FeedPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [origin, setOrigin] = useState(FALLBACK_ORIGIN);
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState("");
 
   useEffect(() => { setOrigin(window.location.origin); }, []);
 
@@ -37,34 +41,39 @@ export default function BlogRssPage() {
   const readerUrl = `https://feedly.com/i/subscription/feed/${encodeURIComponent(feedUrl)}`;
 
   async function copy() {
+    setCopyError("");
     try {
+      // `navigator.clipboard` còn thiếu trên http/localhost → báo lỗi rõ ràng thay vì im lặng thất bại.
+      if (!navigator.clipboard || typeof navigator.clipboard.writeText !== "function") {
+        throw new Error("clipboard-unavailable");
+      }
       await navigator.clipboard.writeText(feedUrl);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2400);
     } catch {
       setCopied(false);
+      setCopyError("Không sao chép tự động được. Hãy chọn liên kết bên dưới và sao chép thủ công.");
     }
   }
 
-  return <PublicShell>
-    <PageHeading title="Nguồn RSS" description="Theo dõi bài viết mới bằng trình đọc tin bạn đang dùng." />
-    <section className="kg-panel mt-6">
-      <h2 className="text-lg font-semibold text-strong">{t("Liên kết nguồn tin")}</h2>
+  return <>
+    <section className="kg-panel">
+      <h3 className="text-lg font-semibold text-strong">{t("Liên kết nguồn tin")}</h3>
       <p className="mt-2 text-sm leading-relaxed text-subtle">{t("Dán liên kết này vào Feedly, Inoreader, NetNewsWire hoặc bất kỳ trình đọc RSS nào. Tệp XML luôn hợp lệ kể cả khi chưa có bài viết.")}</p>
-      <p className="mt-4 break-all rounded-xl border border-line bg-sand/50 px-4 py-3 font-mono text-[13px] text-body">{feedUrl}</p>
+      <p className="mt-4 select-all break-all rounded-xl border border-line bg-sand/50 px-4 py-3 font-mono text-[13px] text-body">{feedUrl}</p>
       <div className="mt-4 flex flex-wrap gap-3">
         <button type="button" onClick={copy} className="kg-button"><Copy size={18} aria-hidden />{t("Sao chép liên kết")}</button>
-        <a href="/feed.xml" target="_blank" rel="noreferrer" className="kg-secondary"><Rss size={18} aria-hidden />{t("Mở tệp XML")}</a>
         <a href={readerUrl} target="_blank" rel="noreferrer" className="kg-secondary">{t("Theo dõi bằng Feedly")}</a>
-        <Link href="/blog" className="kg-secondary"><ArrowLeft size={18} aria-hidden />{t("Về trang bài viết")}</Link>
+        <a href="/feed.xml" target="_blank" rel="noreferrer" className="kg-secondary"><Rss size={18} aria-hidden />Dùng trình đọc khác</a>
       </div>
       {copied && <p role="status" className="mt-4 inline-flex items-center gap-2 px-0 text-sm text-positive"><Check size={18} aria-hidden />{t("Đã sao chép liên kết nguồn tin.")}</p>}
+      {copyError && <p role="alert" className="mt-4 text-sm text-warning">{copyError}</p>}
     </section>
     <section className="mt-8">
-      <h2 className="text-lg font-semibold text-strong">{t("Bài viết gần đây")}</h2>
+      <h3 className="text-lg font-semibold text-strong">{t("Bài viết gần đây")}</h3>
       {loading && <p role="status" className="kg-panel mt-4">{t("Đang tải bài viết…")}</p>}
       {error && <p role="alert" className="mt-4">{t(error)}</p>}
-      {!loading && !error && posts.length === 0 && <p className="kg-panel mt-4 text-subtle">{t("Chưa có bài viết được xuất bản.")}</p>}
+      {!loading && !error && posts.length === 0 && <p className="kg-panel mt-4 text-subtle">{t("Chưa có bài viết được xuất bản.")} Nguồn tin vẫn hợp lệ và sẽ tự cập nhật ngay khi có bài viết mới.</p>}
       <ul className="mt-4 divide-y divide-line/70 overflow-hidden rounded-2xl border border-line/80 bg-surface">
         {posts.map(post => <li key={post.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-5">
           <div className="min-w-0">
@@ -75,5 +84,5 @@ export default function BlogRssPage() {
         </li>)}
       </ul>
     </section>
-  </PublicShell>;
+  </>;
 }

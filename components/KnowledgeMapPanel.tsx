@@ -4,7 +4,6 @@ import { useLocale } from "@/components/locale";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { RequireAuth, PageHeading } from "@/components/ui";
 import { apiRequest } from "@/lib/api-client";
 
 import { Pagination } from "@/components/Pagination";
@@ -14,7 +13,13 @@ type MindmapData = {
   edges: { source: string; target: string; relation: string }[];
 };
 
-function Mindmap() {
+/**
+ * Nội dung sơ đồ kiến thức, tách khỏi trang `/mindmap` để nhúng vào tab của dashboard.
+ *
+ * Không còn `RequireAuth`/`PageHeading` tầng trang — dashboard đã lo phần khung và tiêu đề; phần
+ * tải dữ liệu, bộ lọc, phân trang và các trạng thái loading/error/empty vẫn giữ nguyên.
+ */
+export function KnowledgeMapPanel() {
   const { t, locale } = useLocale();
   const [data, setData] = useState<MindmapData | null>(null);
   const [error, setError] = useState("");
@@ -37,9 +42,9 @@ function Mindmap() {
     return () => controller.abort();
   }, [tick]);
 
-  if (error) return <div><PageHeading title="Sơ đồ kiến thức" /><div role="alert">{t(error)} <button className="underline" onClick={() => setTick(v => v + 1)}>{t("Thử lại")}</button></div></div>;
-  if (!data) return <div><PageHeading title="Sơ đồ kiến thức" /><p role="status">{t("Đang tải sơ đồ kiến thức…")}</p></div>;
-  if (data.nodes.length === 0) return <div><PageHeading title="Sơ đồ kiến thức" /><p className="kg-notice">{t("Chưa có module để hiển thị.")}</p><Link className="kg-secondary mt-4" href="/learn">{t("Chọn chủ đề")}</Link></div>;
+  if (error) return <div className="flex min-w-0 flex-col gap-5"><div role="alert">{t(error)} <button className="underline" onClick={() => setTick(v => v + 1)}>{t("Thử lại")}</button></div></div>;
+  if (!data) return <div className="flex min-w-0 flex-col gap-5"><p role="status">{t("Đang tải sơ đồ kiến thức…")}</p></div>;
+  if (data.nodes.length === 0) return <div className="flex min-w-0 flex-col gap-5"><p className="kg-notice">{t("Chưa có module để hiển thị.")}</p><Link className="kg-secondary mt-4" href="/learn">{t("Chọn chủ đề")}</Link></div>;
 
   const filtered = filterMapNodes(data.nodes, query, level, sort);
   const pages = Math.ceil(filtered.length / MAP_PAGE_SIZE);
@@ -59,8 +64,7 @@ function Mindmap() {
     });
   });
 
-  return <div className="kg-page gap-5">
-    <PageHeading title="Sơ đồ kiến thức" description={locale === "en" ? "Find modules to revisit and choose how to practise. Open the diagram to see connections." : "Tìm module cần ôn lại và chọn cách luyện. Mở sơ đồ để xem các kết nối kiến thức."} />
+  return <div className="flex min-w-0 flex-col gap-5">
     <div className="grid items-end gap-4 sm:grid-cols-3"><label className="block text-sm"><span className="mb-2 block">{c("Tìm module", "Search modules")}</span><input type="search" className="kg-field" value={query} onChange={e => { setQuery(e.target.value); setPage(1); }} /></label><label className="block text-sm"><span className="mb-2 block">{c("Mức độ nắm vững", "Mastery level")}</span><select className="kg-field" value={level} onChange={e => { setLevel(e.target.value); setPage(1); }}><option value="">{c("Tất cả", "All")}</option><option value="weak">{c("Cần ôn thêm · dưới 40%", "Needs practice · below 40%")}</option><option value="learning">{c("Đang củng cố · 40–74%", "Developing · 40–74%")}</option><option value="strong">{c("Nắm vững · từ 75%", "Strong · 75% or higher")}</option></select></label><label className="block text-sm"><span className="mb-2 block">{c("Sắp xếp", "Sort by")}</span><select className="kg-field" value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}><option value="name">{c("Tên module", "Module name")}</option><option value="weak">{c("Cần ôn trước", "Lowest mastery first")}</option></select></label></div>
     <p className="text-sm tabular-nums text-subtle">{nodes.length} / {filtered.length} {c("module khớp · tối đa 12 trên mỗi trang", "matching modules · up to 12 per page")}</p>
     {!nodes.length && <p className="kg-notice">{c("Không có module khớp. Thử từ khóa khác hoặc bỏ bộ lọc mức độ nắm vững.", "No matching modules. Try another term or clear the mastery filter.")}</p>}
@@ -73,17 +77,17 @@ function Mindmap() {
             const source = positions.get(edge.source);
             const target = positions.get(edge.target);
             if (!source || !target) return null;
-            return <line key={`${edge.source}-${edge.target}`} x1={source.x} y1={source.y} x2={target.x} y2={target.y} stroke="#59636f" strokeWidth="2" strokeDasharray="5 5" />;
+            return <line key={`${edge.source}-${edge.target}`} x1={source.x} y1={source.y} x2={target.x} y2={target.y} className="stroke-line" strokeWidth="2" strokeDasharray="5 5" />;
           })}
         </g>
         {nodes.map((node) => {
           const point = positions.get(node.id)!;
           const radius = Math.max(40, Math.min(60, 32 + Math.sqrt(node.questionCount) * 3));
           const mastery = Math.max(0, Math.min(100, Number(node.masteryPct) || 0));
-          const fill = mastery >= 75 ? "#dce7d9" : mastery >= 40 ? "#e3edf0" : "#e8dfcd";
+          const fill = mastery >= 75 ? "fill-positive/20" : mastery >= 40 ? "fill-accent/20" : "fill-warning/25";
           return <g key={node.id} role="button" tabIndex={0} aria-label={`${node.name}, ${t("Mức độ nắm vững")} ${mastery}%, ${node.questionCount} ${t("câu hỏi")}`} onClick={() => router.push(`/quiz/${node.id}`)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); router.push(`/quiz/${node.id}`); } }} className="cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"><title>{node.name}</title>
-            <circle cx={point.x} cy={point.y} r={radius} fill={fill} stroke="#7d877f" strokeWidth="1" />
-            <text x={point.x} y={point.y + 5} textAnchor="middle" fill="#273c4a" fontSize="18" fontWeight="600">{mastery.toFixed(0)}%</text>
+            <circle cx={point.x} cy={point.y} r={radius} fill={fill} className="stroke-line" strokeWidth="1" />
+            <text x={point.x} y={point.y + 5} textAnchor="middle" className="fill-strong" fontSize="18" fontWeight="600">{mastery.toFixed(0)}%</text>
             <text x={point.x} y={point.y + radius + 22} textAnchor="middle" className="fill-body" fontSize="13" fontWeight="600">{node.name.length > 22 ? `${node.name.slice(0, 20)}…` : node.name}</text>
             <text x={point.x} y={point.y + radius + 40} textAnchor="middle" className="fill-body" fontSize="12">{node.questionCount} {t("câu hỏi")}</text>
           </g>;
@@ -93,8 +97,4 @@ function Mindmap() {
     <p className="mt-3 text-sm text-body">{t("Chọn một module để bắt đầu quiz.")}</p><p className="mt-2 text-xs text-subtle lg:hidden">{t("Trên màn hình nhỏ, vuốt ngang để xem các module.")}</p></details>}
     <Pagination page={currentPage} totalPages={pages} onChange={setPage} />
   </div>;
-}
-
-export default function MindmapPage() {
-  return <RequireAuth><Mindmap /></RequireAuth>;
 }

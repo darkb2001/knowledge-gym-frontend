@@ -44,6 +44,25 @@ const RATINGS: Rating[] = [
   },
 ];
 
+/**
+ * Nút chấm gọn cho phiên ôn tổng hợp: chỉ giữ "Ôn lại" (Again) và "Đã nhớ" (Good).
+ * Vẫn gửi đúng `quality` như thang 4 mức nên BE không đổi.
+ */
+const SIMPLE_RATINGS: Rating[] = [
+  {
+    label: "Ôn lại",
+    quality: QUALITY.AGAIN,
+    hint: "Chưa nhớ — hẹn ôn lại sớm",
+    tone: "border-accent/60 text-warning hover:bg-accent/10",
+  },
+  {
+    label: "Đã nhớ",
+    quality: QUALITY.GOOD,
+    hint: "Nhớ được — giãn lịch ôn",
+    tone: "border-accent/60 text-positive hover:bg-accent/10",
+  },
+];
+
 export type ReviewSummary = {
   cardId: string;
   quality: number;
@@ -51,8 +70,8 @@ export type ReviewSummary = {
   nextReview: string;
 };
 
-function ratingLabel(quality: number): string {
-  return RATINGS.find((r) => r.quality === quality)?.label ?? String(quality);
+function ratingLabel(quality: number, ratings: Rating[] = RATINGS): string {
+  return ratings.find((r) => r.quality === quality)?.label ?? RATINGS.find((r) => r.quality === quality)?.label ?? String(quality);
 }
 
 /**
@@ -65,11 +84,15 @@ function ratingLabel(quality: number): string {
 export function FlashcardDeck({
   cards,
   onFinished,
+  mode = "full",
 }: {
   cards: DueCard[];
   onFinished?: (summaries: ReviewSummary[]) => void;
+  /** "simple" gộp thang 4 mức thành 2 nút Ôn lại / Đã nhớ cho trang ôn tập tổng hợp. */
+  mode?: "full" | "simple";
 }) {
   const { t, locale } = useLocale();
+  const ratings = mode === "simple" ? SIMPLE_RATINGS : RATINGS;
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -140,8 +163,8 @@ export function FlashcardDeck({
         setFlipped((value) => !value);
         return;
       }
-      const byDigit = RATINGS[Number(event.key) - 1];
-      const byLetter = RATINGS.find(
+      const byDigit = ratings[Number(event.key) - 1];
+      const byLetter = ratings.find(
         (r) => r.label.charAt(0).toLowerCase() === event.key.toLowerCase(),
       );
       const rating = byDigit ?? byLetter;
@@ -152,7 +175,7 @@ export function FlashcardDeck({
     }
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [submit]);
+  }, [submit, ratings]);
 
   if (!card) {
     return (
@@ -203,8 +226,8 @@ export function FlashcardDeck({
         </p>
       ) : null}
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {RATINGS.map((rating) => (
+      <div className={`mt-6 grid grid-cols-2 gap-3 ${ratings.length > 2 ? "sm:grid-cols-4" : ""}`}>
+        {ratings.map((rating) => (
           <button
             key={rating.quality}
             type="button"
@@ -228,7 +251,7 @@ export function FlashcardDeck({
         <ul className="mt-8 space-y-1 border-t border-line pt-4 text-xs text-subtle">
           {summaries.slice(-5).reverse().map((summary) => (
             <li key={summary.cardId}>
-              {t(ratingLabel(summary.quality))} {t(" · lần sau sau ")}{formatReviewInterval(summary.intervalDays, locale)} {t(" (")}{summary.nextReview}{t(")")}</li>
+              {t(ratingLabel(summary.quality, ratings))} {t(" · lần sau sau ")}{formatReviewInterval(summary.intervalDays, locale)} {t(" (")}{summary.nextReview}{t(")")}</li>
           ))}
         </ul>
       ) : null}

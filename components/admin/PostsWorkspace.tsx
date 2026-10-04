@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { PlusIcon } from "@phosphor-icons/react";
-import { RequireAdmin, PageHeading } from "@/components/ui";
 import { Pagination } from "@/components/Pagination";
 import { PostEditor } from "@/components/admin/PostEditor";
 import { useAdminCatalog } from "@/components/admin/use-catalog";
@@ -12,7 +10,7 @@ import { apiRequest } from "@/lib/api-client";
 import { blogListEnabled, collectPosts, isUuid, type AdminPost } from "@/lib/admin-content";
 import type { PageResponse } from "@/lib/types";
 
-function BlogWorkspace() {
+export function PostsWorkspace() {
   const { c, locale } = useAdminCopy();
   const catalog = useAdminCatalog();
   const [posts, setPosts] = useState<AdminPost[]>([]);
@@ -67,7 +65,6 @@ function BlogWorkspace() {
     catch (reason) { setError(reason); } finally { setCollecting(false); }
   }
   return <div className="kg-page">
-    <PageHeading title={c("Biên tập bài viết", "Blog editor")} description={c("Viết nội dung của bạn, xem trước và xuất bản khi đã sẵn sàng.", "Write your own content, preview it and publish when ready.")} action={<Link href="/admin/writer" className="kg-secondary">{c("Writer & lịch sử phiên bản", "Writer & revision history")}</Link>} />
     {!blogListEnabled && <div className="mb-6"><PendingBackend>{c("Danh sách hiện là hàng đợi duyệt, không phải toàn bộ bài viết. Danh sách đầy đủ đang chờ API mới. Có thể mở bất kỳ bài viết nào bằng ID hoặc tạo bản nháp thủ công bên dưới.", "This list is the review queue, not all articles. The complete list awaits a new API. Open an existing article by ID or create a manual draft below.")}</PendingBackend></div>}
     {Boolean(error) && <p role="alert" className="mb-5">{adminError(error, locale === "en")} <button type="button" className="underline" onClick={() => setTick(value => value + 1)}>{c("Thử lại", "Retry")}</button></p>}
     {Boolean(catalog.error) && <p role="alert" className="mb-5">{adminError(catalog.error, locale === "en")} <button type="button" className="underline" onClick={catalog.reload}>{c("Tải lại module", "Retry modules")}</button></p>}
@@ -87,4 +84,3 @@ function BlogWorkspace() {
     <Pagination page={page} totalPages={pages} onChange={setPage} disabled={loading} />
   </div>;
 }
-export default function AdminPostsPage() { return <RequireAdmin><BlogWorkspace /></RequireAdmin>; }

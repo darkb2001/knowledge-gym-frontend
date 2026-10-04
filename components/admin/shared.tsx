@@ -53,14 +53,15 @@ export function downloadDraft(name: string, data: unknown) {
   const link = document.createElement("a"); link.href = url; link.download = `${name}.json`; link.click();
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-export function DeleteConfirmation({ name, busy, onDelete, onCancel }: { name: string; busy: boolean; onDelete: () => void; onCancel: () => void }) {
+export function DeleteConfirmation({ name, busy, onDelete, onCancel, title, warning, confirmLabel }: { name: string; busy: boolean; onDelete: () => void; onCancel: () => void; title?: string; warning?: string; confirmLabel?: string }) {
   const { c } = useAdminCopy();
   const id = useId();
   const [confirmation, setConfirmation] = useState("");
   return <div className="mt-5 space-y-3 rounded-xl border border-danger/30 bg-[#fbefea] p-4">
-    <p className="text-sm font-semibold text-danger">{c("Xóa dữ liệu này? Thao tác không thể hoàn tác.", "Delete this content? This cannot be undone.")}</p>
+    <p className="text-sm font-semibold text-danger">{title ?? c("Xóa dữ liệu này? Thao tác không thể hoàn tác.", "Delete this content? This cannot be undone.")}</p>
+    {warning && <p className="text-sm leading-relaxed text-body">{warning}</p>}
     <label htmlFor={id} className="block text-sm">{c("Nhập tên để xác nhận", "Type the name to confirm")}: <strong className="break-words">{name}</strong></label>
     <input id={id} autoFocus className="kg-field" value={confirmation} onChange={event => setConfirmation(event.target.value)} disabled={busy} autoComplete="off" />
-    <div className="flex flex-wrap gap-2"><button type="button" className="kg-secondary text-danger" disabled={busy || confirmation !== name} onClick={onDelete}>{c("Xóa vĩnh viễn", "Delete permanently")}</button><button type="button" className="kg-secondary" disabled={busy} onClick={onCancel}>{c("Giữ lại", "Keep content")}</button></div>
+    <div className="flex flex-wrap gap-2"><button type="button" className="kg-secondary text-danger" disabled={busy || confirmation !== name} onClick={onDelete}>{confirmLabel ?? c("Xóa vĩnh viễn", "Delete permanently")}</button><button type="button" className="kg-secondary" disabled={busy} onClick={onCancel}>{c("Giữ lại", "Keep content")}</button></div>
   </div>;
 }

@@ -3,9 +3,10 @@ import { useLocale } from "@/components/locale";
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { AuthShell, Field, ghostBtnClass, inputClass, primaryBtnClass } from "@/components/ui";
+import { AuthShell, Field, inputClass, primaryBtnClass } from "@/components/ui";
 import { ApiError } from "@/lib/api-client";
 import { forgotPassword, resetPassword } from "@/lib/auth";
+import CodeStep from "@/components/auth/CodeStep";
 
 type Step = 1 | 2 | 3;
 
@@ -106,35 +107,23 @@ export default function ForgotPasswordPage() {
       ) : null}
 
       {step === 2 ? (
-        <form onSubmit={onConfirmCode} className="animate-fade-up-delay">
-          <p className="mb-4 text-sm text-subtle">{t(message)}</p>
-          <Field label={t("Mã 6 số")}>
-            <input
-              className={inputClass}
-              inputMode="numeric"
-              pattern="\d{6}"
-              maxLength={6}
-              required
-              value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-            />
-          </Field>
-          {error ? (
-            <p className="mb-4 text-sm text-warning" role="alert">
-              {t(error)}
-            </p>
-          ) : null}
-          <button type="submit" className={primaryBtnClass}>
-            {t("Tiếp tục")}</button>
-          <button
-            type="button"
-            disabled={busy}
-            onClick={() => void requestCode()}
-            className={`${ghostBtnClass} mt-3 disabled:opacity-60`}
-          >
-            {busy ? t("Đang gửi…") : t("Gửi lại mã")}
-          </button>
-        </form>
+        <CodeStep
+          email={email}
+          code={code}
+          onCodeChange={setCode}
+          message={message}
+          error={error}
+          busy={busy}
+          submitLabel={t("Tiếp tục")}
+          onSubmit={onConfirmCode}
+          onResend={() => void requestCode()}
+          resendBusy={busy}
+          backLabel={t("Đổi email")}
+          onBack={() => {
+            setStep(1);
+            setError(null);
+          }}
+        />
       ) : null}
 
       {step === 3 ? (

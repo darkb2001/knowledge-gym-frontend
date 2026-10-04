@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowRightIcon as ArrowRight, RssIcon as Rss } from "@phosphor-icons/react";
+import { ArrowRightIcon as ArrowRight, CaretDownIcon as CaretDown } from "@phosphor-icons/react";
 import { getApiBase } from "@/lib/api-client";
 import { useLocale } from "@/components/locale";
 import { PublicShell, PageHeading, ContentLanguageNotice } from "@/components/ui";
+import BlogFeedPanel from "@/components/BlogFeedPanel";
 
 type BlogPost = { id: string; title: string; slug: string; excerpt: string | null; publishedAt: string; likeCount: number; viewCount: number; tags: string[] };
 
@@ -20,18 +21,23 @@ export default function BlogPage() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [reload, setReload] = useState(0);
+  const [rssOpen, setRssOpen] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
     const first = page === 1;
     if (first) { setLoading(true); setError(""); } else { setLoadingMore(true); }
-    fetch(`${getApiBase()}/blog/posts?page=${page}&size=${PAGE_SIZE}`, { signal: controller.signal }).then(async response => {
+    // BE trả envelope {items,total,page,size,hasMore} với page 0-based; vẫn chấp nhận mảng trần
+    // để FE/BE lệch bản deploy không làm hỏng trang.
+    fetch(`${getApiBase()}/blog/posts?page=${page - 1}&size=${PAGE_SIZE}`, { signal: controller.signal }).then(async response => {
       if (!response.ok) throw new Error("Không tải được bài viết");
-      return response.json() as Promise<BlogPost[]>;
+      return response.json() as Promise<BlogPost[] | { items?: BlogPost[]; hasMore?: boolean }>;
     }).then(value => {
       if (controller.signal.aborted) return;
-      setPosts(old => first ? value : [...old, ...value]);
-      setHasMore(value.length >= PAGE_SIZE);
+      const items = Array.isArray(value) ? value : value.items ?? [];
+      const more = Array.isArray(value) ? items.length >= PAGE_SIZE : value.hasMore ?? items.length >= PAGE_SIZE;
+      setPosts(old => first ? items : [...old, ...items]);
+      setHasMore(more);
     }).catch(() => {
       if (!controller.signal.aborted) setError("Không tải được bài viết");
     }).finally(() => {
@@ -41,7 +47,7 @@ export default function BlogPage() {
   }, [page, reload]);
 
   return <PublicShell>
-    <PageHeading title="Bài viết" description="Đọc một chút. Hiểu thêm một chút." action={<Link href="/blog/rss" className="kg-secondary"><Rss size={19} aria-hidden />RSS</Link>} />
+    <PageHeading title="Bài viết" description="Đọc một chút. Hiểu thêm một chút." />
     {loading && <p role="status" className="kg-panel">{t("Đang tải bài viết…")}</p>}
     {error && <p role="alert" className="kg-panel">{t(error)}<button type="button" onClick={() => { setPage(1); setReload(value => value + 1); }} className="ml-4 inline-flex min-h-11 items-center underline">{t("Thử lại")}</button></p>}
     {!loading && !error && posts.length === 0 && <p className="kg-panel text-subtle">{t("Chưa có bài viết được xuất bản.")}</p>}
@@ -56,6 +62,27 @@ export default function BlogPage() {
         {loadingMore ? t("Đang tải…") : t("Tải thêm bài viết")}
       </button>
     </div>}
+    <section className="mt-10 border-t border-line/70 pt-7" aria-labelledby="blog-rss-heading">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="min-w-0">
+          <h2 id="blog-rss-heading" className="text-xl text-strong">Theo dõi bằng RSS</h2>
+          <p className="mt-1 text-sm text-subtle">Dùng trình đọc tin bạn đang dùng để nhận bài viết mới.</p>
+        </div>
+        <button
+          type="button"
+          aria-expanded={rssOpen}
+          aria-controls="blog-rss-panel"
+          onClick={() => setRssOpen(open => !open)}
+          className="kg-secondary min-h-11 px-5 text-sm"
+        >
+          {rssOpen ? "Ẩn nguồn tin" : "Hiện nguồn tin"}
+          <CaretDown size={16} className={rssOpen ? "rotate-180 transition-transform" : "transition-transform"} aria-hidden />
+        </button>
+      </div>
+      <div id="blog-rss-panel" hidden={!rssOpen} className="mt-5">
+        {rssOpen ? <BlogFeedPanel /> : null}
+      </div>
+    </section>
     <ContentLanguageNotice />
   </PublicShell>;
 }
