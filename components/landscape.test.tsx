@@ -29,10 +29,14 @@ describe("decorative landscape instances", () => {
     expect(new Set(ids).size).toBe(10);
     for (const id of ids) expect(html).toContain(`clip-path="url(#${id})"`);
   });
-  it("includes a small daytime flock and only two sparse meteor tracks", () => {
+  it("repeats two daytime flocks, five meteor tracks and three cloud layers in an independent sky band", () => {
     const html = renderToStaticMarkup(<MountainScene />);
-    expect(html.match(/class="scene-bird-wing scene-bird-wing--/g)).toHaveLength(6);
-    expect(html.match(/class="scene-meteor scene-meteor--/g)).toHaveLength(2);
+    expect(html.match(/class="scene-bird-wing scene-bird-wing--/g)).toHaveLength(12);
+    expect(html.match(/class="scene-flock scene-flock--/g)).toHaveLength(2);
+    expect(html.match(/class="scene-meteor scene-meteor--/g)).toHaveLength(5);
+    expect(html.match(/class="scene-cloud scene-cloud--/g)).toHaveLength(3);
+    expect(html).toContain('class="scene-atmosphere"');
+    expect(html).toContain('viewBox="0 0 1440 300"');
     expect(html).toContain('aria-hidden="true"');
     expect(html).not.toContain("tabindex");
     expect(html).not.toContain("https://");

@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useEffect, useId, useRef } from "react";
 import { farSnowPeaks, middleSnowPeaks, snowCapGeometry, type SnowPeak } from "@/lib/landscape";
 
 function SnowCap({ id, definition }: { id: string; definition: SnowPeak }) {
@@ -11,20 +11,28 @@ function SnowCap({ id, definition }: { id: string; definition: SnowPeak }) {
 /** Original geometric landscape, inspired by the supplied references; no screenshot pixels or remote assets. */
 export function MountainScene({ portrait = false }: { portrait?: boolean }) {
   const key = useId().replace(/:/g, "");
-  const sky = `${key}-sky`, light = `${key}-light`, mist = `${key}-mist`, pine = `${key}-pine`, meteor = `${key}-meteor`;
-  return <div className={`mountain-scene ${portrait ? "mountain-scene--portrait" : "mountain-scene--global"}`} aria-hidden="true" data-scenic-background>
+  const scene = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const syncVisibility = () => {
+      if (!scene.current) return;
+      if (document.hidden) scene.current.dataset.scenicPaused = "";
+      else delete scene.current.dataset.scenicPaused;
+    };
+    syncVisibility();
+    document.addEventListener("visibilitychange", syncVisibility);
+    return () => document.removeEventListener("visibilitychange", syncVisibility);
+  }, []);
+  const sky = `${key}-sky`, light = `${key}-light`, mist = `${key}-mist`, pine = `${key}-pine`, meteor = `${key}-meteor`, cloud = `${key}-cloud`;
+  return <div ref={scene} className={`mountain-scene ${portrait ? "mountain-scene--portrait" : "mountain-scene--global"}`} aria-hidden="true" data-scenic-background>
     <svg viewBox={portrait ? "360 0 720 1000" : "0 0 1440 1000"} preserveAspectRatio="xMidYMid slice" focusable="false">
       <defs>
         <linearGradient id={sky} x2="0" y2="1"><stop className="scene-sky-top" /><stop offset="1" className="scene-sky-bottom" /></linearGradient>
         <radialGradient id={light}><stop stopColor="#f4fcff" stopOpacity=".4" /><stop offset="1" stopColor="#eefaff" stopOpacity="0" /></radialGradient>
         <linearGradient id={mist} x2="0" y2="1"><stop stopColor="#cfedf2" stopOpacity="0" /><stop offset=".7" stopColor="#cfedf2" stopOpacity=".2" /><stop offset="1" stopColor="#cfedf2" stopOpacity="0" /></linearGradient>
-        <linearGradient id={meteor} x1="0" y1="1" x2="1" y2="0"><stop stopColor="#e8faff" stopOpacity=".95" /><stop offset="1" stopColor="#e8faff" stopOpacity="0" /></linearGradient>
         <g id={pine}><path d="M0 0 -8 17 -4 16 -13 30 -7 28 -18 44 -10 42 -24 61 24 61 10 42 18 44 7 28 13 30 4 16 8 17Z" /><path d="M-2 56H2V76H-2Z" /></g>
       </defs>
       <path fill={`url(#${sky})`} d="M0 0H1440V1000H0Z" />
       <g className="scene-stars" fill="#e1f4fc">{Array.from({ length: 34 }, (_, i) => <circle key={i} cx={65 + ((i * 193) % 1300)} cy={35 + ((i * 71) % 375)} r={i % 5 === 0 ? 1.8 : .9} opacity={.35 + (i % 4) * .15} />)}<path d="M260 130v14m-7-7h14M1154 93v9m-4.5-4.5h9" stroke="#d9effa" strokeWidth="1" /></g>
-      <g className="scene-birds"><g className="scene-flock">{[[620,116,1],[653,133,.8],[684,149,.95],[715,130,.72],[747,111,.85],[778,141,.65]].map(([x,y,scale],i) => <g key={i} transform={`translate(${x} ${y}) scale(${scale})`}><path className={`scene-bird-wing scene-bird-wing--${i % 3}`} d="M-9 1Q-4-5 0 0Q4-5 9 1" fill="none" strokeWidth="1.7" strokeLinecap="round" /></g>)}</g></g>
-      <g className="scene-meteors">{[[1120,95],[1340,150]].map(([x,y],i) => <g key={i} transform={`translate(${x} ${y})`}><g className={`scene-meteor scene-meteor--${i}`}><path d="M0 0 140-75" fill="none" stroke={`url(#${meteor})`} strokeWidth="1.6" strokeLinecap="round" /><circle r="1.5" fill="#e8faff" /></g></g>)}</g>
       <g className="scene-orb"><circle cx="934" cy="200" r="130" fill={`url(#${light})`} /><circle cx="934" cy="200" r="39" className="scene-moon" /><g className="scene-craters" fill="#71919e" opacity=".16"><circle cx="923" cy="184" r="9" /><circle cx="948" cy="208" r="12" /><circle cx="918" cy="215" r="5" /></g></g>
       <g className="scene-ridge scene-ridge--far">
         <path className="scene-far" d="M-100 690 90 417 187 514 355 272 532 521 665 389 804 556 995 317 1155 502 1334 263 1550 577V1100H-100Z" />
@@ -40,5 +48,15 @@ export function MountainScene({ portrait = false }: { portrait?: boolean }) {
       <g className="scene-forest scene-forest--front">{Array.from({ length: 26 }, (_, i) => <use key={i} href={`#${pine}`} transform={`translate(${i * 62 - 35} ${847 + Math.sin(i * .6) * 49}) scale(${.9 + (i % 4) * .24})`} />)}</g>
       <g className="scene-haze scene-haze--low"><path fill={`url(#${mist})`} d="M-200 875Q260 802 699 904T1660 862V1100H-200Z" /></g>
     </svg>
+    {/* A separate sky band avoids terrain cropping and keeps motion above the auth window. */}
+    <div className="scene-atmosphere"><svg viewBox="0 0 1440 300" preserveAspectRatio="xMidYMin slice" focusable="false">
+      <defs>
+        <linearGradient id={meteor} x1="0" y1="1" x2="1" y2="0"><stop stopColor="#e8faff" stopOpacity=".95" /><stop offset="1" stopColor="#e8faff" stopOpacity="0" /></linearGradient>
+        <linearGradient id={cloud} x2="0" y2="1"><stop className="scene-cloud-ink" stopOpacity="0" /><stop offset=".45" className="scene-cloud-ink" stopOpacity=".55" /><stop offset="1" className="scene-cloud-ink" stopOpacity="0" /></linearGradient>
+      </defs>
+      <g className="scene-clouds" fill={`url(#${cloud})`}>{[[240,30,.9],[770,10,1.2],[1190,54,.75]].map(([x,y,scale],i) => <g key={i} transform={`translate(${x} ${y}) scale(${scale})`}><path className={`scene-cloud scene-cloud--${i}`} d="M-180 60Q-155 33-113 40Q-98 9-57 20Q-28-10 15 17Q55 4 76 31Q119 21 145 49Q190 45 215 67Q140 92 15 83Q-118 95-180 60Z" /></g>)}</g>
+      <g className="scene-birds">{[0,1].map(flock => <g key={flock} transform={`translate(0 ${flock * 38})`}><g className={`scene-flock scene-flock--${flock}`}>{[[580,110,1],[613,127,.8],[644,143,.95],[675,124,.72],[707,105,.85],[738,135,.65]].map(([x,y,scale],i) => <g key={i} transform={`translate(${x} ${y}) scale(${scale})`}><path className={`scene-bird-wing scene-bird-wing--${i % 3}`} d="M-9 1Q-4-5 0 0Q4-5 9 1" fill="none" strokeWidth="1.9" strokeLinecap="round" /></g>)}</g></g>)}</g>
+      <g className="scene-meteors">{[[1200,30],[850,65],[1400,100],[520,45],[1070,125]].map(([x,y],i) => <g key={i} transform={`translate(${x} ${y})`}><g className={`scene-meteor scene-meteor--${i}`}><path d="M0 0 140-75" fill="none" stroke={`url(#${meteor})`} strokeWidth="1.6" strokeLinecap="round" /><circle r="1.5" fill="#e8faff" /></g></g>)}</g>
+    </svg></div>
   </div>;
 }

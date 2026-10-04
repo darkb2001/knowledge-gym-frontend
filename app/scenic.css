@@ -66,21 +66,35 @@ input::placeholder, textarea::placeholder { color: rgb(var(--kg-subtle)); }
 .scene-near { fill: var(--scene-near); } .scene-near-facet { fill: var(--scene-near-facet); }
 .scene-snow { fill: var(--scene-snow); }
 .scene-snow-shadow { fill: var(--scene-far-facet); opacity: .24; }
-.scene-birds { opacity: .8; transition: opacity 600ms ease; }
-.scene-flock { animation: flock-pass 42s linear -18s infinite; }
+.scene-atmosphere { position: absolute; inset: 0 0 auto; height: clamp(160px, 24vh, 240px); overflow: hidden; }
+.mountain-scene--portrait .scene-atmosphere { height: 220px; }
+.scene-cloud-ink { stop-color: var(--scene-orb); }
+.scene-clouds { opacity: .55; }
+[data-theme="dark"] .scene-clouds { opacity: .15; }
+.scene-cloud { animation: cloud-drift 74s linear -32s infinite; }
+.scene-cloud--1 { animation-duration: 91s; animation-delay: -57s; }
+.scene-cloud--2 { animation-duration: 107s; animation-delay: -18s; }
+.scene-birds { opacity: .88; transition: opacity 600ms ease; }
+.scene-flock { animation: flock-pass 24s linear -10s infinite; }
+.scene-flock--1 { animation-delay: -22s; }
 .scene-bird-wing { stroke: var(--scene-forest-back); transform-box: fill-box; transform-origin: center; animation: bird-wing 1.6s ease-in-out infinite alternate; }
 .scene-bird-wing--1 { animation-delay: -.6s; } .scene-bird-wing--2 { animation-delay: -1.1s; }
 .scene-meteors { opacity: 0; transition: opacity 600ms ease; }
-.scene-meteor { opacity: 0; animation: meteor-pass 19s linear 2s infinite; animation-play-state: paused; }
-.scene-meteor--1 { animation-duration: 27s; animation-delay: 11s; }
+.scene-meteor { opacity: 0; animation: meteor-pass 9s linear .4s infinite; animation-play-state: paused; }
+.scene-meteor--1 { animation-duration: 11s; animation-delay: 2.2s; }
+.scene-meteor--2 { animation-duration: 13s; animation-delay: 4.2s; }
+.scene-meteor--3 { animation-duration: 10s; animation-delay: 6.4s; }
+.scene-meteor--4 { animation-duration: 12s; animation-delay: 8.3s; }
 [data-theme="dark"] .scene-birds { opacity: 0; }
 [data-theme="dark"] .scene-flock, [data-theme="dark"] .scene-bird-wing { animation-play-state: paused; }
 [data-theme="dark"] .scene-meteors { opacity: 1; }
 [data-theme="dark"] .scene-meteor { animation-play-state: running; }
-@keyframes flock-pass { from { transform: translate3d(-820px, 10px, 0); } 50% { transform: translate3d(40px, -14px, 0); } to { transform: translate3d(900px, 8px, 0); } }
+@keyframes cloud-drift { from { transform: translate3d(-800px, 0, 0); opacity: 0; } 6%, 94% { opacity: 1; } to { transform: translate3d(800px, 6px, 0); opacity: 0; } }
+@keyframes flock-pass { from { transform: translate3d(-850px, 10px, 0); } 50% { transform: translate3d(0, -8px, 0); } to { transform: translate3d(850px, 8px, 0); } }
 @keyframes bird-wing { from { transform: scaleY(.85); } to { transform: scaleY(-.55); } }
-@keyframes meteor-pass { 0% { transform: translate3d(0, 0, 0); opacity: 0; } 1% { opacity: .9; } 7% { transform: translate3d(-560px, 300px, 0); opacity: .7; } 10%, 100% { transform: translate3d(-600px, 322px, 0); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .scene-flock, .scene-bird-wing { animation: none !important; } .scene-flock { transform: none; } .scene-meteors { display: none; } }
+@keyframes meteor-pass { 0% { transform: translate3d(0, 0, 0); opacity: 0; } 1% { opacity: .9; } 9% { transform: translate3d(-560px, 280px, 0); opacity: .7; } 13%, 100% { transform: translate3d(-600px, 300px, 0); opacity: 0; } }
+.mountain-scene[data-scenic-paused] :is(.scene-ridge, .scene-haze, .scene-cloud, .scene-flock, .scene-bird-wing, .scene-meteor) { animation-play-state: paused !important; }
+@media (prefers-reduced-motion: reduce) { .scene-flock, .scene-bird-wing, .scene-cloud { animation: none !important; } .scene-flock { transform: none; } .scene-meteors { display: none; } }
 .scene-river { fill: var(--scene-river); opacity: .65; }
 .scene-ground { fill: var(--scene-ground); }
 .scene-forest--back { fill: var(--scene-forest-back); } .scene-forest--front { fill: var(--scene-forest-front); }
@@ -150,6 +164,7 @@ input::placeholder, textarea::placeholder { color: rgb(var(--kg-subtle)); }
   .auth-stage { padding: 28px 0; }
   .auth-card { max-width: 460px; grid-template-columns: minmax(0, 1fr); padding: 0; border-radius: 22px; }
   .auth-story { display: none; }
+  .auth-story :is(.scene-ridge, .scene-haze, .scene-cloud, .scene-flock, .scene-bird-wing, .scene-meteor) { animation-play-state: paused !important; }
   .auth-form { padding: 30px 24px; }
   .auth-form h1 { font-size: 30px; }
   .auth-form .kg-field, .auth-form .kg-button, .auth-form .kg-secondary { min-height: 48px; }

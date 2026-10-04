@@ -47,6 +47,7 @@ try {
     for(const theme of ['light','dark']) {
       if(theme==='dark')await page.getByRole('button',{name:'Chuyển sang giao diện tối',exact:true}).click();
       check(`${theme}: theme applies`,await page.locator('html').getAttribute('data-theme'),theme);
+      check(`${theme}: themed scrollbar`,await page.locator('html').evaluate(el=>getComputedStyle(el).scrollbarColor),theme==='light'?'rgb(85, 113, 123) rgb(239, 245, 245)':'rgb(113, 137, 149) rgb(17, 31, 42)');
       check(`${theme}: email type/autocomplete`,await page.getByLabel('Email',{exact:true}).getAttribute('autocomplete'),'email');
       check(`${theme}: password type`,await page.getByLabel('Mật khẩu',{exact:true}).getAttribute('type'),'password');
       check(`${theme}: original login fields`,await page.locator('main form input').count(),2);
@@ -68,6 +69,7 @@ try {
     if(width===390) { await page.setViewportSize({width,height:500}); await page.getByLabel('Mật khẩu',{exact:true}).focus(); await page.getByRole('button',{name:'Vào phòng tập',exact:true}).scrollIntoViewIfNeeded(); const b=await page.getByRole('button',{name:'Vào phòng tập',exact:true}).boundingBox(); check('short viewport can scroll submit into view',b.y>=0&&b.y+b.height<=500,true); check('short viewport has no horizontal overflow',await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false); await page.setViewportSize({width,height}); }
     check('reduced motion stops landscape',await page.locator('.scene-ridge--far').first().evaluate(el=>getComputedStyle(el).animationName),'none');
     check('reduced motion stops bird flight',await page.locator('.scene-flock').first().evaluate(el=>getComputedStyle(el).animationName),'none');
+    check('reduced motion stops clouds',await page.locator('.scene-cloud').first().evaluate(el=>getComputedStyle(el).animationName),'none');
     check('reduced motion hides meteors',await page.locator('.scene-meteors').first().evaluate(el=>getComputedStyle(el).display),'none');
     await page.getByRole('button',{name:'English',exact:true}).click();check('English title',await page.getByRole('heading',{name:'Sign in',exact:true}).count(),1);await capture('login-dark-en');
     await page.getByRole('button',{name:'Tiếng Việt',exact:true}).click();
@@ -82,14 +84,24 @@ try {
     const context=await browser.newContext({viewport:{width,height},reducedMotion:'no-preference'});const page=await context.newPage();await page.goto(base+'/login');await page.waitForLoadState('networkidle');
     assert.equal(await page.locator('.scene-ridge--far').first().evaluate(el=>getComputedStyle(el).animationName),'mountain-drift');report.checks.push({device,name:'normal-motion landscape enabled'});
     assert.equal(await page.locator('.scene-flock').first().evaluate(el=>getComputedStyle(el).animationName),'flock-pass');report.checks.push({device,name:'daytime flock animation enabled'});
-    assert.equal(await page.locator('.scene-bird-wing').count(),12);report.checks.push({device,name:'six birds per scene'});
+    assert.equal(await page.locator('.scene-bird-wing').count(),24);report.checks.push({device,name:'two flocks of six birds per scene'});
+    assert.equal(await page.locator('.scene-cloud').first().evaluate(el=>getComputedStyle(el).animationName),'cloud-drift');report.checks.push({device,name:'gentle clouds animate'});
+    const exteriorBirds=await page.locator('.mountain-scene--global .scene-flock').evaluateAll(async elements=>{for(const el of elements){const a=el.getAnimations()[0],t=a.effect.getTiming();a.pause();a.currentTime=Number(t.delay)+Number(t.duration)*(el.classList.contains('scene-flock--1')?.82:.46);}await new Promise(resolve=>requestAnimationFrame(resolve));const top=document.querySelector('.auth-card').getBoundingClientRect().top;return elements.flatMap(el=>[...el.querySelectorAll('.scene-bird-wing')]).filter(el=>{const r=el.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.top>=65&&r.bottom<top;}).length;});
+    assert.ok(exteriorBirds>=3,'flock must visibly occupy the exterior sky above the form');report.checks.push({device,name:'global birds visible outside form'});
+    assert.equal(await page.locator('.scene-flock').first().evaluate(el=>getComputedStyle(el).animationIterationCount),'infinite');report.checks.push({device,name:'flocks repeat indefinitely'});
     assert.equal(await page.locator('.scene-meteor').first().evaluate(el=>getComputedStyle(el).animationPlayState),'paused');report.checks.push({device,name:'daytime meteors paused'});
     await page.screenshot({path:`${output}/${device}-daytime-birds.png`,fullPage:true});
     await page.getByRole('button',{name:'Chuyển sang giao diện tối',exact:true}).click();
     assert.equal(await page.locator('.scene-flock').first().evaluate(el=>getComputedStyle(el).animationPlayState),'paused');report.checks.push({device,name:'nighttime flock paused'});
-    const visible=await page.locator('.scene-meteor--0:visible').evaluateAll(async elements=>{for(const transition of document.getAnimations())if(transition instanceof CSSTransition)transition.finish();for(const el of elements){const a=el.getAnimations().find(a=>a.animationName==='meteor-pass');if(!a)return false;a.pause();a.currentTime=3000;}await new Promise(resolve=>requestAnimationFrame(resolve));return elements.length>0&&elements.every(el=>Number(getComputedStyle(el).opacity)>0);});
+    const visible=await page.locator('.scene-meteor--0:visible').evaluateAll(async elements=>{for(const transition of document.getAnimations())if(transition instanceof CSSTransition)transition.finish();for(const el of elements){const a=el.getAnimations().find(a=>a.animationName==='meteor-pass');if(!a)return false;const t=a.effect.getTiming();a.pause();a.currentTime=Number(t.delay)+Number(t.duration)*.05;}await new Promise(resolve=>requestAnimationFrame(resolve));return elements.length>0&&elements.every(el=>Number(getComputedStyle(el).opacity)>0);});
     assert.equal(visible,true);report.checks.push({device,name:'night meteor renders during its flight phase'});
-    assert.equal(await page.locator('.scene-meteor--1').first().evaluate(el=>getComputedStyle(el).animationDuration),'27s');report.checks.push({device,name:'secondary meteor remains sparse'});
+    assert.equal(await page.locator('.scene-meteor--1').first().evaluate(el=>getComputedStyle(el).animationDuration),'11s');report.checks.push({device,name:'closer meteor recurrence'});
+    assert.equal(await page.locator('.mountain-scene--global .scene-meteor').count(),5);report.checks.push({device,name:'five global meteor tracks'});
+    assert.equal(await page.locator('.scene-meteor').first().evaluate(el=>getComputedStyle(el).animationIterationCount),'infinite');report.checks.push({device,name:'meteor flights repeat indefinitely'});
+    await page.evaluate(()=>{Object.defineProperty(document,'hidden',{value:true,configurable:true});document.dispatchEvent(new Event('visibilitychange'));});
+    assert.equal(await page.locator('.scene-cloud').first().evaluate(el=>getComputedStyle(el).animationPlayState),'paused');report.checks.push({device,name:'hidden document pauses atmospheric motion'});
+    await page.evaluate(()=>{delete document.hidden;document.dispatchEvent(new Event('visibilitychange'));});
+    assert.equal(await page.locator('.scene-cloud').first().evaluate(el=>getComputedStyle(el).animationPlayState),'running');report.checks.push({device,name:'visible document resumes atmospheric motion'});
     await page.screenshot({path:`${output}/${device}-nighttime-meteor.png`,fullPage:true});
     await context.close();
   }

@@ -30,9 +30,11 @@
   a { text-underline-offset: 4px; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
   ::selection { background: var(--selection); color: var(--foreground); }
-  * { scrollbar-width: thin; scrollbar-color: #b7bcad transparent; }
+  * { scrollbar-width: thin; scrollbar-color: rgb(var(--kg-control)) rgb(var(--kg-surface)); }
   ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-thumb { background: #b7bcad; border: 2px solid var(--background); border-radius: 6px; }
+  ::-webkit-scrollbar-track { background: rgb(var(--kg-surface)); }
+  ::-webkit-scrollbar-thumb { background: rgb(var(--kg-control)); border: 2px solid rgb(var(--kg-surface)); border-radius: 6px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--kg-accent)); }
   progress { accent-color: var(--accent); }
   summary { @apply rounded-sm px-2 py-2 font-medium text-accent; }
 }

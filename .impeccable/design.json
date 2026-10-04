@@ -529,13 +529,18 @@
       },
       {
         "name": "daytime-flock",
-        "value": "42s linear infinite; wingbeats 1.6s alternate",
-        "purpose": "Six small distant birds, paused at night and frozen by reduced motion."
+        "value": "24s linear infinite, two flocks offset 12s; wingbeats 1.6s alternate",
+        "purpose": "Two six-bird flocks in the independent exterior/portrait sky band; paused at night, hidden or reduced motion."
       },
       {
         "name": "nighttime-meteors",
-        "value": "19s / 27s linear cycles, 2s / 11s staggered starts",
-        "purpose": "Short flight followed by a long quiet interval; paused in daylight, hidden by reduced motion."
+        "value": "9–13s linear cycles, .4 / 2.2 / 4.2 / 6.4 / 8.3s staggered starts",
+        "purpose": "Five repeating tracks with short flights and closer recurrence; paused in daylight/hidden tabs, hidden by reduced motion."
+      },
+      {
+        "name": "cloud-drift",
+        "value": "74 / 91 / 107s linear infinite",
+        "purpose": "Three soft, slow cloud layers; faint at night, static in reduced motion, paused when hidden."
       }
     ],
     "breakpoints": [

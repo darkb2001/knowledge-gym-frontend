@@ -25,6 +25,12 @@ describe("scenic theme preference", () => {
     }
     expect(config.theme?.extend?.colors).toHaveProperty("canvas", "rgb(var(--kg-canvas) / <alpha-value>)");
   });
+  it("uses semantic scrollbar colors rather than the previous fixed beige thumb", () => {
+    const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+    expect(css).toContain("scrollbar-color: rgb(var(--kg-control)) rgb(var(--kg-surface))");
+    expect(css).toContain("::-webkit-scrollbar-thumb:hover { background: rgb(var(--kg-accent))");
+    expect(css).not.toContain("#b7bcad");
+  });
   it("preserves login fields, validation, credential submission and redirect behavior", () => {
     const login = readFileSync(new URL("../app/(auth)/login/page.tsx", import.meta.url), "utf8");
     expect(login).toContain('type="email"');
