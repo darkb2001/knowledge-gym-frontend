@@ -3,7 +3,7 @@ import { useLocale } from "@/components/locale";
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { AuthShell, Field, inputClass, primaryBtnClass } from "@/components/ui";
+import { AuthShell, Field, ghostBtnClass, inputClass, primaryBtnClass } from "@/components/ui";
 import { ApiError } from "@/lib/api-client";
 import { forgotPassword, resetPassword } from "@/lib/auth";
 
@@ -19,8 +19,7 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  async function onRequestCode(e: FormEvent) {
-    e.preventDefault();
+  async function requestCode() {
     setBusy(true);
     setError(null);
     setMessage(null);
@@ -33,6 +32,11 @@ export default function ForgotPasswordPage() {
     } finally {
       setBusy(false);
     }
+  }
+
+  function onRequestCode(e: FormEvent) {
+    e.preventDefault();
+    void requestCode();
   }
 
   function onConfirmCode(e: FormEvent) {
@@ -122,6 +126,14 @@ export default function ForgotPasswordPage() {
           ) : null}
           <button type="submit" className={primaryBtnClass}>
             {t("Tiếp tục")}</button>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => void requestCode()}
+            className={`${ghostBtnClass} mt-3 disabled:opacity-60`}
+          >
+            {busy ? t("Đang gửi…") : t("Gửi lại mã")}
+          </button>
         </form>
       ) : null}
 

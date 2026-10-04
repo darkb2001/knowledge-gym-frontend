@@ -14,7 +14,10 @@ import type { Topic } from "@/lib/types";
 import {
   clearDraft,
   countAnswered,
+  dismissSession,
   interviewHistory,
+  interviewResult,
+  readDismissedSessions,
   readDraft,
   startInterview,
   submitInterview,
@@ -43,6 +46,8 @@ function InterviewFlow() {
   const [historySize, setHistorySize] = useState(5);
   const [historyTotal, setHistoryTotal] = useState(0);
   const [historyLoading, setHistoryLoading] = useState(true);
+  const [topicsError, setTopicsError] = useState("");
+  const [resumed, setResumed] = useState(false);
 
   useEffect(() => {
     const ac = new AbortController();
@@ -51,9 +56,10 @@ function InterviewFlow() {
         if (ac.signal.aborted) return;
         setTopics(list);
         setTopic(previous => previous || list[0]?.id || "");
+        setTopicsError("");
       })
       .catch(e => {
-        if (!ac.signal.aborted) setError(e instanceof Error ? e.message : t("Không tải được chủ đề"));
+        if (!ac.signal.aborted) setTopicsError(e instanceof Error ? e.message : "Không tải được chủ đề");
       });
     return () => ac.abort();
   }, [tick, t]);
@@ -81,6 +87,32 @@ function InterviewFlow() {
     setAnswers(readDraft(interview.session.id));
   }, [interview]);
 
+  /**
+   * Khôi phục LUÔN phiên đang làm: trước đây F5 là mất phiên (chỉ còn nháp nằm chết trong
+   * localStorage) rồi người dùng phải mở phiên mới. BE không có endpoint resume, nhưng `/result`
+   * trả về danh sách câu hỏi của phiên ACTIVE nên đủ để dựng lại màn làm bài.
+   */
+  useEffect(() => {
+    if (interview) return;
+    const dismissed = readDismissedSessions();
+    const running = history.find(item => item.status !== "FINISHED" && !dismissed.includes(item.id));
+    if (!running) return;
+    let cancelled = false;
+    void interviewResult(running.id)
+      .then(view => {
+        if (cancelled) return;
+        setInterview(prev => prev ?? {
+          session: view.session,
+          questions: view.items.map(item => ({ questionId: item.questionId, title: item.title })),
+        });
+        setResumed(true);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [history, interview]);
+
   const answered = useMemo(
     () => (interview ? countAnswered(answers) : 0),
     [interview, answers],
@@ -103,6 +135,18 @@ function InterviewFlow() {
     } finally {
       setBusy(false);
     }
+  }
+
+  /** Bỏ phiên đang làm (kể cả phiên vừa được khôi phục) để bắt đầu phiên khác. */
+  function discard() {
+    if (!interview) return;
+    dismissSession(interview.session.id);
+    clearDraft(interview.session.id);
+    setInterview(null);
+    setAnswers({});
+    setConfirming(false);
+    setResumed(false);
+    setTick(value => value + 1);
   }
 
   function updateAnswer(questionId: string, value: string) {
@@ -151,6 +195,22 @@ function InterviewFlow() {
         </p>
       )}
 
+      {topicsError && (
+        <p role="alert" className="flex flex-wrap items-center gap-2 rounded-xl border border-warning/40 bg-warning/10 px-4 py-3 text-sm text-warning">
+          {t(topicsError)}
+          <button
+            type="button"
+            onClick={() => {
+              setTopicsError("");
+              setTick(value => value + 1);
+            }}
+            className="inline-flex min-h-11 items-center font-medium underline underline-offset-4"
+          >
+            {t("Thử lại")}
+          </button>
+        </p>
+      )}
+
       {!active ? (
         <form
           onSubmit={event => {
@@ -180,7 +240,7 @@ function InterviewFlow() {
                 max={20}
                 inputMode="numeric"
                 value={count}
-                onChange={event => setCount(Number(event.target.value))}
+                onChange={event => setCount(Math.min(20, Math.max(1, Number(event.target.value) || 1)))}
                 className={`${inputClass} mt-2`}
               />
             </label>
@@ -197,6 +257,18 @@ function InterviewFlow() {
         </form>
       ) : (
         <>
+          {resumed && (
+            <p role="status" className="flex flex-wrap items-center gap-2 rounded-xl border border-line/80 bg-sage/40 px-4 py-3 text-sm text-strong">
+              {t("Đã khôi phục phiên đang làm dở dang của bạn.")}
+              <button
+                type="button"
+                onClick={discard}
+                className="inline-flex min-h-11 items-center font-medium text-accent underline-offset-4 hover:underline"
+              >
+                {t("Bỏ phiên này")}
+              </button>
+            </p>
+          )}
           <div className="sticky top-2 z-10 space-y-3 rounded-2xl border border-line/80 bg-canvas/95 p-4 backdrop-blur">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-sm font-medium text-strong">

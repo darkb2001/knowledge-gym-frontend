@@ -88,7 +88,7 @@ function TopicExplorer() {
   const resetGrouping = () => { setExpanded({}); setGroupLimit(4); setModuleLimit(6); setSelectedId(""); };
   useEffect(() => { setExpanded({}); setGroupLimit(4); setModuleLimit(6); setSelectedId(""); }, [query]);
 
-  return <div>
+  return <div className="pb-44 xl:pb-0">
     <PageHeading title="Bạn muốn học gì hôm nay?" description="Chọn một chủ đề, tìm module phù hợp rồi bắt đầu theo cách bạn thích." />
     <div className="mb-6 max-w-2xl"><label htmlFor="topic-search" className="sr-only">{t("Tìm chủ đề hoặc module")}</label><div className="relative"><MagnifyingGlass size={21} aria-hidden className="pointer-events-none absolute left-4 top-3.5 text-subtle" /><input id="topic-search" type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder={t("Ví dụ: Java, Spring, cơ sở dữ liệu…")} className="kg-field pl-12" /></div></div>
     {error ? <div role="alert" className="mb-6">{t(error)}<button type="button" onClick={() => setAttempt(value => value + 1)} className="ml-4 font-medium underline">{t("Thử lại")}</button></div> : null}

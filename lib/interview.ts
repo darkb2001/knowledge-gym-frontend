@@ -93,6 +93,32 @@ export function writeDraft(sessionId: string, answers: Record<string, string>): 
   }
 }
 
+/**
+ * Phiên người dùng đã chủ động bỏ. Trang luyện phỏng vấn tự khôi phục phiên ACTIVE gần nhất khi mở
+ * lại, nên nếu không ghi nhớ lựa chọn "bỏ" thì phiên cũ sẽ quay lại mỗi lần F5.
+ */
+const dismissedKey = "kg.interview.dismissed";
+
+export function readDismissedSessions(): string[] {
+  try {
+    const raw = localStorage.getItem(dismissedKey);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
+    return Array.isArray(parsed) ? parsed.filter((value): value is string => typeof value === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+export function dismissSession(sessionId: string): void {
+  try {
+    const next = Array.from(new Set([...readDismissedSessions(), sessionId])).slice(-20);
+    localStorage.setItem(dismissedKey, JSON.stringify(next));
+  } catch {
+    /* xem writeDraft */
+  }
+}
+
 export function clearDraft(sessionId: string): void {
   try {
     localStorage.removeItem(draftKey(sessionId));

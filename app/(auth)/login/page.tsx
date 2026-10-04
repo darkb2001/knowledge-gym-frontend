@@ -91,7 +91,7 @@ export default function LoginPage() {
             {t(error)}
           </p>
         ) : null}
-        {error === "Email verification required" ? (
+        {error && /verif|xác minh/i.test(error) ? (
           <p className="mb-4 text-sm text-subtle">
             <Link href="/verify-email" className="text-positive underline underline-offset-4 hover:text-strong">
               {t("Xác minh email")}</Link>
@@ -106,8 +106,6 @@ export default function LoginPage() {
         {t("Tiếp tục với Google")}</button>
 
       <div className="mt-6 flex flex-col gap-2 text-sm text-subtle">
-        <Link href="/verify-email" className="hover:text-positive">
-          {t("Xác minh email")}</Link>
         <Link href="/forgot-password" className="hover:text-warning">
           {t("Quên mật khẩu?")}</Link>
         <p>

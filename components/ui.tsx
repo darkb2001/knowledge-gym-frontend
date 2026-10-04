@@ -30,25 +30,46 @@ function Brand() {
 function Navigation({ user, onNavigate }: { user: User | null; onNavigate?: () => void }) {
   const pathname = usePathname();
   const { t, locale } = useLocale();
-  const adminLabels: Record<string, string> = { "/admin/content": "Content library", "/admin/posts": "Blog editor", "/admin/users": "Accounts", "/admin/comments": "Comments", "/admin/learning": "Learning administration", "/admin/knowledge": "AI knowledge intake", "/admin/knowledge/drafts": "AI learning drafts" };
+  const adminLabels: Record<string, string> = { "/admin/content": "Content library", "/admin/posts": "Blog editor", "/admin/users": "Accounts", "/admin/comments": "Comments", "/admin/learning": "Learning administration", "/admin/knowledge": "AI knowledge intake", "/admin/knowledge/drafts": "AI learning drafts", "/admin/writer": "AI writer", "/admin/search": "Search administration" };
   const admin = user?.role === "ADMIN" || user?.role === "ROLE_ADMIN";
   const links = (items: typeof navigation) => items.map(({ href, label, icon: Icon }) => {
     const active = (pathname === href || pathname.startsWith(href + "/")) && !items.some(item => item.href !== href && item.href.startsWith(href + "/") && (pathname === item.href || pathname.startsWith(item.href + "/")));
     return <Link key={href} href={href} onClick={onNavigate} aria-current={active ? "page" : undefined} className={`flex min-h-11 items-center gap-3 rounded-lg px-3.5 py-2.5 text-[13px] font-medium transition-colors ${active ? "bg-sage text-strong" : "text-body hover:bg-surface/60 hover:text-strong"}`}><Icon size={19} className="shrink-0" weight={active ? "fill" : "regular"} aria-hidden /><span className="min-w-0">{locale === "en" && adminLabels[href] ? adminLabels[href] : t(label)}</span></Link>;
   });
+  // Khách vãng lai chỉ thấy mục công khai — tránh bấm vào link rồi bị đá về /login.
+  const learnerLinks = user ? navigation : navigation.filter(item => item.href === "/blog");
+  const adminGroups: { label: string; items: typeof navigation }[] = [
+    {
+      label: "Thư viện & người học",
+      items: [
+        { href: "/admin/content", label: "Quản trị thư viện", icon: BookOpen },
+        { href: "/admin/users", label: "Quản lý tài khoản", icon: UserCircle },
+        { href: "/admin/learning", label: "Quản trị dữ liệu học", icon: ChartLine },
+      ],
+    },
+    {
+      label: "Nội dung & AI",
+      items: [
+        { href: "/admin/posts", label: "Biên tập bài viết", icon: Notebook },
+        { href: "/admin/writer", label: "Quản trị nội dung", icon: TextAlignLeft },
+        { href: "/admin/comments", label: "Kiểm duyệt bình luận", icon: TextAlignLeft },
+        { href: "/admin/knowledge", label: "AI thu nạp kiến thức", icon: GearSix },
+        { href: "/admin/knowledge/drafts", label: "Duyệt nội dung AI", icon: Check },
+      ],
+    },
+    {
+      label: "Hệ thống",
+      items: [{ href: "/admin/search", label: "Quản trị tìm kiếm", icon: GearSix }],
+    },
+  ];
   return <nav aria-label={t("Điều hướng chính")} className="space-y-1">
-    {links(navigation)}
-    {admin && <div className="mt-7 border-t border-line pt-5"><p className="mb-2 px-3.5 text-xs font-medium text-subtle">{t("Công cụ quản trị")}</p>{links([
-      { href: "/admin/content", label: "Quản trị thư viện", icon: BookOpen },
-      { href: "/admin/posts", label: "Biên tập bài viết", icon: Notebook },
-      { href: "/admin/users", label: "Quản lý tài khoản", icon: UserCircle },
-      { href: "/admin/comments", label: "Kiểm duyệt bình luận", icon: TextAlignLeft },
-      { href: "/admin/learning", label: "Quản trị dữ liệu học", icon: ChartLine },
-      { href: "/admin/knowledge", label: "AI thu nạp kiến thức", icon: GearSix },
-      { href: "/admin/knowledge/drafts", label: "Duyệt nội dung AI", icon: Check },
-      { href: "/admin/writer", label: "Quản trị nội dung", icon: TextAlignLeft },
-      { href: "/admin/search", label: "Quản trị tìm kiếm", icon: GearSix },
-    ])}</div>}
+    {links(learnerLinks)}
+    {admin && <div className="mt-7 space-y-5 border-t border-line pt-5">{adminGroups.map(group => (
+      <div key={group.label}>
+        <p className="mb-2 px-3.5 text-xs font-medium text-subtle">{t("Công cụ quản trị")} · {t(group.label)}</p>
+        {links(group.items)}
+      </div>
+    ))}</div>}
   </nav>;
 }
 

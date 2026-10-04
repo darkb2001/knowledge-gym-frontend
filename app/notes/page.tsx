@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   BookmarkSimpleIcon,
@@ -33,7 +34,7 @@ const EMPTY: Draft = { noteType: "QUICK", content: "", questionId: "", tags: "" 
 const NOTE_TYPES = ["QUICK", "STUDY", "HIGHLIGHT"] as const;
 
 function Notes() {
-  const { t, formatLocale } = useLocale();
+  const { t } = useLocale();
   const [notes, setNotes] = useState<Note[]>([]);
   const [bookmarks, setBookmarks] = useState<Note[]>([]);
   const [draft, setDraft] = useState<Draft>(EMPTY);
@@ -50,6 +51,8 @@ function Notes() {
   const [toast, setToast] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [titles, setTitles] = useState<Record<string, string>>({});
 
   const load = useCallback(async () => {
     try {
@@ -62,6 +65,8 @@ function Notes() {
       setError("");
     } catch (e) {
       setError(e instanceof Error ? e.message : t("Không tải được ghi chú"));
+    } finally {
+      setLoaded(true);
     }
   }, [t]);
 
@@ -116,6 +121,33 @@ function Notes() {
       clearTimeout(timer);
     };
   }, [findQuery]);
+
+  // Lấy tiêu đề câu hỏi đã liên kết để hiện tên thật thay vì id cắt ngắn.
+  useEffect(() => {
+    const ids = Array.from(new Set(notes.map(note => note.questionId).filter((v): v is string => Boolean(v)))).slice(0, 12);
+    const missing = ids.filter(id => !titles[id]);
+    if (missing.length === 0) return;
+    let cancelled = false;
+    void Promise.all(
+      missing.map(id =>
+        getQuestion(id)
+          .then(question => [id, question.title] as const)
+          .catch(() => [id, ""] as const),
+      ),
+    ).then(pairs => {
+      if (cancelled) return;
+      setTitles(prev => {
+        const next = { ...prev };
+        pairs.forEach(([id, title]) => {
+          if (title) next[id] = title;
+        });
+        return next;
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [notes, titles]);
 
   const linkedTitle = useMemo(() => questionTitle || t("Câu hỏi đã liên kết"), [questionTitle, t]);
 
@@ -202,21 +234,28 @@ function Notes() {
   }
 
   async function exportMarkdown() {
-    if (!(await ensureAccessToken())) return;
-    const response = await fetch(`${getApiBase()}/notes/export?format=md`, {
-      headers: { Authorization: `Bearer ${getAccessToken()}` },
-      credentials: "include",
-    });
-    if (!response.ok) {
-      setError(t("Không xuất được ghi chú"));
-      return;
+    if (busy) return;
+    setBusy(true);
+    try {
+      if (!(await ensureAccessToken())) return;
+      const response = await fetch(`${getApiBase()}/notes/export?format=md`, {
+        headers: { Authorization: `Bearer ${getAccessToken()}` },
+        credentials: "include",
+      });
+      if (!response.ok) {
+        setError(t("Không xuất được ghi chú"));
+        return;
+      }
+      const url = URL.createObjectURL(await response.blob());
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "notes.md";
+      link.click();
+      URL.revokeObjectURL(url);
+      setToast(t("Đã tải ghi chú dưới dạng Markdown."));
+    } finally {
+      setBusy(false);
     }
-    const url = URL.createObjectURL(await response.blob());
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "notes.md";
-    link.click();
-    URL.revokeObjectURL(url);
   }
 
   function edit(note: Note) {
@@ -242,8 +281,13 @@ function Notes() {
         title={t("Ghi chú")}
         description={t("Lưu lại điều bạn muốn nhớ, gắn thẻ và liên kết tới câu hỏi trong thư viện.")}
         action={
-          <button type="button" onClick={() => void exportMarkdown()} className="kg-secondary min-h-10 px-4 text-sm">
-            {t("Xuất Markdown")}
+          <button
+            type="button"
+            onClick={() => void exportMarkdown()}
+            disabled={busy}
+            className="kg-secondary min-h-10 px-4 text-sm disabled:opacity-60"
+          >
+            {busy ? t("Đang xuất…") : t("Xuất Markdown")}
           </button>
         }
       />
@@ -266,13 +310,29 @@ function Notes() {
         <section aria-label={t("Kết quả tìm kiếm")} className="space-y-3 rounded-2xl border border-line/80 bg-surface p-4">
           <h2 className="font-display text-lg text-strong">{t("Kết quả")}</h2>
           <ul className="space-y-3">
-            {hits.map(hit => (
-              <li key={`${hit.type}-${hit.id}`} className="border-b border-line/70 pb-3 last:border-0 last:pb-0">
-                <span className="mr-2 text-[10px] uppercase tracking-wider text-positive">{hit.type}</span>
-                <span className="text-sm font-medium text-strong">{hit.title}</span>
-                <p className="mt-1 text-sm text-subtle">{hit.excerpt}</p>
-              </li>
-            ))}
+            {hits.map(hit => {
+              const isQuestion = hit.type.toUpperCase() === "QUESTION";
+              const body = (
+                <>
+                  <span className="mr-2 rounded-full bg-sage px-2 py-0.5 text-xs font-medium uppercase tracking-wide text-positive">
+                    {isQuestion ? t("Câu hỏi") : t("Ghi chú")}
+                  </span>
+                  <span className="text-sm font-medium text-strong">{hit.title}</span>
+                  <p className="mt-1 text-sm text-subtle">{hit.excerpt}</p>
+                </>
+              );
+              return (
+                <li key={`${hit.type}-${hit.id}`} className="border-b border-line/70 pb-3 last:border-0 last:pb-0">
+                  {isQuestion ? (
+                    <Link href={`/questions/${hit.id}`} className="block rounded-xl px-2 py-1 transition-colors hover:bg-sage/40">
+                      {body}
+                    </Link>
+                  ) : (
+                    <div className="px-2 py-1">{body}</div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </section>
       )}
@@ -463,7 +523,14 @@ function Notes() {
       )}
 
       <section className="space-y-3">
-        {notes.length === 0 ? (
+        {!loaded ? (
+          <div className="space-y-3" aria-busy>
+            {[0, 1, 2].map(index => (
+              <div key={index} className="h-24 animate-pulse rounded-2xl border border-line/60 bg-surface" />
+            ))}
+            <p role="status" className="text-sm text-subtle">{t("Đang tải ghi chú…")}</p>
+          </div>
+        ) : notes.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-line px-4 py-10 text-center">
             <NotePencilIcon size={28} className="mx-auto text-subtle" aria-hidden />
             <p className="mt-3 text-sm text-subtle">{t("Chưa có ghi chú nào.")}</p>
@@ -494,7 +561,13 @@ function Notes() {
 
                 {note.questionId && (
                   <p className="text-xs text-subtle">
-                    {t("Liên kết câu hỏi:")} <span className="font-mono">{note.questionId.slice(0, 8)}…</span>
+                    {t("Liên kết câu hỏi:")}{" "}
+                    <Link
+                      href={`/questions/${note.questionId}`}
+                      className="font-medium text-accent underline-offset-4 hover:underline"
+                    >
+                      {titles[note.questionId] ?? `${note.questionId.slice(0, 8)}…`}
+                    </Link>
                   </p>
                 )}
 
@@ -548,7 +621,7 @@ function Notes() {
                 )}
 
                 <p className="text-xs text-subtle">
-                  {t("Loại ghi chú")}: {t(note.noteType)} · {new Date().toLocaleDateString(formatLocale)}
+                  {t("Loại ghi chú")}: {t(note.noteType)}
                 </p>
               </li>
             ))}

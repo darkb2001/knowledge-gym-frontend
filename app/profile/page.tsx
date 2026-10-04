@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { RequireAuth, Field, PageHeading } from "@/components/ui";
 import PasswordPanel from "@/components/PasswordPanel";
@@ -70,7 +71,6 @@ function ProfilePage() {
 
   async function onPickAvatar(file: File | undefined) {
     if (!file || !profile || busy) return;
-    if (!displayName.trim()) { setError("Vui lòng nhập tên hiển thị trước khi lưu."); return; }
     const invalid = validateAvatar(file);
     if (invalid) { setError(invalid); return; }
     setBusy(true); setError(""); setMessage("");
@@ -85,6 +85,9 @@ function ProfilePage() {
     finally { setBusy(false); }
   }
 
+  const providerLabel = profile && profile.authProvider.toUpperCase() === "GOOGLE" ? t("Google") : t("Email và mật khẩu");
+  const roleLabel = profile && profile.role.toUpperCase().includes("ADMIN") ? t("Quản trị viên") : t("Người học");
+
   return <div className="max-w-3xl">
     <PageHeading title="Hồ sơ của bạn" description="Quản lý thông tin cá nhân và bảo mật tài khoản." />
     {error && <p role="alert" className="mb-6">{t(error)}{!profile && <button type="button" onClick={() => setAttempt(value => value + 1)} className="ml-4 underline">{t("Thử lại")}</button>}</p>}
@@ -96,7 +99,7 @@ function ProfilePage() {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={profile.avatarUrl} alt={`${t("Ảnh đại diện")}: ${profile.displayName}`} className="h-20 w-20 rounded-full bg-sage object-cover" />
         ) : <span aria-hidden="true" className="flex h-20 w-20 items-center justify-center rounded-full bg-sage text-3xl font-medium text-strong">{profile.displayName.slice(0, 1).toUpperCase()}</span>}
-        <div className="min-w-0 flex-1"><p className="break-all font-medium text-strong">{profile.email}</p><p className="mt-1 text-xs text-subtle">{profile.authProvider}</p><button type="button" disabled={busy || loading} onClick={() => fileRef.current?.click()} className="kg-secondary mt-3">{t(busy ? "Đang tải…" : "Đổi ảnh đại diện")}</button><input ref={fileRef} aria-label={t("Ảnh đại diện")} type="file" accept="image/*" hidden onChange={event => { const file = event.target.files?.[0]; event.target.value = ""; void onPickAvatar(file); }} /></div>
+        <div className="min-w-0 flex-1"><p className="break-all font-medium text-strong">{profile.email}</p><p className="mt-1 text-xs text-subtle">{providerLabel}</p><button type="button" disabled={busy || loading} onClick={() => fileRef.current?.click()} className="kg-secondary mt-3">{t(busy ? "Đang tải…" : "Đổi ảnh đại diện")}</button><input ref={fileRef} aria-label={t("Ảnh đại diện")} type="file" accept="image/*" hidden onChange={event => { const file = event.target.files?.[0]; event.target.value = ""; void onPickAvatar(file); }} /></div>
       </div>
       <form onSubmit={event => { event.preventDefault(); void saveProfile(); }}>
         <Field label="Tên hiển thị"><input required value={displayName} disabled={busy || loading} onChange={event => setDisplayName(event.target.value)} className="kg-field" maxLength={80} autoComplete="nickname" /></Field>
@@ -105,10 +108,10 @@ function ProfilePage() {
       <section className="border-t border-line pt-6" aria-labelledby="account-settings-heading">
         <h2 id="account-settings-heading" className="text-xl text-strong">{t("Thông tin tài khoản")}</h2>
         <dl className="mt-4 grid gap-4 sm:grid-cols-2">
-          <div><dt className="text-xs text-subtle">{t("Email")}</dt><dd className="mt-1 break-all font-medium text-strong">{profile.email}<span className="mt-1 block text-xs font-normal text-subtle">{t("Email hiện chưa hỗ trợ chỉnh sửa trực tiếp để bảo vệ phiên đăng nhập.")}</span></dd></div>
-          <div><dt className="text-xs text-subtle">{t("Phương thức đăng nhập")}</dt><dd className="mt-1 font-medium text-strong">{profile.authProvider}</dd></div>
-          <div><dt className="text-xs text-subtle">{t("Vai trò")}</dt><dd className="mt-1 font-medium text-strong">{profile.role}</dd></div>
-          <div><dt className="text-xs text-subtle">{t("Thành tích học tập")}</dt><dd className="mt-1 font-medium text-strong">{profile.stats.currentStreak.toLocaleString(formatLocale)} {t("ngày liên tiếp")} · {(profile.stats.longestStreak ?? 0).toLocaleString(formatLocale)} {t("ngày dài nhất")}</dd></div>
+          <div><dt className="text-xs text-subtle">{t("Email")}</dt><dd className="mt-1 break-all font-medium text-strong">{profile.email}</dd><p className="mt-1 text-xs text-subtle">{t("Email hiện chưa hỗ trợ chỉnh sửa trực tiếp để bảo vệ phiên đăng nhập.")}</p></div>
+          <div><dt className="text-xs text-subtle">{t("Phương thức đăng nhập")}</dt><dd className="mt-1 font-medium text-strong">{providerLabel}</dd></div>
+          <div><dt className="text-xs text-subtle">{t("Vai trò")}</dt><dd className="mt-1 font-medium text-strong">{roleLabel}</dd></div>
+          <div><dt className="text-xs text-subtle">{t("Thành tích học tập")}</dt><dd className="mt-1 font-medium text-strong"><Link href="/dashboard" className="text-accent underline-offset-4 hover:underline">{t("Xem trên bảng điều khiển")}</Link></dd></div>
         </dl>
         <PasswordPanel hasPassword={profile.hasPassword} />
       </section>
