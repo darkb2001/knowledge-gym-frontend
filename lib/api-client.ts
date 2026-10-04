@@ -52,6 +52,21 @@ export function acceptAuthenticatedSession(token: string, expectedVersion = sess
   setAccessToken(token);
 }
 
+/**
+ * OAuth callback: handler phía BE đã ghi refresh cookie HttpOnly TRƯỚC khi redirect về FE nên
+ * đây là phiên mới hợp lệ — được phép gỡ hàng rào logout-intent (khác `restoreSession`, thứ
+ * phải chịu hàng rào để một logout lỗi mạng không bị "hồi sinh" sau reload).
+ * Không cấp access token trực tiếp: token vẫn đổi qua `POST /auth/refresh` bằng cookie đó.
+ */
+export function acceptOAuthCallbackSession(): void {
+  sessionVersion++;
+  refreshInFlight = null;
+  logoutBlocked = false;
+  clearLogoutIntent();
+  try { localStorage.removeItem(LOGOUT_INTENT_KEY); } catch { /* Keep the in-memory fallback. */ }
+  accessToken = null;
+}
+
 export function getApiBase(): string {
   return API_BASE;
 }
