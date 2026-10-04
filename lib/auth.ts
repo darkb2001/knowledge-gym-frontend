@@ -1,4 +1,4 @@
-import { apiRequest, clearSession, ensureAccessToken, getApiBase, setAccessToken } from "./api-client";
+import { acceptAuthenticatedSession, ApiError, apiRequest, beginLogout, clearSession, ensureAccessToken, getAccessToken, getApiBase, getSessionVersion } from "./api-client";
 import { markSessionAlive } from "./session-marker";
 import type { TokenResponse, User } from "./types";
 
@@ -40,7 +40,9 @@ export async function restoreSession(): Promise<boolean> {
  * cookie, rồi ghi đè bằng dữ liệu server trả về (kèm marker phiên cho middleware).
  */
 export async function verifySession(): Promise<User> {
+  const version = getSessionVersion();
   const me = await apiRequest<User>("/users/me");
+  if (version !== getSessionVersion()) throw new ApiError(401, { title: "unauthorized", detail: "Phiên đăng nhập đã thay đổi" });
   storeUser(me);
   markSessionAlive();
   if (typeof window !== "undefined") {
@@ -50,12 +52,13 @@ export async function verifySession(): Promise<User> {
 }
 
 export async function login(email: string, password: string): Promise<TokenResponse> {
+  const version = getSessionVersion();
   const data = await apiRequest<TokenResponse>("/auth/login", {
     method: "POST",
     body: { email, password },
     skipAuth: true,
   });
-  setAccessToken(data.accessToken);
+  acceptAuthenticatedSession(data.accessToken, version);
   storeUser(data.user);
   markSessionAlive();
   return data;
@@ -76,12 +79,13 @@ export async function register(
   if (password !== confirmPassword) {
     throw new Error("Mật khẩu xác nhận không khớp.");
   }
+  const version = getSessionVersion();
   const data = await apiRequest<TokenResponse>("/auth/register", {
     method: "POST",
     body: { email, password, confirmPassword, displayName, verificationCode },
     skipAuth: true,
   });
-  setAccessToken(data.accessToken);
+  acceptAuthenticatedSession(data.accessToken, version);
   storeUser(data.user);
   markSessionAlive();
   return data;
@@ -117,8 +121,21 @@ export async function verifyExistingEmail(
 }
 
 export async function logout(): Promise<void> {
+  const token = getAccessToken();
+  beginLogout();
+  storeUser(null);
   try {
-    await apiRequest<void>("/auth/logout", { method: "POST" });
+    try {
+      // No refresh during logout; the bearer lets BE invalidate access even without a cookie.
+      await apiRequest<void>("/auth/logout", {
+        method: "POST", skipAuth: true,
+        ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+      });
+    } catch (error) {
+      // A stale bearer can be rejected before the public logout handler; still revoke its cookie.
+      if (!(error instanceof ApiError) || error.status !== 401 || !token) throw error;
+      await apiRequest<void>("/auth/logout", { method: "POST", skipAuth: true });
+    }
   } finally {
     clearSession();
     storeUser(null);
@@ -159,7 +176,7 @@ export function applyOAuthHash(hash: string): { accessToken: string; userId: str
   const userId = params.get("userId");
   const role = params.get("role") || "USER";
   if (!accessToken || !userId) return null;
-  setAccessToken(accessToken);
+  acceptAuthenticatedSession(accessToken);
   markSessionAlive();
   return { accessToken, userId, role };
 }

@@ -1,6 +1,6 @@
 import type { ApiProblem } from "./types";
 import { isJwtExpired } from "./jwt";
-import { clearSessionMarker, markSessionAlive } from "./session-marker";
+import { clearLogoutIntent, clearSessionMarker, hasLogoutIntentCookie, markLogoutIntent, markSessionAlive } from "./session-marker";
 
 /**
  * Browser API client for Knowledge Gym backend.
@@ -17,12 +17,47 @@ const API_BASE =
 
 let accessToken: string | null = null;
 let refreshInFlight: Promise<boolean> | null = null;
+let sessionVersion = 0;
+let logoutBlocked = false;
+const LOGOUT_INTENT_KEY = "kg.logout-intent";
+
+function hasLogoutIntent(): boolean {
+  try {
+    return logoutBlocked || hasLogoutIntentCookie() || (typeof localStorage !== "undefined" && localStorage.getItem(LOGOUT_INTENT_KEY) === "1");
+  } catch {
+    return logoutBlocked || hasLogoutIntentCookie();
+  }
+}
+
+/** Persist only a non-secret logout intent, never JWTs. Block cookie restore even after reload. */
+export function beginLogout(): void {
+  sessionVersion++;
+  refreshInFlight = null;
+  logoutBlocked = true;
+  markLogoutIntent();
+  try { localStorage.setItem(LOGOUT_INTENT_KEY, "1"); } catch { /* Storage may be unavailable. */ }
+  clearSession();
+}
+
+export function getSessionVersion(): number { return sessionVersion; }
+
+/** Only an explicit successful login/register/OAuth callback may remove the logout fence. */
+export function acceptAuthenticatedSession(token: string, expectedVersion = sessionVersion): void {
+  if (expectedVersion !== sessionVersion) throw new Error("Đăng nhập đã bị hủy bởi yêu cầu đăng xuất");
+  sessionVersion++;
+  refreshInFlight = null;
+  logoutBlocked = false;
+  clearLogoutIntent();
+  try { localStorage.removeItem(LOGOUT_INTENT_KEY); } catch { /* Keep the in-memory fallback. */ }
+  setAccessToken(token);
+}
 
 export function getApiBase(): string {
   return API_BASE;
 }
 
 export function getAccessToken(): string | null {
+  if (hasLogoutIntent()) clearSession();
   return accessToken;
 }
 
@@ -43,13 +78,15 @@ export function clearSession(): void {
  * mà FE vẫn coi là hợp lệ thì người dùng vẫn thấy trang nội bộ cho tới khi có request 401.
  */
 export function hasUsableAccessToken(): boolean {
-  return Boolean(accessToken) && !isJwtExpired(accessToken);
+  return !hasLogoutIntent() && Boolean(accessToken) && !isJwtExpired(accessToken);
 }
 
 /** Exposed for unit tests — reset module state between cases. */
 export function __resetApiClientForTests(): void {
   accessToken = null;
   refreshInFlight = null;
+  logoutBlocked = false;
+  sessionVersion++;
 }
 
 export class ApiError extends Error {
@@ -113,13 +150,16 @@ function bounceToLogin(): void {
  * @throws {ApiError} on other non-OK refresh responses (5xx, 429…) — session kept.
  */
 async function tryRefresh(): Promise<boolean> {
+  if (hasLogoutIntent()) { clearSession(); return false; }
   if (refreshInFlight) return refreshInFlight;
+  const version = sessionVersion;
   refreshInFlight = (async () => {
     try {
       const res = await fetch(`${API_BASE}/auth/refresh`, {
         method: "POST",
         credentials: "include",
       });
+      if (version !== sessionVersion || hasLogoutIntent()) return false;
       // Definitive auth failure only — cookie gone / revoked / expired.
       if (res.status === 401 || res.status === 403) {
         clearSession();
@@ -130,6 +170,7 @@ async function tryRefresh(): Promise<boolean> {
         throw new ApiError(res.status, await parseProblem(res));
       }
       const data = (await res.json()) as { accessToken?: string };
+      if (version !== sessionVersion || hasLogoutIntent()) return false;
       if (!data.accessToken) {
         clearSession();
         return false;
@@ -139,13 +180,14 @@ async function tryRefresh(): Promise<boolean> {
       markSessionAlive();
       return true;
     } catch (err) {
+      if (version !== sessionVersion || hasLogoutIntent()) return false;
       if (err instanceof ApiError) throw err;
       // TypeError (failed to fetch), AbortError, DNS, CORS, etc.
       throw new RefreshUnreachableError(
         err instanceof Error ? err.message : undefined,
       );
     } finally {
-      refreshInFlight = null;
+      if (version === sessionVersion) refreshInFlight = null;
     }
   })();
   return refreshInFlight;
@@ -159,6 +201,7 @@ async function tryRefresh(): Promise<boolean> {
  *   on blips (e.g. RequireAuth) should catch these and show an error/retry UI.
  */
 export async function ensureAccessToken(): Promise<boolean> {
+  if (hasLogoutIntent()) { clearSession(); return false; }
   if (hasUsableAccessToken()) return true;
   // Token hết hạn trong bộ nhớ: bỏ luôn, không gửi JWT đã chết lên API.
   if (accessToken) accessToken = null;
@@ -170,9 +213,17 @@ export async function apiRequest<T>(
   options: RequestOptions = {},
 ): Promise<T> {
   const { body, skipAuth, _retried, headers: extraHeaders, ...rest } = options;
+  if (!skipAuth && hasLogoutIntent()) {
+    clearSession();
+    throw new ApiError(401, { title: "unauthorized", detail: "Vui lòng đăng nhập lại" });
+  }
+  const version = sessionVersion;
   if (!skipAuth && accessToken && isJwtExpired(accessToken)) {
     // Đổi mới trước khi gọi: gửi JWT đã hết hạn là chắc chắn 401.
     await ensureAccessToken();
+  }
+  if (!skipAuth && (version !== sessionVersion || hasLogoutIntent())) {
+    throw new ApiError(401, { title: "unauthorized", detail: "Phiên đăng nhập đã thay đổi" });
   }
   const headers = new Headers(extraHeaders);
   if (body !== undefined) {
@@ -189,6 +240,9 @@ export async function apiRequest<T>(
     body: body === undefined ? undefined : JSON.stringify(body),
   });
 
+  if (!skipAuth && (version !== sessionVersion || hasLogoutIntent())) {
+    throw new ApiError(401, { title: "unauthorized", detail: "Phiên đăng nhập đã thay đổi" });
+  }
   if (res.status === 401 && !skipAuth && !_retried) {
     try {
       const refreshed = await tryRefresh();
@@ -215,7 +269,11 @@ export async function apiRequest<T>(
   }
 
   if (res.headers.get("content-type")?.includes("application/json")) {
-    return (await res.json()) as T;
+    const data = (await res.json()) as T;
+    if (!skipAuth && (version !== sessionVersion || hasLogoutIntent())) {
+      throw new ApiError(401, { title: "unauthorized", detail: "Phiên đăng nhập đã thay đổi" });
+    }
+    return data;
   }
   return undefined as T;
 }
@@ -232,6 +290,11 @@ export async function apiUpload<T>(
   formData: FormData,
   options: { _retried?: boolean } = {},
 ): Promise<T> {
+  if (hasLogoutIntent()) {
+    clearSession();
+    throw new ApiError(401, { title: "unauthorized", detail: "Vui lòng đăng nhập lại" });
+  }
+  const version = sessionVersion;
   const headers = new Headers();
   if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`);
 
@@ -242,6 +305,9 @@ export async function apiUpload<T>(
     body: formData,
   });
 
+  if (version !== sessionVersion || hasLogoutIntent()) {
+    throw new ApiError(401, { title: "unauthorized", detail: "Phiên đăng nhập đã thay đổi" });
+  }
   if (res.status === 401 && !options._retried) {
     if (await tryRefresh()) return apiUpload<T>(path, formData, { _retried: true });
     bounceToLogin();
@@ -252,7 +318,11 @@ export async function apiUpload<T>(
   if (!res.ok) throw new ApiError(res.status, await parseProblem(res));
 
   if (res.headers.get("content-type")?.includes("application/json")) {
-    return (await res.json()) as T;
+    const data = (await res.json()) as T;
+    if (version !== sessionVersion || hasLogoutIntent()) {
+      throw new ApiError(401, { title: "unauthorized", detail: "Phiên đăng nhập đã thay đổi" });
+    }
+    return data;
   }
   return undefined as T;
 }

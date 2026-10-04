@@ -9,15 +9,16 @@
  */
 
 export const SESSION_MARKER = "kg_session";
+const LOGOUT_MARKER = "kg_logout";
 
 /** Khớp TTL refresh token (7 ngày). */
 const MAX_AGE_SECONDS = 7 * 24 * 3600;
 
-function write(value: string, maxAgeSeconds: number): void {
+function write(value: string, maxAgeSeconds: number, name = SESSION_MARKER): void {
   if (typeof document === "undefined") return;
   const secure =
     typeof window !== "undefined" && window.location.protocol === "https:" ? "; Secure" : "";
-  document.cookie = `${SESSION_MARKER}=${value}; Path=/; Max-Age=${maxAgeSeconds}; SameSite=Lax${secure}`;
+  document.cookie = `${name}=${value}; Path=/; Max-Age=${maxAgeSeconds}; SameSite=Lax${secure}`;
 }
 
 export function markSessionAlive(): void {
@@ -26,6 +27,14 @@ export function markSessionAlive(): void {
 
 export function clearSessionMarker(): void {
   write("", 0);
+}
+
+/** Non-secret fallback when localStorage is unavailable; never an authentication credential. */
+export function markLogoutIntent(): void { write("1", MAX_AGE_SECONDS, LOGOUT_MARKER); }
+export function clearLogoutIntent(): void { write("", 0, LOGOUT_MARKER); }
+export function hasLogoutIntentCookie(): boolean {
+  return typeof document !== "undefined" && document.cookie.split(";")
+    .some((part) => part.trim() === `${LOGOUT_MARKER}=1`);
 }
 
 export function hasSessionMarker(): boolean {

@@ -1,6 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("./api-client", () => ({
+vi.mock("./api-client", async (importOriginal) => ({
+  ...await importOriginal<typeof import("./api-client")>(),
+  acceptAuthenticatedSession: vi.fn(),
+  beginLogout: vi.fn(),
+  getAccessToken: vi.fn(),
+  getSessionVersion: vi.fn(),
   apiRequest: vi.fn(),
   clearSession: vi.fn(),
   ensureAccessToken: vi.fn(),
@@ -8,12 +13,13 @@ vi.mock("./api-client", () => ({
   setAccessToken: vi.fn(),
 }));
 
-import { apiRequest, setAccessToken } from "./api-client";
+import { acceptAuthenticatedSession, apiRequest, getSessionVersion } from "./api-client";
 import { register, requestEmailVerification, verifyExistingEmail } from "./auth";
 
 describe("registration confirmation", () => {
   beforeEach(() => {
     vi.resetAllMocks();
+    vi.mocked(getSessionVersion).mockReturnValue(0);
     vi.mocked(apiRequest).mockResolvedValue({ message: "Verification complete" });
   });
 
@@ -21,7 +27,7 @@ describe("registration confirmation", () => {
     await expect(register("user@example.com", "password123", "User", "different123", "123456"))
       .rejects.toThrow("Mật khẩu xác nhận không khớp.");
     expect(apiRequest).not.toHaveBeenCalled();
-    expect(setAccessToken).not.toHaveBeenCalled();
+    expect(acceptAuthenticatedSession).not.toHaveBeenCalled();
   });
 
   it("requests email code without sending password or installing a session", async () => {
@@ -29,7 +35,7 @@ describe("registration confirmation", () => {
     expect(apiRequest).toHaveBeenCalledWith("/auth/email-verification/request", {
       method: "POST", body: { email: "user@example.com" }, skipAuth: true,
     });
-    expect(setAccessToken).not.toHaveBeenCalled();
+    expect(acceptAuthenticatedSession).not.toHaveBeenCalled();
   });
 
   it("activates legacy account with a new password but does not log in", async () => {
@@ -39,7 +45,7 @@ describe("registration confirmation", () => {
       method: "POST", body: { email: "user@example.com", code: "123456",
         newPassword: "newPassword123", confirmPassword: "newPassword123" }, skipAuth: true,
     });
-    expect(setAccessToken).not.toHaveBeenCalled();
+    expect(acceptAuthenticatedSession).not.toHaveBeenCalled();
   });
 
   it("sends confirmation together with the password", async () => {
@@ -54,6 +60,6 @@ describe("registration confirmation", () => {
       },
       skipAuth: true,
     });
-    expect(setAccessToken).toHaveBeenCalledWith("test-token");
+    expect(acceptAuthenticatedSession).toHaveBeenCalledWith("test-token", 0);
   });
 });
