@@ -18,6 +18,16 @@ export type Topic = {
   description: string | null;
   displayOrder: number;
   moduleCount: number;
+  /** Slug of the parent content track (e.g. `java`, `aws`). Null for untracked topics. */
+  track?: string | null;
+};
+
+export type Track = {
+  slug: string;
+  name: string;
+  description: string | null;
+  icon: string | null;
+  displayOrder: number;
 };
 
 export type Module = {

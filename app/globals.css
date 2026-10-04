@@ -138,3 +138,167 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   AWS visual system (module AWS / DVA-C02) — icon + diagram
+   Icon lấy từ AWS Architecture Icons (48px), phục vụ /aws-icons/<alias>.png
+   Dùng trong answer_html: <span class="aws-ico lambda"></span>
+   ══════════════════════════════════════════════════════════════ */
+.answer-html .aws-ico {
+  display: inline-block; width: 40px; height: 40px; flex: none;
+  background-repeat: no-repeat; background-position: center; background-size: contain;
+}
+.answer-html .aws-ico.sm { width: 28px; height: 28px; }
+.answer-html .aws-ico.lg { width: 56px; height: 56px; }
+.answer-html .aws-ico.acm { background-image: url("/aws-icons/acm.png"); }
+.answer-html .aws-ico.alb { background-image: url("/aws-icons/alb.png"); }
+.answer-html .aws-ico.apigateway { background-image: url("/aws-icons/apigateway.png"); }
+.answer-html .aws-ico.apprunner { background-image: url("/aws-icons/apprunner.png"); }
+.answer-html .aws-ico.appsync { background-image: url("/aws-icons/appsync.png"); }
+.answer-html .aws-ico.athena { background-image: url("/aws-icons/athena.png"); }
+.answer-html .aws-ico.aurora { background-image: url("/aws-icons/aurora.png"); }
+.answer-html .aws-ico.backup { background-image: url("/aws-icons/backup.png"); }
+.answer-html .aws-ico.batch { background-image: url("/aws-icons/batch.png"); }
+.answer-html .aws-ico.beanstalk { background-image: url("/aws-icons/beanstalk.png"); }
+.answer-html .aws-ico.cdk { background-image: url("/aws-icons/cdk.png"); }
+.answer-html .aws-ico.clb { background-image: url("/aws-icons/clb.png"); }
+.answer-html .aws-ico.cloud { background-image: url("/aws-icons/cloud.png"); }
+.answer-html .aws-ico.cloudformation { background-image: url("/aws-icons/cloudformation.png"); }
+.answer-html .aws-ico.cloudfront { background-image: url("/aws-icons/cloudfront.png"); }
+.answer-html .aws-ico.cloudtrail { background-image: url("/aws-icons/cloudtrail.png"); }
+.answer-html .aws-ico.cloudwatch { background-image: url("/aws-icons/cloudwatch.png"); }
+.answer-html .aws-ico.codebuild { background-image: url("/aws-icons/codebuild.png"); }
+.answer-html .aws-ico.codecommit { background-image: url("/aws-icons/codecommit.png"); }
+.answer-html .aws-ico.codedeploy { background-image: url("/aws-icons/codedeploy.png"); }
+.answer-html .aws-ico.codepipeline { background-image: url("/aws-icons/codepipeline.png"); }
+.answer-html .aws-ico.cognito { background-image: url("/aws-icons/cognito.png"); }
+.answer-html .aws-ico.config { background-image: url("/aws-icons/config.png"); }
+.answer-html .aws-ico.datasync { background-image: url("/aws-icons/datasync.png"); }
+.answer-html .aws-ico.dax { background-image: url("/aws-icons/dax.png"); }
+.answer-html .aws-ico.directconnect { background-image: url("/aws-icons/directconnect.png"); }
+.answer-html .aws-ico.docdb { background-image: url("/aws-icons/docdb.png"); }
+.answer-html .aws-ico.dynamodb { background-image: url("/aws-icons/dynamodb.png"); }
+.answer-html .aws-ico.ebs { background-image: url("/aws-icons/ebs.png"); }
+.answer-html .aws-ico.ec2 { background-image: url("/aws-icons/ec2.png"); }
+.answer-html .aws-ico.ecr { background-image: url("/aws-icons/ecr.png"); }
+.answer-html .aws-ico.ecs { background-image: url("/aws-icons/ecs.png"); }
+.answer-html .aws-ico.efs { background-image: url("/aws-icons/efs.png"); }
+.answer-html .aws-ico.eks { background-image: url("/aws-icons/eks.png"); }
+.answer-html .aws-ico.elasticache { background-image: url("/aws-icons/elasticache.png"); }
+.answer-html .aws-ico.emr { background-image: url("/aws-icons/emr.png"); }
+.answer-html .aws-ico.eventbridge { background-image: url("/aws-icons/eventbridge.png"); }
+.answer-html .aws-ico.eventbridge-pipes { background-image: url("/aws-icons/eventbridge-pipes.png"); }
+.answer-html .aws-ico.fargate { background-image: url("/aws-icons/fargate.png"); }
+.answer-html .aws-ico.fsx { background-image: url("/aws-icons/fsx.png"); }
+.answer-html .aws-ico.generic { background-image: url("/aws-icons/generic.png"); }
+.answer-html .aws-ico.glacier { background-image: url("/aws-icons/glacier.png"); }
+.answer-html .aws-ico.global-accelerator { background-image: url("/aws-icons/global-accelerator.png"); }
+.answer-html .aws-ico.glue { background-image: url("/aws-icons/glue.png"); }
+.answer-html .aws-ico.guardduty { background-image: url("/aws-icons/guardduty.png"); }
+.answer-html .aws-ico.iam { background-image: url("/aws-icons/iam.png"); }
+.answer-html .aws-ico.inspector { background-image: url("/aws-icons/inspector.png"); }
+.answer-html .aws-ico.kinesis { background-image: url("/aws-icons/kinesis.png"); }
+.answer-html .aws-ico.kinesisfirehose { background-image: url("/aws-icons/kinesisfirehose.png"); }
+.answer-html .aws-ico.kms { background-image: url("/aws-icons/kms.png"); }
+.answer-html .aws-ico.lambda { background-image: url("/aws-icons/lambda.png"); }
+.answer-html .aws-ico.lightsail { background-image: url("/aws-icons/lightsail.png"); }
+.answer-html .aws-ico.macie { background-image: url("/aws-icons/macie.png"); }
+.answer-html .aws-ico.mq { background-image: url("/aws-icons/mq.png"); }
+.answer-html .aws-ico.msk { background-image: url("/aws-icons/msk.png"); }
+.answer-html .aws-ico.neptune { background-image: url("/aws-icons/neptune.png"); }
+.answer-html .aws-ico.network-firewall { background-image: url("/aws-icons/network-firewall.png"); }
+.answer-html .aws-ico.nlb { background-image: url("/aws-icons/nlb.png"); }
+.answer-html .aws-ico.onprem { background-image: url("/aws-icons/onprem.png"); }
+.answer-html .aws-ico.opensearch { background-image: url("/aws-icons/opensearch.png"); }
+.answer-html .aws-ico.organizations { background-image: url("/aws-icons/organizations.png"); }
+.answer-html .aws-ico.privatelink { background-image: url("/aws-icons/privatelink.png"); }
+.answer-html .aws-ico.quicksight { background-image: url("/aws-icons/quicksight.png"); }
+.answer-html .aws-ico.rds { background-image: url("/aws-icons/rds.png"); }
+.answer-html .aws-ico.redshift { background-image: url("/aws-icons/redshift.png"); }
+.answer-html .aws-ico.region { background-image: url("/aws-icons/region.png"); }
+.answer-html .aws-ico.route53 { background-image: url("/aws-icons/route53.png"); }
+.answer-html .aws-ico.s3 { background-image: url("/aws-icons/s3.png"); }
+.answer-html .aws-ico.scheduler { background-image: url("/aws-icons/scheduler.png"); }
+.answer-html .aws-ico.secretsmanager { background-image: url("/aws-icons/secretsmanager.png"); }
+.answer-html .aws-ico.serverless { background-image: url("/aws-icons/serverless.png"); }
+.answer-html .aws-ico.shield { background-image: url("/aws-icons/shield.png"); }
+.answer-html .aws-ico.snowball { background-image: url("/aws-icons/snowball.png"); }
+.answer-html .aws-ico.sns { background-image: url("/aws-icons/sns.png"); }
+.answer-html .aws-ico.sqs { background-image: url("/aws-icons/sqs.png"); }
+.answer-html .aws-ico.ssm { background-image: url("/aws-icons/ssm.png"); }
+.answer-html .aws-ico.stepfunctions { background-image: url("/aws-icons/stepfunctions.png"); }
+.answer-html .aws-ico.storage-gateway { background-image: url("/aws-icons/storage-gateway.png"); }
+.answer-html .aws-ico.sts { background-image: url("/aws-icons/sts.png"); }
+.answer-html .aws-ico.transit-gateway { background-image: url("/aws-icons/transit-gateway.png"); }
+.answer-html .aws-ico.vpc { background-image: url("/aws-icons/vpc.png"); }
+.answer-html .aws-ico.vpc-endpoint { background-image: url("/aws-icons/vpc-endpoint.png"); }
+.answer-html .aws-ico.vpc-net { background-image: url("/aws-icons/vpc-net.png"); }
+.answer-html .aws-ico.vpn { background-image: url("/aws-icons/vpn.png"); }
+.answer-html .aws-ico.waf { background-image: url("/aws-icons/waf.png"); }
+.answer-html .aws-ico.xray { background-image: url("/aws-icons/xray.png"); }
+.answer-html .aws-ico.user::before { content: "👤"; font-size: 1.5rem; line-height: 40px; }
+.answer-html .aws-ico.mobile::before { content: "📱"; font-size: 1.5rem; line-height: 40px; }
+.answer-html .aws-ico.az::before { content: "AZ"; font-size: 1.5rem; line-height: 40px; }
+.answer-html .aws-ico.sam::before { content: "SAM"; font-size: 1.5rem; line-height: 40px; }
+
+.answer-html .aws-ico.eni { background-image: url("/aws-icons/eni.png"); }
+.answer-html .aws-ico.flow-logs { background-image: url("/aws-icons/flow-logs.png"); }
+.answer-html .aws-ico.igw { background-image: url("/aws-icons/igw.png"); }
+.answer-html .aws-ico.nacl { background-image: url("/aws-icons/nacl.png"); }
+.answer-html .aws-ico.nat-gateway { background-image: url("/aws-icons/nat-gateway.png"); }
+.answer-html .aws-ico.route-table { background-image: url("/aws-icons/route-table.png"); }
+
+/* ── Luồng icon ngang ── */
+.answer-html .icon-flow {
+  display: flex; flex-wrap: wrap; align-items: stretch; gap: .5rem .6rem;
+  margin: 1rem 0; padding: .9rem 1rem; border: 1px solid var(--line);
+  border-radius: 14px; background: linear-gradient(180deg, #fdf6ea, #fbf3e6);
+}
+.answer-html .icon-node {
+  display: flex; flex-direction: column; align-items: center; gap: .2rem; flex: 1 1 8rem;
+  min-width: 7.5rem; padding: .6rem .5rem; border: 1px solid var(--line);
+  border-radius: 12px; background: var(--surface); text-align: center;
+}
+.answer-html .icon-label { font-size: .82rem; font-weight: 600; line-height: 1.25; color: var(--foreground); }
+.answer-html .icon-note { font-size: .72rem; line-height: 1.3; color: #6b6257; }
+.answer-html .icon-arrow {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .1rem; font-size: 1.15rem; line-height: 1; color: #c2410c; flex: 0 0 auto; padding: 0 .15rem;
+}
+.answer-html .arrow-note { font-size: .66rem; max-width: 7.5rem; text-align: center; color: #6b6257; }
+
+/* ── Lưới service (chọn service nào) ── */
+.answer-html .service-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: .6rem; margin: 1rem 0;
+}
+.answer-html .service-grid .icon-node { flex: none; min-width: 0; }
+
+/* ── Xếp lớp (Region / AZ / VPC / subnet) ── */
+.answer-html .stack {
+  margin: .8rem 0; padding: .75rem .85rem; border: 1px dashed #dcae7a;
+  border-radius: 14px; background: rgba(234, 88, 12, .04);
+}
+.answer-html .stack-title {
+  font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+  color: #9a3412; margin-bottom: .45rem;
+}
+.answer-html .sub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: .6rem; }
+.answer-html .stack .icon-node { background: var(--surface); }
+
+/* ── Nhãn nhỏ ── */
+.answer-html .pill {
+  display: inline-block; margin: 0 .15rem; padding: .1rem .5rem; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); font-size: .72rem; color: #4b5563;
+}
+.answer-html .pill-ok { border-color: #a7c4a0; color: #2f6b3a; background: #f1f7ee; }
+.answer-html .pill-warn { border-color: #e0b083; color: #9a3412; background: #fdf3e7; }
+
+@media (max-width: 640px) {
+  .answer-html .icon-flow { padding: .7rem .6rem; gap: .45rem; }
+  .answer-html .icon-node { flex: 1 1 6.5rem; min-width: 6.5rem; }
+  .answer-html .icon-arrow { font-size: 1rem; }
+  .answer-html .arrow-note { display: none; }
+  .answer-html .aws-ico { width: 34px; height: 34px; }
+  .answer-html .service-grid { grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); }
+}

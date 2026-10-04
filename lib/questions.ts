@@ -1,5 +1,5 @@
 import { apiRequest } from "./api-client";
-import type { Module, PageResponse, QuestionDetail, QuestionSummary, Topic } from "./types";
+import type { Module, PageResponse, QuestionDetail, QuestionSummary, Topic, Track } from "./types";
 
 export type QuestionQuery = {
   moduleId?: string;
@@ -12,6 +12,10 @@ export type QuestionQuery = {
 
 export async function listTopics(signal?: AbortSignal): Promise<Topic[]> {
   return apiRequest<Topic[]>("/topics", { signal });
+}
+
+export async function listTracks(signal?: AbortSignal): Promise<Track[]> {
+  return apiRequest<Track[]>("/tracks", { signal });
 }
 
 export async function listModules(topicId?: string, signal?: AbortSignal): Promise<Module[]> {

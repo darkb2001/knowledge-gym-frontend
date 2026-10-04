@@ -44,6 +44,8 @@ export const messages: Record<string, string> = {
   "Ví dụ: Java, Spring, cơ sở dữ liệu…": "Try Java, Spring, databases…",
   "Tất cả chủ đề": "All topics", "Chủ đề": "Topic", "Module": "Module",
   "module": "modules", "câu hỏi": "questions", "Các module": "Modules",
+  "Loại nội dung": "Content track", "Tất cả nội dung": "All content",
+  "Xem thêm": "Show more", "Thu gọn": "Show less",
   "Chọn module để xem các cách luyện tập.": "Choose a module to see your practice options.",
   "Bắt đầu từ đây": "Start here", "Bạn chọn cách học": "Choose how to practise",
   "Đọc & khám phá": "Read & explore", "Đọc câu hỏi, tìm hiểu đáp án và kết nối kiến thức.": "Browse questions, read answers and connect ideas.",
