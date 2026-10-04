@@ -1,10 +1,12 @@
 "use client";
 import { useLocale } from "@/components/locale";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ArrowUpRightIcon as ArrowUpRight } from "@phosphor-icons/react";
 import { ApiError } from "@/lib/api-client";
-import { LearningContent } from "./LearningContent";
 import { QUALITY, reviewCard, type DueCard } from "@/lib/srs";
+import { summarizeAnswer } from "@/lib/flashcard-summary";
 import { formatReviewInterval } from "@/lib/i18n";
 
 type Rating = {
@@ -77,6 +79,8 @@ export function FlashcardDeck({
   const shownAtRef = useRef<number>(Date.now());
   const inFlight = useRef(false);
   const card = cards[index];
+  // Mặt sau chỉ là bản tóm tắt: nội dung đầy đủ nằm ở trang câu hỏi (mở tab mới, không rời phiên ôn).
+  const summary = useMemo(() => summarizeAnswer(card?.answerHtml), [card?.answerHtml]);
 
   // Thời gian đo từ lúc thẻ được hiển thị — mỗi thẻ mới bắt đầu lại đồng hồ.
   useEffect(() => {
@@ -176,7 +180,20 @@ export function FlashcardDeck({
         </button> : <div className="space-y-5 p-6 sm:p-10">
           <div className="flex flex-wrap items-center justify-between gap-3"><p className="text-sm font-medium text-positive">{t("Đáp án")}</p><button type="button" className="kg-secondary" aria-label={t("Lật về mặt câu hỏi")} onClick={() => setFlipped(false)}>{locale === "en" ? "Back to question" : "Về câu hỏi"}</button></div>
           <h2 className="break-words text-xl">{card.title}</h2>
-          <LearningContent html={card.answerHtml} className="border-t border-line pt-5" />
+          <div className="border-t border-line pt-5">
+            <p className="text-lg leading-relaxed text-body">{summary || t("Thẻ này chưa có đáp án tóm tắt — mở bài viết đầy đủ bên dưới.")}</p>
+            <p className="mt-4 text-xs uppercase tracking-wide text-subtle">{t("Nội dung đầy đủ")}</p>
+            <Link
+              href={`/questions/${card.questionId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-flex min-h-11 items-center gap-2 text-accent underline underline-offset-4 hover:text-strong"
+            >
+              {t("Mở bài viết đầy đủ")}
+              <ArrowUpRight size={16} aria-hidden />
+            </Link>
+            <p className="text-xs text-subtle">{t("Mở trong tab mới — phiên ôn thẻ hiện tại không bị gián đoạn.")}</p>
+          </div>
         </div>}
       </div>
 

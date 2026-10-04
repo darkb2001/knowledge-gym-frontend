@@ -1,4 +1,6 @@
 import type { ApiProblem } from "./types";
+import { isJwtExpired } from "./jwt";
+import { clearSessionMarker, markSessionAlive } from "./session-marker";
 
 /**
  * Browser API client for Knowledge Gym backend.
@@ -30,6 +32,18 @@ export function setAccessToken(token: string | null): void {
 
 export function clearSession(): void {
   accessToken = null;
+  // Marker phiên (cookie first-party cho middleware) phải chết cùng token trong bộ nhớ.
+  clearSessionMarker();
+}
+
+/**
+ * `true` chỉ khi có access token **và** token còn hạn.
+ *
+ * "Có token trong bộ nhớ" không đồng nghĩa "đã đăng nhập": sau khi JWT hết hạn (mặc định 15 phút)
+ * mà FE vẫn coi là hợp lệ thì người dùng vẫn thấy trang nội bộ cho tới khi có request 401.
+ */
+export function hasUsableAccessToken(): boolean {
+  return Boolean(accessToken) && !isJwtExpired(accessToken);
 }
 
 /** Exposed for unit tests — reset module state between cases. */
@@ -121,6 +135,8 @@ async function tryRefresh(): Promise<boolean> {
         return false;
       }
       setAccessToken(data.accessToken);
+      // Refresh thành công ⇒ phiên còn sống: dựng lại marker cho middleware (tab reload làm mất state).
+      markSessionAlive();
       return true;
     } catch (err) {
       if (err instanceof ApiError) throw err;
@@ -143,7 +159,9 @@ async function tryRefresh(): Promise<boolean> {
  *   on blips (e.g. RequireAuth) should catch these and show an error/retry UI.
  */
 export async function ensureAccessToken(): Promise<boolean> {
-  if (accessToken) return true;
+  if (hasUsableAccessToken()) return true;
+  // Token hết hạn trong bộ nhớ: bỏ luôn, không gửi JWT đã chết lên API.
+  if (accessToken) accessToken = null;
   return tryRefresh();
 }
 
@@ -152,6 +170,10 @@ export async function apiRequest<T>(
   options: RequestOptions = {},
 ): Promise<T> {
   const { body, skipAuth, _retried, headers: extraHeaders, ...rest } = options;
+  if (!skipAuth && accessToken && isJwtExpired(accessToken)) {
+    // Đổi mới trước khi gọi: gửi JWT đã hết hạn là chắc chắn 401.
+    await ensureAccessToken();
+  }
   const headers = new Headers(extraHeaders);
   if (body !== undefined) {
     headers.set("Content-Type", "application/json");

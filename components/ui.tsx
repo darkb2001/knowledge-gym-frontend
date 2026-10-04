@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { ArrowRightIcon as ArrowRight, BookOpenIcon as BookOpen, CheckIcon as Check, ChartLineIcon as ChartLine, CirclesThreeIcon as CirclesThree, CompassIcon as Compass, GearSixIcon as GearSix, NotebookIcon as Notebook, SignOutIcon as SignOut, StackIcon as Stack, TextAlignLeftIcon as TextAlignLeft, UserCircleIcon as UserCircle, UsersThreeIcon as UsersThree } from "@phosphor-icons/react";
-import { getAccessToken, RefreshUnreachableError } from "@/lib/api-client";
-import { logout, readStoredUser, restoreSession } from "@/lib/auth";
+import { ApiError, clearSession, ensureAccessToken, getAccessToken, hasUsableAccessToken, RefreshUnreachableError } from "@/lib/api-client";
+import { logout, readStoredUser, verifySession } from "@/lib/auth";
 import { LanguageSwitch, useLocale } from "@/components/locale";
 import type { User } from "@/lib/types";
 
@@ -109,7 +109,23 @@ export function PublicShell({ children }: { children: ReactNode }) {
   return <AppFrame user={user}>{children}</AppFrame>;
 }
 
-/** Preserve refresh/session restoration and its network-error recovery. */
+/**
+ * Chỉ tin phiên sau khi server xác nhận.
+ *
+ * Cache theo **giá trị access token**: điều hướng trong app không gọi lại `GET /users/me`, nhưng mỗi
+ * lần token được đổi mới (hoặc tab mới) thì kiểm tra lại — nên token hết hạn/thu hồi không thể
+ * "đi tiếp" bằng dữ liệu cũ trong sessionStorage.
+ */
+let verifiedToken: string | null = null;
+
+async function verifySessionOnce(): Promise<void> {
+  const token = getAccessToken();
+  if (token && token === verifiedToken) return;
+  await verifySession();
+  verifiedToken = getAccessToken();
+}
+
+/** Chặn trang nội bộ: bắt buộc có access token **còn hạn** + server xác nhận phiên. */
 export function RequireAuth({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { t } = useLocale();
@@ -120,16 +136,26 @@ export function RequireAuth({ children }: { children: ReactNode }) {
     let cancelled = false;
     (async () => {
       try {
-        let token = getAccessToken();
-        if (!token) {
-          const ok = await restoreSession();
-          token = getAccessToken();
-          if (!ok && !token) { if (!cancelled) router.replace("/login"); return; }
-        }
+        const refreshed = await ensureAccessToken();
         if (cancelled) return;
-        setUser(readStoredUser()); setReady(Boolean(getAccessToken()));
+        if (!refreshed || !hasUsableAccessToken()) {
+          verifiedToken = null;
+          router.replace("/login");
+          return;
+        }
+        await verifySessionOnce();
+        if (cancelled) return;
+        setUser(readStoredUser());
+        setReady(true);
       } catch (err) {
         if (cancelled) return;
+        if (err instanceof ApiError && err.status === 401) {
+          // Token/phiên đã chết ở tầng API — dọn phiên và đưa về đăng nhập.
+          verifiedToken = null;
+          clearSession();
+          router.replace("/login");
+          return;
+        }
         setRestoreError(err instanceof RefreshUnreachableError ? "Không kết nối được máy chủ để làm mới phiên" : "Không kết nối được máy chủ. Thử lại.");
       }
     })();

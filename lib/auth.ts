@@ -1,4 +1,5 @@
 import { apiRequest, clearSession, ensureAccessToken, getApiBase, setAccessToken } from "./api-client";
+import { markSessionAlive } from "./session-marker";
 import type { TokenResponse, User } from "./types";
 
 const USER_KEY = "kg.user";
@@ -31,6 +32,23 @@ export async function restoreSession(): Promise<boolean> {
   return ensureAccessToken();
 }
 
+/**
+ * Xác thực phiên bằng server và **đồng bộ lại user thật**.
+ *
+ * `kg.user` nằm trong sessionStorage (client ghi) nên sửa tay được — ví dụ đổi `role` thành ADMIN.
+ * Trang nội bộ vì vậy không tin dữ liệu đó: gọi `GET /users/me` bằng access token vừa đổi từ refresh
+ * cookie, rồi ghi đè bằng dữ liệu server trả về (kèm marker phiên cho middleware).
+ */
+export async function verifySession(): Promise<User> {
+  const me = await apiRequest<User>("/users/me");
+  storeUser(me);
+  markSessionAlive();
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("kg:user-changed"));
+  }
+  return me;
+}
+
 export async function login(email: string, password: string): Promise<TokenResponse> {
   const data = await apiRequest<TokenResponse>("/auth/login", {
     method: "POST",
@@ -39,6 +57,7 @@ export async function login(email: string, password: string): Promise<TokenRespo
   });
   setAccessToken(data.accessToken);
   storeUser(data.user);
+  markSessionAlive();
   return data;
 }
 
@@ -64,6 +83,7 @@ export async function register(
   });
   setAccessToken(data.accessToken);
   storeUser(data.user);
+  markSessionAlive();
   return data;
 }
 
@@ -140,5 +160,6 @@ export function applyOAuthHash(hash: string): { accessToken: string; userId: str
   const role = params.get("role") || "USER";
   if (!accessToken || !userId) return null;
   setAccessToken(accessToken);
+  markSessionAlive();
   return { accessToken, userId, role };
 }

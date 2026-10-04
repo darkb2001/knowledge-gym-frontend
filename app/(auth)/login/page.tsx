@@ -3,7 +3,7 @@ import { useLocale } from "@/components/locale";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import {
   AuthShell,
   Field,
@@ -11,8 +11,19 @@ import {
   inputClass,
   primaryBtnClass,
 } from "@/components/ui";
-import { ApiError } from "@/lib/api-client";
-import { login, startGoogleLogin } from "@/lib/auth";
+import { ApiError, ensureAccessToken, hasUsableAccessToken } from "@/lib/api-client";
+import { login, startGoogleLogin, verifySession } from "@/lib/auth";
+
+/**
+ * `?next=` do middleware gắn khi chặn trang nội bộ. Chỉ nhận đường dẫn nội bộ
+ * (bắt đầu bằng "/" và không phải "//host") để không thành open redirect.
+ */
+function safeNextPath(): string {
+  if (typeof window === "undefined") return "/learn";
+  const raw = new URLSearchParams(window.location.search).get("next");
+  if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return "/learn";
+  return raw;
+}
 
 export default function LoginPage() {
   const { t } = useLocale();
@@ -22,13 +33,29 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
+  // Còn phiên hợp lệ (refresh cookie + marker) thì không bắt đăng nhập lại: vào thẳng trang đích.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const refreshed = await ensureAccessToken();
+        if (!refreshed || !hasUsableAccessToken()) return;
+        await verifySession();
+        if (!cancelled) router.replace(safeNextPath());
+      } catch {
+        // Chưa đăng nhập / mạng lỗi → ở lại form, không báo lỗi.
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [router]);
+
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setBusy(true);
     setError(null);
     try {
       await login(email.trim(), password);
-      router.replace("/learn");
+      router.replace(safeNextPath());
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Đăng nhập thất bại");
     } finally {
