@@ -103,6 +103,7 @@ export const messages: Record<string, string> = {
   "Chưa có tài khoản?": "New here?", "Đăng ký": "Sign up", "Đăng nhập thất bại": "Could not sign in",
   "Tạo tài khoản": "Create an account", "Email + mật khẩu ít nhất 8 ký tự.": "Use your email and a password of at least 8 characters.",
   "Không thể hoàn tất đăng nhập Google. Vui lòng thử lại.": "Could not complete Google sign-in. Please try again.",
+  "Phiên đăng nhập Google đã hết hạn hoặc đã được dùng. Hãy bắt đầu lại.": "The Google sign-in session expired or was already used. Please start again.",
   "Đặt mật khẩu mới để kích hoạt an toàn tài khoản chưa xác minh.": "Set a new password to securely activate an unverified account.",
   "Email already verified; sign in or reset password": "Email already verified; sign in or reset your password.",
   "Xác minh email": "Verify email",

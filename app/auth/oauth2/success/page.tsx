@@ -94,7 +94,7 @@ export default function OAuthSuccessPage() {
             {t("Thử lại")}
           </button>
           <p className="text-center text-sm">
-            <Link href="/login" className="text-muted underline">
+            <Link href="/login" className="font-medium text-accent underline-offset-4 hover:underline">
               {t("Đăng nhập")}
             </Link>
           </p>
