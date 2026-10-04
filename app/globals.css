@@ -43,19 +43,20 @@
   .kg-secondary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-sm border border-line bg-surface px-4 py-2.5 text-sm font-medium text-strong transition-colors hover:bg-muted disabled:opacity-50; }
   .kg-field { @apply w-full rounded-sm border border-control bg-surface px-3.5 py-2.5 text-strong outline-none transition-colors placeholder:text-subtle focus:border-accent focus:ring-2 focus:ring-accent/15; }
   .kg-panel { @apply rounded-2xl border border-line/80 bg-surface p-5 sm:p-6; }
-  .kg-page-heading { @apply text-[26px] font-semibold leading-tight tracking-[-0.02em] text-strong sm:text-4xl; }
+  .kg-page-heading { @apply text-[26px] font-semibold leading-tight tracking-[-0.02em] text-strong sm:text-3xl; }
   .kg-intro { @apply mt-3 max-w-2xl text-base leading-relaxed text-subtle; }
   .kg-notice { @apply rounded-xl border border-line bg-surface p-4 text-sm leading-relaxed; }
   .kg-shell { @apply min-h-[100dvh] bg-canvas; }
-  .kg-main { @apply mx-auto flex min-h-[calc(100dvh_-_64px)] w-full max-w-[1320px] flex-col px-4 py-6 sm:min-h-[calc(100dvh_-_76px)] sm:px-8 sm:py-10 xl:px-12; }
-  .kg-main > :first-child { @apply flex min-h-full flex-1 flex-col; }
+  .kg-main { @apply mx-auto flex w-full min-w-0 max-w-[1320px] flex-1 flex-col px-4 py-6 sm:px-8 sm:py-8 xl:px-12; }
+  .kg-main > :first-child { @apply min-w-0 flex-1; }
+  .kg-page { @apply flex min-w-0 flex-1 flex-col; }
   .kg-main > main { max-width: none; padding: 0; }
   .kg-reading { @apply mx-auto w-full max-w-[78ch] rounded-2xl border border-line/70 bg-surface p-5 sm:p-10; }
   .kg-main form > label, .kg-main label.space-y-1 { @apply text-sm font-medium; }
   .kg-main label > input, .kg-main label > select, .kg-main label > textarea { margin-top: 6px; }
   .kg-main section > h2 { margin-bottom: 8px; }
   .kg-main [role="alert"] { @apply rounded-xl border border-danger/25 bg-[#fbefea] p-4 text-danger; }
-  .kg-main [role="status"] { @apply rounded-xl border border-positive/25 bg-sage/40 p-4 text-positive; }
+  .kg-main [role="status"] { @apply rounded-xl border border-line bg-muted/50 p-4 text-body; }
   .kg-main fieldset { @apply rounded-xl bg-surface; }
   .kg-main fieldset label:has(input:checked):not([data-result]) { @apply border-accent bg-accent-soft; }
   .kg-main fieldset:not(:disabled) label:hover { @apply bg-muted; }
@@ -119,7 +120,7 @@
 .answer-html pre code { padding: 0; background: transparent; font-size: inherit; }
 .answer-html .kg-code-toolbar { @apply flex flex-wrap items-center justify-between gap-2 rounded-t-xl border border-line bg-muted px-4 text-xs text-subtle; }
 .answer-html .kg-code-toolbar button { @apply min-h-11 rounded-md px-3 font-sans text-xs font-medium text-accent hover:bg-surface; }
-.answer-html .kg-code-toolbar + pre { margin-top: 0; border-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
+.answer-html .kg-code-toolbar + pre:not([hidden]) { margin-top: 0; border-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
 .answer-html .hljs-keyword, .answer-html .hljs-selector-tag, .answer-html .hljs-literal { color: #395d83; }
 .answer-html .hljs-title, .answer-html .hljs-type, .answer-html .hljs-built_in { color: #8a482a; }
 .answer-html .hljs-string, .answer-html .hljs-regexp, .answer-html .hljs-attr { color: #386345; }

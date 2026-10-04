@@ -1,6 +1,6 @@
 "use client";
 
-import { cloneElement, isValidElement, useEffect, useId, useState, type ReactNode } from "react";
+import { Children, cloneElement, isValidElement, useEffect, useId, useState, type ReactNode } from "react";
 import { useLocale } from "../locale";
 import { ApiError } from "@/lib/api-client";
 
@@ -18,10 +18,12 @@ export function adminError(error: unknown, english: boolean) {
 }
 export function AdminField({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   const generatedId = useId();
-  const control = isValidElement<{ id?: string; "aria-describedby"?: string }>(children) ? children : null;
-  const id = control?.props.id ?? generatedId;
-  const description = [control?.props["aria-describedby"], hint ? `${id}-hint` : undefined].filter(Boolean).join(" ") || undefined;
-  return <div className="text-sm font-medium text-strong"><label htmlFor={id} className="mb-2 block">{label}</label>{control ? cloneElement(control, { id, "aria-describedby": description }) : children}{hint && <p id={`${id}-hint`} className="mt-2 text-xs font-normal leading-relaxed text-subtle">{hint}</p>}</div>;
+  const fields = Children.toArray(children);
+  const control = fields.find(child => isValidElement(child) && typeof child.type === "string" && ["input", "select", "textarea"].includes(child.type));
+  const editable = isValidElement<{ id?: string; "aria-describedby"?: string }>(control) ? control : null;
+  const id = editable?.props.id ?? generatedId;
+  const description = [editable?.props["aria-describedby"], hint ? `${id}-hint` : undefined].filter(Boolean).join(" ") || undefined;
+  return <div className="text-sm font-medium text-strong"><label htmlFor={id} className="mb-2 block">{label}</label>{fields.map(child => child === editable && editable ? cloneElement(editable, { id, "aria-describedby": description }) : child)}{hint && <p id={`${id}-hint`} className="mt-2 text-xs font-normal leading-relaxed text-subtle">{hint}</p>}</div>;
 }
 export function PendingBackend({ children }: { children: ReactNode }) {
   const { c } = useAdminCopy();

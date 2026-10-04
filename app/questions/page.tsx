@@ -138,7 +138,7 @@ function QuestionsBrowser() {
   function clearFilters() {
     setPage(1); setModuleId(""); setDifficulty(""); setTag(""); setTagDraft(""); setQ(""); setQDraft("");
   }
-  return <div>
+  return <div className="kg-page">
     <PageHeading title="Thư viện câu hỏi" description="Tìm câu hỏi theo module, độ khó hoặc từ khóa." action={<Link href="/learn" className="kg-secondary">{t("Chọn chủ đề")}<ArrowRight size={18} aria-hidden /></Link>} />
     <form onSubmit={onSearch} className="kg-panel mb-7">
       <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">

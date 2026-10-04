@@ -22,8 +22,8 @@ export function Pagination({ page, totalPages, onChange, disabled = false }: {
         <button type="button" className={control} disabled={disabled || currentPage <= 1} onClick={() => go(1)} aria-label={label("Trang đầu", "First page")}><CaretDoubleLeftIcon size={17} aria-hidden /></button>
         <button type="button" className={control} disabled={disabled || currentPage <= 1} onClick={() => go(currentPage - 1)} aria-label={label("Trang trước", "Previous page")}><CaretLeftIcon size={17} aria-hidden /></button>
       </div>
-      <ol className="flex justify-center gap-1">
-        {pages.map(value => <li key={value}><button type="button" aria-label={`${t("Trang")} ${value}`} aria-current={value === currentPage ? "page" : undefined} disabled={disabled} onClick={() => go(value)} className={`min-h-11 min-w-11 rounded-lg px-2 text-sm font-semibold tabular-nums transition-colors disabled:opacity-50 ${value === page ? "bg-accent text-on-accent" : "text-strong hover:bg-muted"}`}>{value}</button></li>)}
+      <ol className="order-first flex w-full justify-center gap-1 sm:order-none sm:w-auto">
+        {pages.map(value => <li key={value}><button type="button" aria-label={`${t("Trang")} ${value}`} aria-current={value === currentPage ? "page" : undefined} disabled={disabled} onClick={() => go(value)} className={`min-h-11 min-w-11 rounded-lg px-2 text-sm font-semibold tabular-nums transition-colors disabled:opacity-50 ${value === currentPage ? "bg-accent text-on-accent" : "text-strong hover:bg-muted"}`}>{value}</button></li>)}
       </ol>
       <div className="flex gap-2">
         <button type="button" className={control} disabled={disabled || currentPage >= effectiveTotalPages} onClick={() => go(currentPage + 1)} aria-label={label("Trang sau", "Next page")}><CaretRightIcon size={17} aria-hidden /></button>

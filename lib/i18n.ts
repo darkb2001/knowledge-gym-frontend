@@ -7,6 +7,7 @@ export const messages: Record<string, string> = {
   "Chọn chủ đề": "Choose a topic",
   "Hồ sơ": "Profile", "Hồ sơ của bạn": "Your profile",
   "Cập nhật tên hiển thị và ảnh đại diện.": "Update your display name and profile picture.",
+  "Quản lý thông tin cá nhân và bảo mật tài khoản.": "Manage your personal information and account security.",
   "Ảnh đại diện": "Profile picture", "Đổi ảnh đại diện": "Change profile picture",
   "Đang tải hồ sơ…": "Loading your profile…", "Lưu hồ sơ": "Save profile",
   "Không tải được hồ sơ": "Could not load your profile", "Không lưu được hồ sơ": "Could not save your profile",

@@ -21,7 +21,7 @@ const navigation = [
 ];
 
 function Brand() {
-  return <Link href="/learn" className="inline-flex min-w-0 items-center gap-2.5 text-strong sm:gap-3">
+  return <Link href="/learn" className="inline-flex min-w-0 max-w-full items-center gap-2.5 text-strong sm:gap-3">
     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent text-on-accent sm:h-10 sm:w-10"><Stack size={22} weight="bold" aria-hidden /></span>
     <span className="truncate text-base font-semibold leading-tight tracking-[-0.035em] sm:text-[17px]">Knowledge Gym<span className="text-accent">.</span></span>
   </Link>;
@@ -33,8 +33,8 @@ function Navigation({ user, onNavigate }: { user: User | null; onNavigate?: () =
   const adminLabels: Record<string, string> = { "/admin/content": "Content library", "/admin/posts": "Blog editor", "/admin/users": "Accounts", "/admin/comments": "Comments", "/admin/learning": "Learning administration", "/admin/knowledge": "AI knowledge intake", "/admin/knowledge/drafts": "AI learning drafts" };
   const admin = user?.role === "ADMIN" || user?.role === "ROLE_ADMIN";
   const links = (items: typeof navigation) => items.map(({ href, label, icon: Icon }) => {
-    const active = pathname === href || pathname.startsWith(href + "/");
-    return <Link key={href} href={href} onClick={onNavigate} aria-current={active ? "page" : undefined} className={`flex min-h-11 items-center gap-3 rounded-lg px-3.5 py-2.5 text-[13px] font-medium transition-colors ${active ? "bg-sage text-strong" : "text-body hover:bg-surface/60 hover:text-strong"}`}><Icon size={19} weight={active ? "fill" : "regular"} aria-hidden /><span>{locale === "en" && adminLabels[href] ? adminLabels[href] : t(label)}</span></Link>;
+    const active = (pathname === href || pathname.startsWith(href + "/")) && !items.some(item => item.href !== href && item.href.startsWith(href + "/") && (pathname === item.href || pathname.startsWith(item.href + "/")));
+    return <Link key={href} href={href} onClick={onNavigate} aria-current={active ? "page" : undefined} className={`flex min-h-11 items-center gap-3 rounded-lg px-3.5 py-2.5 text-[13px] font-medium transition-colors ${active ? "bg-sage text-strong" : "text-body hover:bg-surface/60 hover:text-strong"}`}><Icon size={19} className="shrink-0" weight={active ? "fill" : "regular"} aria-hidden /><span className="min-w-0">{locale === "en" && adminLabels[href] ? adminLabels[href] : t(label)}</span></Link>;
   });
   return <nav aria-label={t("Điều hướng chính")} className="space-y-1">
     {links(navigation)}
@@ -94,7 +94,7 @@ export function AppFrame({ user, children }: { user: User | null; children: Reac
       <Navigation user={currentUser} />
       <div className="mt-auto px-3 pt-8"><p className="text-sm font-medium leading-relaxed text-strong">{t("Chọn điều muốn hiểu. Luyện cho đến khi nhớ.")}</p><p className="mt-3 text-xs leading-relaxed text-subtle">{t("Nội dung học giữ nguyên ngôn ngữ gốc.")}</p></div>
     </aside>
-    <div className="min-w-0">
+    <div className="flex min-h-[100dvh] min-w-0 flex-col">
       <AppHeader user={currentUser} />
       <div className="border-b border-line/70 px-5 py-2 lg:hidden"><button type="button" aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(open => !open)} className="flex min-h-11 items-center gap-2 text-sm font-medium text-strong"><TextAlignLeft size={20} aria-hidden />{t(menuOpen ? "Đóng điều hướng" : "Mở điều hướng")}</button>{menuOpen && <div id="mobile-navigation" className="pb-3"><Navigation user={currentUser} onNavigate={() => setMenuOpen(false)} /></div>}</div>
       <main id="main-content" tabIndex={-1} className="kg-main outline-none">{children}</main>
@@ -206,7 +206,7 @@ export function Field({ label, children }: { label: string; children: ReactNode 
 
 export function PageHeading({ title, description, action }: { title: string; description?: string; action?: ReactNode }) {
   const { t } = useLocale();
-  return <header className="mb-8 flex flex-wrap items-start justify-between gap-5"><div><h1 className="kg-page-heading">{t(title)}</h1>{description && <p className="kg-intro">{t(description)}</p>}</div>{action}</header>;
+  return <header className="mb-7 flex flex-wrap items-start justify-between gap-4 sm:mb-8"><div className="min-w-0 max-w-3xl"><h1 className="kg-page-heading">{t(title)}</h1>{description && <p className="kg-intro">{t(description)}</p>}</div>{action}</header>;
 }
 
 export function ContentLanguageNotice() {

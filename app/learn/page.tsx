@@ -113,7 +113,7 @@ function TopicExplorer() {
           {selected && <div role="group" aria-label={t("Bạn chọn cách học")} className="mt-6 rounded-2xl border border-positive/25 bg-sage/60 p-5 sm:p-6 xl:hidden"><p className="mb-2 text-sm text-subtle">{t("Bạn chọn cách học")}</p><h3 className="mb-4 break-words text-lg text-strong">{selected.name}</h3><PracticeLinks modes={modes} /></div>}
           <ContentLanguageNotice />
         </section>
-        <aside id="practice-options" aria-labelledby="practice-options-title" className={`rounded-2xl bg-sand/65 p-6 xl:sticky xl:top-8 ${selected ? "hidden xl:block" : ""}`}>
+        <aside id="practice-options" aria-labelledby="practice-options-title" className={`rounded-2xl bg-sand/65 p-6 xl:sticky xl:top-8 hidden xl:block`}>
           {selected ? <><p className="mb-2 text-sm text-subtle">{t("Bạn chọn cách học")}</p><h2 id="practice-options-title" className="break-words text-2xl">{selected.name}</h2><div className="mt-6"><PracticeLinks modes={modes} /></div></> : <><Compass size={36} weight="duotone" className="mb-5 text-accent" aria-hidden /><h2 id="practice-options-title" className="text-xl">{t("Bắt đầu từ đây")}</h2><p className="mt-3 text-sm leading-relaxed text-body">{t("Chọn module để xem các cách luyện tập.")}</p></>}
           <div className="mt-7 border-t border-line pt-5"><Link href="/questions" className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-accent hover:underline">{t("Khám phá câu hỏi")}<ArrowRight size={17} aria-hidden /></Link></div>
         </aside>

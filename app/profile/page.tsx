@@ -86,7 +86,7 @@ function ProfilePage() {
   }
 
   return <div className="max-w-3xl">
-    <PageHeading title="Hồ sơ của bạn" description="Cập nhật tên hiển thị và ảnh đại diện." />
+    <PageHeading title="Hồ sơ của bạn" description="Quản lý thông tin cá nhân và bảo mật tài khoản." />
     {error && <p role="alert" className="mb-6">{t(error)}{!profile && <button type="button" onClick={() => setAttempt(value => value + 1)} className="ml-4 underline">{t("Thử lại")}</button>}</p>}
     {message && <p role="status" className="mb-6">{t(message)}</p>}
     {loading && <p role="status">{t("Đang tải hồ sơ…")}</p>}
@@ -105,7 +105,7 @@ function ProfilePage() {
       <section className="border-t border-line pt-6" aria-labelledby="account-settings-heading">
         <h2 id="account-settings-heading" className="text-xl text-strong">{t("Thông tin tài khoản")}</h2>
         <dl className="mt-4 grid gap-4 sm:grid-cols-2">
-          <div><dt className="text-xs text-subtle">{t("Email")}</dt><dd className="mt-1 break-all font-medium text-strong">{profile.email}</dd><p className="mt-1 text-xs text-subtle">{t("Email hiện chưa hỗ trợ chỉnh sửa trực tiếp để bảo vệ phiên đăng nhập.")}</p></div>
+          <div><dt className="text-xs text-subtle">{t("Email")}</dt><dd className="mt-1 break-all font-medium text-strong">{profile.email}<span className="mt-1 block text-xs font-normal text-subtle">{t("Email hiện chưa hỗ trợ chỉnh sửa trực tiếp để bảo vệ phiên đăng nhập.")}</span></dd></div>
           <div><dt className="text-xs text-subtle">{t("Phương thức đăng nhập")}</dt><dd className="mt-1 font-medium text-strong">{profile.authProvider}</dd></div>
           <div><dt className="text-xs text-subtle">{t("Vai trò")}</dt><dd className="mt-1 font-medium text-strong">{profile.role}</dd></div>
           <div><dt className="text-xs text-subtle">{t("Thành tích học tập")}</dt><dd className="mt-1 font-medium text-strong">{profile.stats.currentStreak.toLocaleString(formatLocale)} {t("ngày liên tiếp")} · {(profile.stats.longestStreak ?? 0).toLocaleString(formatLocale)} {t("ngày dài nhất")}</dd></div>
