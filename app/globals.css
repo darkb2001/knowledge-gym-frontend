@@ -202,6 +202,21 @@
    xoay 90° sẽ biến "↓ chứa" thành mũi tên ngang và đè lên nhãn box. */
 .answer-html .flow-arrow { flex: 0 0 auto; align-self: center; text-align: center; white-space: nowrap; }
 
+/* Điện thoại: nhãn dài trong sơ đồ (vd "↓ 1. Ghi Undo Log (rollback) + Redo vào WAL")
+   với white-space:nowrap sẽ kéo rộng cả trang; cho mũi tên co lại và bọc chữ. */
+@media (max-width: 639px) {
+  .answer-html .flow-diagram,
+  .answer-html .flow-row,
+  .answer-html .flow-node,
+  .answer-html .flow-arrow,
+  .answer-html .icon-node { max-width: 100%; }
+  .answer-html .flow-arrow { flex: 0 1 auto; min-width: 0; white-space: normal; }
+  .answer-html .icon-node { overflow-wrap: anywhere; }
+  /* flex-basis 0 của desktop chia đều 1 hàng -> 6-7 node bị bóp còn ~45px, chữ dọc.
+     Cho node tối thiểu 8rem để hàng tự xuống dòng thay vì bóp. */
+  .answer-html .flow-row > .flow-node { flex: 1 1 8rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:not([data-motion="on"]) *, html:not([data-motion="on"]) *::before, html:not([data-motion="on"]) *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
