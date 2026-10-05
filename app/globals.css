@@ -50,7 +50,9 @@
   .kg-notice { @apply rounded-xl border border-line bg-surface p-4 text-sm leading-relaxed; }
   .kg-shell { @apply min-h-[100dvh]; }
   .kg-main { @apply mx-auto flex w-full min-w-0 max-w-[1320px] flex-1 flex-col px-4 py-6 sm:px-8 sm:py-8 xl:px-12; }
-  .kg-main > :first-child { @apply min-w-0 flex-1; }
+  /* Chỉ khối NỘI DUNG mới giãn hết chiều cao. Nếu cho mọi phần tử giãn, trang nào mở đầu bằng
+     <PageHeading> (thẻ <header>) sẽ bị kéo heading cao hết trang và đẩy nội dung xuống đáy. */
+  .kg-main > :first-child:is(div, main, section, form, article) { @apply min-w-0 flex-1; }
   .kg-page { @apply flex min-w-0 flex-1 flex-col; }
   .kg-main > main { max-width: none; padding: 0; }
   .kg-reading { @apply mx-auto w-full max-w-[78ch] rounded-2xl border border-line/70 bg-surface p-5 sm:p-10; }

@@ -1,5 +1,6 @@
 import { acceptAuthenticatedSession, ApiError, apiRequest, beginLogout, clearSession, ensureAccessToken, getAccessToken, getApiBase, getSessionVersion } from "./api-client";
 import { markSessionAlive } from "./session-marker";
+import { turnstileOption } from "./turnstile";
 import type { TokenResponse, User } from "./types";
 
 const USER_KEY = "kg.user";
@@ -75,6 +76,7 @@ export async function register(
   displayName: string,
   confirmPassword: string,
   verificationCode: string,
+  turnstileToken?: string | null,
 ): Promise<TokenResponse> {
   if (password !== confirmPassword) {
     throw new Error("Mật khẩu xác nhận không khớp.");
@@ -84,6 +86,7 @@ export async function register(
     method: "POST",
     body: { email, password, confirmPassword, displayName, verificationCode },
     skipAuth: true,
+    ...turnstileOption(turnstileToken),
   });
   acceptAuthenticatedSession(data.accessToken, version);
   storeUser(data.user);
@@ -92,11 +95,15 @@ export async function register(
 }
 
 /** Emails a 6-digit verification code (valid 10 minutes) for registration or a legacy unverified account. */
-export async function requestEmailVerification(email: string): Promise<string> {
+export async function requestEmailVerification(
+  email: string,
+  turnstileToken?: string | null,
+): Promise<string> {
   const data = await apiRequest<{ message: string }>("/auth/email-verification/request", {
     method: "POST",
     body: { email },
     skipAuth: true,
+    ...turnstileOption(turnstileToken),
   });
   return data.message;
 }
@@ -106,16 +113,19 @@ export async function verifyEmail(
   email: string,
   code: string,
   newPassword: string,
+  turnstileToken?: string | null,
 ): Promise<string> {
-  return verifyExistingEmail(email, code, newPassword, newPassword);
+  return verifyExistingEmail(email, code, newPassword, newPassword, turnstileToken);
 }
 
 export async function verifyExistingEmail(
   email: string, code: string, newPassword: string, confirmPassword: string,
+  turnstileToken?: string | null,
 ): Promise<string> {
   if (newPassword !== confirmPassword) throw new Error("Mật khẩu xác nhận không khớp.");
   const data = await apiRequest<{ message: string }>("/auth/verify-email", {
     method: "POST", body: { email, code, newPassword, confirmPassword }, skipAuth: true,
+    ...turnstileOption(turnstileToken),
   });
   return data.message;
 }
@@ -142,11 +152,12 @@ export async function logout(): Promise<void> {
   }
 }
 
-export async function forgotPassword(email: string): Promise<string> {
+export async function forgotPassword(email: string, turnstileToken?: string | null): Promise<string> {
   const data = await apiRequest<{ message: string }>("/auth/forgot-password", {
     method: "POST",
     body: { email },
     skipAuth: true,
+    ...turnstileOption(turnstileToken),
   });
   return data.message;
 }
@@ -155,11 +166,13 @@ export async function resetPassword(
   email: string,
   code: string,
   newPassword: string,
+  turnstileToken?: string | null,
 ): Promise<string> {
   const data = await apiRequest<{ message: string }>("/auth/reset-password", {
     method: "POST",
     body: { email, code, newPassword },
     skipAuth: true,
+    ...turnstileOption(turnstileToken),
   });
   return data.message;
 }

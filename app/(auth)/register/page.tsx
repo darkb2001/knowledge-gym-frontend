@@ -14,6 +14,7 @@ import {
 
 import { register, requestEmailVerification, startGoogleLogin } from "@/lib/auth";
 import CodeStep from "@/components/auth/CodeStep";
+import { useTurnstile } from "@/components/TurnstileWidget";
 
 type Step = 1 | 2;
 
@@ -29,6 +30,7 @@ export default function RegisterPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const ts = useTurnstile("register");
 
   async function sendCode(): Promise<boolean> {
     setError(null);
@@ -37,13 +39,19 @@ export default function RegisterPage() {
       setError("Mật khẩu nhập lại không khớp");
       return false;
     }
+    if (ts.enabled && !ts.token) {
+      setError("Hãy hoàn tất xác minh chống bot rồi thử lại.");
+      return false;
+    }
     setBusy(true);
     try {
-      setMessage(await requestEmailVerification(email.trim()));
+      setMessage(await requestEmailVerification(email.trim(), ts.token));
+      ts.reset();
       setStep(2);
       return true;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Không gửi được mã");
+      ts.reset();
       return false;
     } finally {
       setBusy(false);
@@ -62,12 +70,17 @@ export default function RegisterPage() {
       setError("Mã phải đúng 6 chữ số");
       return;
     }
+    if (ts.enabled && !ts.token) {
+      setError("Hãy hoàn tất xác minh chống bot rồi thử lại.");
+      return;
+    }
     setBusy(true);
     try {
-      await register(email.trim(), password, displayName.trim(), confirmPassword, code.trim());
+      await register(email.trim(), password, displayName.trim(), confirmPassword, code.trim(), ts.token);
       router.replace("/learn");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đăng ký thất bại");
+      ts.reset();
     } finally {
       setBusy(false);
     }
@@ -80,6 +93,7 @@ export default function RegisterPage() {
 
   return (
     <AuthShell title={t("Tạo tài khoản")} subtitle={t(subtitle)}>
+      {ts.widget}
       {step === 1 ? (
         <form onSubmit={onRequestCode} className="animate-fade-up-delay">
           <Field label={t("Tên hiển thị")}>
@@ -130,7 +144,7 @@ export default function RegisterPage() {
               {t(error)}
             </p>
           ) : null}
-          <button type="submit" className={primaryBtnClass} disabled={busy}>
+          <button type="submit" className={primaryBtnClass} disabled={busy || (ts.enabled && !ts.token)}>
             {busy ? t("Đang gửi…") : t("Gửi mã xác minh")}
           </button>
         </form>

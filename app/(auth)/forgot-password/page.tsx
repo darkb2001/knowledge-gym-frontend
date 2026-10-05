@@ -7,6 +7,7 @@ import { AuthShell, Field, inputClass, primaryBtnClass } from "@/components/ui";
 
 import { forgotPassword, resetPassword } from "@/lib/auth";
 import CodeStep from "@/components/auth/CodeStep";
+import { useTurnstile } from "@/components/TurnstileWidget";
 
 type Step = 1 | 2 | 3;
 
@@ -19,17 +20,24 @@ export default function ForgotPasswordPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const ts = useTurnstile("forgot_password");
 
   async function requestCode() {
     setBusy(true);
     setError(null);
     setMessage(null);
+    if (ts.enabled && !ts.token) {
+      setError("Hãy hoàn tất xác minh chống bot rồi thử lại.");
+      return;
+    }
     try {
-      const msg = await forgotPassword(email.trim());
+      const msg = await forgotPassword(email.trim(), ts.token);
+      ts.reset();
       setMessage(msg);
       setStep(2);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Không gửi được mã");
+      ts.reset();
     } finally {
       setBusy(false);
     }
@@ -55,13 +63,15 @@ export default function ForgotPasswordPage() {
     setBusy(true);
     setError(null);
     try {
-      const msg = await resetPassword(email.trim(), code.trim(), newPassword);
+      const msg = await resetPassword(email.trim(), code.trim(), newPassword, ts.token);
+      ts.reset();
       setMessage(msg);
       setStep(1);
       setCode("");
       setNewPassword("");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đặt lại mật khẩu thất bại");
+      ts.reset();
     } finally {
       setBusy(false);
     }
@@ -76,6 +86,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <AuthShell title={t("Quên mật khẩu")} subtitle={subtitle}>
+      {ts.widget}
       {message && step === 1 ? (
         <p className="mb-4 rounded-sm border border-accent/40 bg-accent/10 px-3 py-2 text-sm text-positive">
           {t(message)}{" "}
@@ -100,7 +111,7 @@ export default function ForgotPasswordPage() {
               {t(error)}
             </p>
           ) : null}
-          <button type="submit" className={primaryBtnClass} disabled={busy}>
+          <button type="submit" className={primaryBtnClass} disabled={busy || (ts.enabled && !ts.token)}>
             {busy ? t("Đang gửi…") : t("Gửi mã")}
           </button>
         </form>
@@ -145,7 +156,7 @@ export default function ForgotPasswordPage() {
               {t(error)}
             </p>
           ) : null}
-          <button type="submit" className={primaryBtnClass} disabled={busy}>
+          <button type="submit" className={primaryBtnClass} disabled={busy || (ts.enabled && !ts.token)}>
             {busy ? t("Đang lưu…") : t("Đặt lại mật khẩu")}
           </button>
         </form>

@@ -130,6 +130,8 @@ export const messages: Record<string, string> = {
   "Quên mật khẩu": "Reset your password", "Nhập email để nhận mã 6 số.": "Enter your email to receive a six-digit code.",
   "Nhập mã trong email.": "Enter the code from your email.", "Đặt mật khẩu mới.": "Choose a new password.",
   "Mã phải đúng 6 chữ số": "The code must contain exactly six digits", "Không gửi được mã": "Could not send the code",
+  "Hãy hoàn tất xác minh chống bot rồi thử lại.": "Complete the anti-bot check, then try again.",
+  "Không tải được phần xác minh chống bot. Hãy tắt trình chặn quảng cáo cho trang này rồi tải lại.": "The anti-bot check could not load. Turn off your ad blocker for this page and reload.",
   "Đang gửi…": "Sending…", "Gửi mã": "Send code", "Mã 6 số": "Six-digit code", "Tiếp tục": "Continue",
   "Mật khẩu mới": "New password", "Đang lưu…": "Saving…", "Đặt lại mật khẩu": "Reset password",
   "Đặt lại mật khẩu thất bại": "Could not reset the password", "về đăng nhập": "return to sign in", "← Quay lại đăng nhập": "Back to sign in",
