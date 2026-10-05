@@ -28,6 +28,11 @@ describe("safe authoring blocks", () => {
 });
 
 describe("mobile table cards", () => {
+  it("returns wrapper-free markup for dangerouslySetInnerHTML", () => {
+    expect(sanitizeAnswerHtml("<p>Text</p>")).toBe("<p>Text</p>");
+    expect(sanitizeAnswerHtml("<p>Text</p>")).not.toMatch(/<body|<html/);
+  });
+
   const table = [
     '<table class="feature-table"><thead><tr><th>Method</th><th>Giữ monitor lock?</th></tr></thead>',
     "<tbody><tr><td><code>wait()</code></td><td>Nhả lock khi vào wait-set</td></tr>",

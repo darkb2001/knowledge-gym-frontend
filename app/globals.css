@@ -99,13 +99,14 @@
   .answer-html table[data-kg-table] [data-kg-head-row] { display: none; }
   .answer-html table[data-kg-table] tbody,
   .answer-html table[data-kg-table] tr,
-  .answer-html table[data-kg-table] td { display: block; width: auto; }
+  .answer-html table[data-kg-table] td,
+  .answer-html table[data-kg-table] th { display: block; width: auto; }
   .answer-html table[data-kg-table] tr { @apply mb-3 rounded-xl border border-line bg-surface p-4; }
   .answer-html table[data-kg-table] td { @apply border-0 border-b border-line/60 px-0 py-2; }
   .answer-html table[data-kg-table] td:last-child { @apply border-b-0; }
   .answer-html table[data-kg-table] td::before { @apply mb-1 block text-[0.6875rem] font-semibold uppercase tracking-wide text-subtle; content: attr(data-label); }
-  .answer-html table[data-kg-table] td[data-kg-title] { @apply border-b border-line pb-2 text-base font-semibold text-strong; }
-  .answer-html table[data-kg-table] td[data-kg-title]::before,
+  .answer-html table[data-kg-table] [data-kg-title] { @apply border-b border-line pb-2 text-base font-semibold text-strong; }
+  .answer-html table[data-kg-table] [data-kg-title]::before,
   .answer-html table[data-kg-table] td:not([data-label])::before { display: none; }
 }
 .answer-html pre, .answer-html code { @apply font-mono text-[0.9em]; }

@@ -55,11 +55,13 @@ function decorateTables(root: HTMLElement) {
 
 export function sanitizeAnswerHtml(html: string): string {
   if (!html) return "";
+  // RETURN_DOM_FRAGMENT (not RETURN_DOM, which hands back the wrapper <body>) keeps the
+  // returned markup wrapper-free, which matters for React's dangerouslySetInnerHTML.
   const fragment = DOMPurify.sanitize(html, {
     ALLOWED_TAGS,
     ALLOWED_ATTR,
     ALLOWED_URI_REGEXP: /^(?:(?:https?):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
-    RETURN_DOM: true,
+    RETURN_DOM_FRAGMENT: true,
   }) as unknown as DocumentFragment;
   const doc = fragment?.ownerDocument;
   if (!doc) return html;
