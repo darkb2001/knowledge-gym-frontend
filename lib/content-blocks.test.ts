@@ -80,4 +80,15 @@ describe("mobile table cards", () => {
     expect(css).toContain("attr(data-label)");
     expect(css).toContain("overflow-wrap: break-word");
   });
+
+  it("wraps long code lines on phones instead of clipping them", () => {
+    const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+    const mobile = css.slice(css.indexOf("@media (max-width: 639px)"));
+    // Dòng mã ~60 ký tự không vừa vùng đọc 272px; cuộn ngang giấu mất nửa dòng.
+    expect(mobile).toContain("white-space: pre-wrap");
+    expect(mobile).toContain("overflow-wrap: break-word");
+    expect(mobile).toContain("overflow-x: hidden");
+    // Chip code nội dòng không được cao/thấp hơn nhịp dòng của đoạn văn.
+    expect(css).toContain("code:not(pre code):not(.code-block code) { @apply rounded bg-muted px-1.5 py-0.5 text-accent; line-height: inherit; }");
+  });
 });

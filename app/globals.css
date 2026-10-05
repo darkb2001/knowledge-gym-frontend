@@ -111,7 +111,7 @@
 }
 .answer-html pre, .answer-html code { @apply font-mono text-[0.9em]; }
 .answer-html .code-block, .answer-html pre { @apply overflow-x-auto rounded-xl border border-line bg-[#eae5da] p-5 text-strong; }
-.answer-html code:not(pre code):not(.code-block code) { @apply rounded bg-muted px-1.5 py-0.5 text-accent; }
+.answer-html code:not(pre code):not(.code-block code) { @apply rounded bg-muted px-1.5 py-0.5 text-accent; line-height: inherit; }
 .answer-html .tok-keyword { color: #395d83; }
 .answer-html .tok-class { color: #8a482a; }
 .answer-html .tok-string { color: #386345; }
@@ -215,6 +215,17 @@
   /* flex-basis 0 của desktop chia đều 1 hàng -> 6-7 node bị bóp còn ~45px, chữ dọc.
      Cho node tối thiểu 8rem để hàng tự xuống dòng thay vì bóp. */
   .answer-html .flow-row > .flow-node { flex: 1 1 8rem; }
+  /* Khối mã: dòng dài ~60 ký tự (≈516px) trong khi vùng đọc chỉ ~272px ⇒ cuộn ngang che
+     mất nửa dòng, người đọc tưởng code bị cắt cụt. Cho bọc dòng ở khoảng trắng (chỉ bẻ
+     token khi chính token dài hơn khung), thu chữ và padding để đỡ phải bọc. */
+  .answer-html pre,
+  .answer-html .code-block { white-space: pre-wrap; overflow-wrap: break-word; }
+  .answer-html pre { overflow-x: hidden; }
+  .answer-html .code-block,
+  .answer-html .kg-code-toolbar + pre { padding: 0.75rem 0.85rem; }
+  .answer-html pre,
+  .answer-html pre code,
+  .answer-html .code-block code { font-size: 0.8rem; line-height: 1.65; }
 }
 
 @media (prefers-reduced-motion: reduce) {
