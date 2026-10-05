@@ -65,11 +65,13 @@
 }
 
 /* Keep the server's sanitized answer vocabulary, with a legible light reading surface. */
-.answer-html { @apply space-y-5 text-base leading-[1.8] text-body; overflow-wrap: anywhere; }
-/* Mobile: long code fences and wide tables must scroll inside the card, never widen the page. */
+.answer-html { @apply space-y-5 text-base leading-[1.8] text-body; overflow-wrap: break-word; }
+/* Mobile: long code fences must scroll inside the card, never widen the page. */
 .answer-html pre { max-width: 100%; overflow-x: auto; font-size: 0.8125rem; line-height: 1.6; }
-.answer-html table { display: block; max-width: 100%; overflow-x: auto; }
 .answer-html img, .answer-html iframe, .answer-html video { max-width: 100%; height: auto; }
+/* Identifiers, URLs and diagram nodes may break anywhere; prose must not. */
+.answer-html pre, .answer-html code, .answer-html a, .answer-html th, .answer-html td,
+.answer-html .flow-node, .answer-html .flow-arrow, .answer-html .arch-box { overflow-wrap: anywhere; }
 .answer-html h1 { @apply mt-8 text-2xl; }
 .answer-html h2 { @apply mt-8 text-xl; }
 .answer-html h3, .answer-html h4 { @apply mt-6 text-lg; }
@@ -84,9 +86,28 @@
 .answer-html .callout-title { @apply text-base font-semibold text-strong; }
 .answer-html .callout-warning, .answer-html .callout-warn { @apply border-warning/30 bg-[#faf0e4]; }
 .answer-html .callout-warning .callout-title, .answer-html .callout-warn .callout-title { @apply text-warning; }
-.answer-html table, .answer-html .feature-table { @apply block w-full overflow-x-auto border-collapse text-sm; }
+.answer-html table, .answer-html .feature-table { @apply w-full max-w-full border-collapse text-sm; }
 .answer-html th, .answer-html td { @apply border border-line px-4 py-3 text-left align-top; }
 .answer-html th { @apply bg-muted font-semibold text-strong; }
+.answer-html caption { @apply pt-2 pb-3 text-sm text-subtle; }
+
+/* Phones: a 4-5 column grid is unreadable, so every row becomes a label/value card.
+   Labels come from the header text captured as `data-label` in lib/sanitize-html.ts. */
+@media (max-width: 639px) {
+  .answer-html table[data-kg-table] { display: block; }
+  .answer-html table[data-kg-table] thead,
+  .answer-html table[data-kg-table] [data-kg-head-row] { display: none; }
+  .answer-html table[data-kg-table] tbody,
+  .answer-html table[data-kg-table] tr,
+  .answer-html table[data-kg-table] td { display: block; width: auto; }
+  .answer-html table[data-kg-table] tr { @apply mb-3 rounded-xl border border-line bg-surface p-4; }
+  .answer-html table[data-kg-table] td { @apply border-0 border-b border-line/60 px-0 py-2; }
+  .answer-html table[data-kg-table] td:last-child { @apply border-b-0; }
+  .answer-html table[data-kg-table] td::before { @apply mb-1 block text-[0.6875rem] font-semibold uppercase tracking-wide text-subtle; content: attr(data-label); }
+  .answer-html table[data-kg-table] td[data-kg-title] { @apply border-b border-line pb-2 text-base font-semibold text-strong; }
+  .answer-html table[data-kg-table] td[data-kg-title]::before,
+  .answer-html table[data-kg-table] td:not([data-label])::before { display: none; }
+}
 .answer-html pre, .answer-html code { @apply font-mono text-[0.9em]; }
 .answer-html .code-block, .answer-html pre { @apply overflow-x-auto rounded-xl border border-line bg-[#eae5da] p-5 text-strong; }
 .answer-html code:not(pre code):not(.code-block code) { @apply rounded bg-muted px-1.5 py-0.5 text-accent; }
