@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isPublicPath, loginRedirectTarget, requiresAuth } from "./route-guard";
+import { isPublicPath, isStaticAssetPath, loginRedirectTarget, requiresAuth } from "./route-guard";
 
 describe("route guard", () => {
   it("cho qua các route công khai", () => {
@@ -31,5 +31,23 @@ describe("route guard", () => {
     const target = loginRedirectTarget("//evil.example.com", "");
     expect(target.startsWith("/login?next=%2F%2Fevil.example.com")).toBe(true);
     expect(target.includes("http")).toBe(false);
+  });
+});
+
+describe("static assets in front of the auth gate", () => {
+  it("cho tài sản tĩnh đi qua, kể cả nhạc nền và font", () => {
+    for (const path of [
+      "/lofi/lofi-dayum.mp3", "/lofi/vanilla-lofi-beat.mp3", "/lofi/CREDITS.txt",
+      "/_next/static/chunks/main.js", "/fonts/x.woff2", "/icon.svg", "/apple-icon.png",
+      "/LOFI/DAYUM.MP3",
+    ]) {
+      expect(isStaticAssetPath(path)).toBe(true);
+    }
+  });
+
+  it("không nhầm trang thật thành tài sản tĩnh", () => {
+    for (const path of ["/", "/learn", "/questions", "/questions/12", "/dashboard", "/blog", "/notes", "/questions/v1.2/notes", "/api/health"]) {
+      expect(isStaticAssetPath(path)).toBe(false);
+    }
   });
 });

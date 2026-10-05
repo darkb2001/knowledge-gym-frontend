@@ -15,6 +15,24 @@ export const PUBLIC_PREFIXES = [
   "/feed.xml",
 ] as const;
 
+/**
+ * Phần mở rộng của tài sản tĩnh. Nhạc nền lofi nằm trong `public/lofi` nên phải đi qua cổng chặn
+ * mà không bị chuyển hướng về `/login` — nếu không, trình phát nhận 307 và im lặng.
+ */
+const STATIC_EXTENSIONS = [
+  "png", "jpg", "jpeg", "svg", "webp", "avif", "gif", "ico", "css", "js", "map",
+  "txt", "xml", "json", "webmanifest", "woff", "woff2", "ttf",
+  "mp3", "m4a", "ogg", "oga", "opus", "wav", "flac", "mp4", "webm",
+] as const;
+
+export function isStaticAssetPath(pathname: string): boolean {
+  if (pathname.startsWith("/_next/")) return true;
+  const slash = pathname.lastIndexOf("/");
+  const dot = pathname.lastIndexOf(".");
+  if (dot <= slash) return false;
+  return (STATIC_EXTENSIONS as readonly string[]).includes(pathname.slice(dot + 1).toLowerCase());
+}
+
 export function isPublicPath(pathname: string): boolean {
   return PUBLIC_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),

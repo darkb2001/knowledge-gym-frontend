@@ -1,0 +1,28 @@
+Nhạc nền lofi không lời — Knowledge Gym
+=======================================
+
+Toàn bộ bài trong thư mục này là CC0 1.0 (Public Domain Dedication) từ Freesound qua
+Openverse: dùng cho mục đích thương mại được, chỉnh sửa được, KHÔNG bắt buộc ghi công.
+Ghi nguồn ở đây để minh bạch và để lần sau thay/thêm bài cho nhanh.
+
+Tệp trong public/lofi/*.mp3 đã chuẩn hoá âm lượng (EBU R128, -16 LUFS, true peak
+-1.5 dBTP) và nén 128 kbps / 44.1 kHz để tải nhanh mà vẫn đủ nghe khi học.
+
+slug (tệp)              | bài gốc                          | tác giả           | thời lượng | nguồn
+------------------------|----------------------------------|-------------------|------------|------------------------------------------
+lofi-dayum              | Dayum .wav                       | loveless1017      | 4:29       | https://freesound.org/s/455443/
+vanilla-lofi-beat       | Vanilla Lofi Beat                | Seth_Makes_Sounds | 3:05       | https://freesound.org/s/691510/
+aesthetic-lofi-loop     | Aesthetic Lofi Loop              | Seth_Makes_Sounds | 2:40       | https://freesound.org/s/679187/
+real-chill-beat         | Real Chill Beat                  | Seth_Makes_Sounds | 2:51       | https://freesound.org/s/685302/
+soul-beat               | Soul Beat                        | Seth_Makes_Sounds | 2:31       | https://freesound.org/s/672038/
+guitar-background-loop  | Cool Guitar Background Music Thing | Seth_Makes_Sounds | 2:45     | https://freesound.org/s/684980/
+
+Danh sách phát nằm trong lib/music.ts (LOOP_TRACKS). Thêm bài mới:
+  1. Tìm bài CC0/CC BY, KHÔNG dùng giấy phép NC (non-commercial) hay ND (no-derivatives):
+     curl -s 'https://api.openverse.org/v1/audio/?q=lofi%20beat&license=cc0&page_size=20' \
+       | python3 -c 'import json,sys; [print(r["title"], "|", r["creator"], "|", r["license"], "|", r["url"]) for r in json.load(sys.stdin)["results"]]'
+  2. Tải bản gốc rồi chuẩn hoá (cần ffmpeg):
+     curl -sSL -o /tmp/new.src.mp3 '<url bản gốc>'
+     ffmpeg -y -i /tmp/new.src.mp3 -af loudnorm=I=-16:TP=-1.5:LRA=11 -c:a libmp3lame -b:a 128k -ac 2 -ar 44100 public/lofi/<slug>.mp3
+  3. Thêm một dòng vào LOOP_TRACKS (slug, title, artist, seconds) và ghi lại nguồn ở bảng trên.
+     lib/music.test.ts sẽ đỏ nếu tệp thiếu hoặc quá nhỏ.

@@ -329,6 +329,22 @@ export const messages: Record<string, string> = {
   "Bạn đã huỷ đăng nhập Google. Có thể thử lại bất cứ lúc nào.":
     "You cancelled the Google sign-in. You can try again at any time.",
   "Đăng nhập bằng email và mật khẩu": "Sign in with email and password",
+  // Bong bóng tiện ích (góc dưới bên phải) và tiện ích nhạc lofi không lời.
+  "Tiện ích": "Tools",
+  "Trợ giúp và tiện ích": "Help and tools",
+  "Vài tiện ích nhỏ cho buổi học dài.": "A few small tools for long study sessions.",
+  "Nhạc lofi": "Lo-fi music",
+  "Nhạc không lời, phát lặp cả danh sách trong lúc bạn học.": "Instrumental tracks that loop while you study.",
+  "Bật": "On",
+  "Tắt": "Off",
+  "Bài trước": "Previous track",
+  "Bài tiếp theo": "Next track",
+  "Phát": "Play",
+  "Tạm dừng": "Pause",
+  "Âm lượng": "Volume",
+  "Trình duyệt đang chặn tự phát — bấm Phát để nghe.": "Your browser blocked autoplay — tap Play to listen.",
+  "Nhạc CC0 (Freesound) — miễn phí, không cần ghi công.": "CC0 music (Freesound) — free to use, no attribution needed.",
+  "Tiếng chỉ phát trên thiết bị này.": "Sound plays on this device only.",
 };
 
 const viLabels: Record<string, string> = {

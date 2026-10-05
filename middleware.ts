@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { isPublicPath, loginRedirectTarget } from "./lib/route-guard";
+import { isPublicPath, isStaticAssetPath, loginRedirectTarget } from "./lib/route-guard";
 import { SESSION_MARKER } from "./lib/session-marker";
 
 /**
@@ -16,6 +16,8 @@ import { SESSION_MARKER } from "./lib/session-marker";
 
 export function middleware(request: NextRequest): NextResponse {
   const { pathname, search } = request.nextUrl;
+  // Tài sản tĩnh (nhạc nền lofi, font, ảnh…) không phải trang nội bộ: chặn ở đây sẽ làm trình phát 307.
+  if (isStaticAssetPath(pathname)) return NextResponse.next();
   if (isPublicPath(pathname)) return NextResponse.next();
   if (request.cookies.get(SESSION_MARKER)?.value === "1") return NextResponse.next();
 
@@ -26,6 +28,6 @@ export function middleware(request: NextRequest): NextResponse {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:png|jpg|jpeg|svg|webp|avif|ico|txt|xml|json|woff|woff2)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:png|jpg|jpeg|svg|webp|avif|gif|ico|txt|xml|json|woff|woff2|mp3|m4a|ogg|oga|opus|wav|flac|mp4|webm|css|js|map)$).*)",
   ],
 };
