@@ -103,7 +103,7 @@
 .answer-html .flow-node.primary { @apply border-accent/40 text-accent; }
 .answer-html .flow-node.secondary { @apply text-body; }
 .answer-html .flow-node.success { @apply border-positive/40 text-positive; }
-.answer-html .flow-arrow { @apply px-1 py-2 text-xs text-subtle; }
+.answer-html .flow-arrow { @apply px-2 py-2 text-lg text-subtle; }
 .answer-html .compare-grid { @apply grid gap-4 sm:grid-cols-2; }
 .answer-html .compare-col { @apply rounded-xl border border-line bg-muted/30 p-5; }
 .answer-html .erd-table { @apply my-3 rounded-xl border border-line p-5 font-mono text-xs; }
@@ -115,6 +115,50 @@
 .answer-html .stat-value { @apply text-xl font-semibold text-strong; }
 .answer-html .stat-label { @apply text-xs text-subtle; }
 .answer-html .step-badge { @apply mr-2 inline-block rounded border border-accent/30 px-2 py-1 text-xs text-accent; }
+
+/* --- Từ vựng nội dung (chuẩn hoá): mọi class dùng trong answer_html phải có style --- */
+.answer-html .callout-info,
+.answer-html .callout-success,
+.answer-html .callout-danger { @apply space-y-2 rounded-xl border px-5 py-4; }
+.answer-html .callout-info { @apply border-accent/25 bg-accent-soft/60; }
+.answer-html .callout-info .callout-title { @apply text-accent; }
+.answer-html .callout-success { @apply border-positive/30 bg-positive/10; }
+.answer-html .callout-success .callout-title { @apply text-positive; }
+.answer-html .callout-danger { @apply border-danger/30 bg-danger/10; }
+.answer-html .callout-danger .callout-title { @apply text-danger; }
+.answer-html .callout.danger,
+.answer-html .callout.warning { @apply border-warning/30 bg-[#faf0e4]; }
+.answer-html .callout.danger .callout-title { @apply text-danger; }
+.answer-html .callout.warning .callout-title { @apply text-warning; }
+
+/* flow-diagram: node có số thứ tự + tên bước */
+.answer-html .flow-node { @apply flex flex-col gap-1; }
+.answer-html .flow-idx { @apply inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-on-accent; }
+.answer-html .flow-name { @apply text-sm font-semibold text-strong; }
+.answer-html .flow-node.primary .flow-name { @apply text-accent; }
+.answer-html .flow-node.success .flow-name { @apply text-positive; }
+.answer-html .arrow-label { @apply inline-block rounded-full border border-line bg-surface px-2.5 py-1 text-xs font-medium text-body; }
+
+/* arch-diagram: sơ đồ kiến trúc dọc (box có phụ đề, mũi tên có nhãn) */
+.answer-html .arch-diagram { @apply my-5 space-y-2 rounded-xl border border-line bg-muted/40 p-5; }
+.answer-html .arch-row { @apply flex flex-wrap items-stretch gap-3; }
+.answer-html .arch-box { @apply flex min-w-[9rem] flex-1 flex-col gap-1 rounded-lg border border-line bg-surface px-4 py-3 text-sm text-strong; }
+.answer-html .arch-box.host { @apply border-line/80 bg-muted/50; }
+.answer-html .arch-box.server { @apply border-accent/30; }
+.answer-html .arch-box.edge { @apply border-sage/50 bg-sage/10; }
+.answer-html .arch-sub { @apply text-xs font-normal text-subtle; }
+.answer-html .arch-arrow { @apply relative flex justify-center py-6; }
+.answer-html .arch-arrow::before { content: ""; @apply absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-line; }
+.answer-html .arch-arrow::after { content: "\25BE"; @apply absolute bottom-0 left-1/2 -translate-x-1/2 text-xs leading-none text-subtle; }
+.answer-html .arch-arrow .arrow-label { @apply relative z-10 bg-surface; }
+
+/* khối phụ trợ */
+.answer-html .stat-row { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); }
+.answer-html .stat-card { @apply w-full; }
+.answer-html .source-line,
+.answer-html .source { @apply mt-5 border-t border-line pt-3 text-xs text-subtle; }
+.answer-html .compare-bad { @apply border-danger/30 bg-danger/5 text-danger; }
+.answer-html .compare-mid { @apply border-warning/30 bg-warning/5 text-warning; }
 
 /* Reading tools share the same warm palette as the authoring preview. */
 .answer-html { container-type: inline-size; min-width: 0; }
