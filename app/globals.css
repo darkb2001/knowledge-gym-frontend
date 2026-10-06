@@ -71,6 +71,13 @@
 71|/* Mobile: long code fences must scroll inside the card, never widen the page. */
 72|.answer-html pre { max-width: 100%; overflow-x: auto; font-size: 0.8125rem; line-height: 1.6; }
 73|.answer-html img, .answer-html iframe, .answer-html video { max-width: 100%; height: auto; }
+.answer-html figure { @apply my-7; }
+.answer-html figure img { @apply mx-auto rounded-xl border border-line shadow-sm; }
+.answer-html figcaption { @apply mt-2 text-center text-sm text-subtle; }
+.answer-html .kg-diagram { @apply overflow-x-auto rounded-2xl border border-line bg-muted/40 p-5; }
+.answer-html .diagram-flow { @apply flex min-w-max items-center justify-center gap-3; }
+.answer-html .diagram-node { @apply max-w-[15rem] rounded-xl border border-accent/30 bg-surface px-4 py-3 text-center text-sm font-medium text-strong shadow-sm; }
+.answer-html .diagram-arrow { @apply text-xl font-bold text-accent; }
 74|/* Identifiers, URLs and diagram nodes may break anywhere; prose must not. */
 75|.answer-html pre, .answer-html code, .answer-html a, .answer-html th, .answer-html td,
 76|.answer-html .flow-node, .answer-html .flow-arrow, .answer-html .arch-box { overflow-wrap: anywhere; }

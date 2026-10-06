@@ -10,10 +10,10 @@ const ALLOWED_TAGS = [
   "ul", "ol", "li", "blockquote", "small", "sup", "sub",
   "table", "thead", "tbody", "tfoot", "tr", "th", "td", "caption",
   "h1", "h2", "h3", "h4", "h5", "h6",
-  "dl", "dt", "dd", "span", "div", "figure", "figcaption", "a",
+  "dl", "dt", "dd", "span", "div", "figure", "figcaption", "a", "img",
 ];
 
-const ALLOWED_ATTR = ["class", "href", "title", "colspan", "rowspan"];
+const ALLOWED_ATTR = ["class", "href", "title", "colspan", "rowspan", "src", "alt", "loading"];
 
 /**
  * Tables become unreadable on a phone once they have 4-5 columns, so mark them for a
