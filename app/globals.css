@@ -1,399 +1,420 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+1|@tailwind base;
+2|@tailwind components;
+3|@tailwind utilities;
+4|
+5|:root {
+6|  color-scheme: light;
+7|  --background: #f3eee4;
+8|  --foreground: #273c4a;
+9|  --surface: #fffcf6;
+10|  --line: #d5cdbf;
+11|  --accent: #345f73;
+12|  --selection: #dce7d9;
+13|}
+14|
+15|@layer base {
+16|  * { @apply border-line; }
+17|  body { @apply bg-canvas font-sans text-body antialiased; }
+18|  h1, h2, h3, h4 { @apply font-display font-semibold text-strong; text-wrap: balance; }
+19|  h1 { letter-spacing: -0.035em; line-height: 1.15; }
+20|  h2, h3 { letter-spacing: -0.02em; }
+21|  p { text-wrap: pretty; }
+22|  button, input, select, textarea { font: inherit; }
+23|  button, a, input, select, textarea, summary { -webkit-tap-highlight-color: transparent; }
+24|  button:not(:disabled), summary { cursor: pointer; }
+25|  button:disabled { cursor: not-allowed; }
+26|  input, select, textarea { accent-color: var(--accent); caret-color: var(--accent); }
+27|  input::placeholder, textarea::placeholder { color: #59635f; opacity: 1; }
+28|  input:not([type="checkbox"]):not([type="radio"]), select, textarea { min-height: 44px; }
+29|  input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; flex-shrink: 0; }
+30|  a { text-underline-offset: 4px; }
+31|  :focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+32|  ::selection { background: var(--selection); color: var(--foreground); }
+33|  * { scrollbar-width: thin; scrollbar-color: rgb(var(--kg-control)) rgb(var(--kg-surface)); }
+34|  ::-webkit-scrollbar { width: 8px; height: 8px; }
+35|  ::-webkit-scrollbar-track { background: rgb(var(--kg-surface)); }
+36|  ::-webkit-scrollbar-thumb { background: rgb(var(--kg-control)); border: 2px solid rgb(var(--kg-surface)); border-radius: 6px; }
+37|  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--kg-accent)); }
+38|  progress { accent-color: var(--accent); }
+39|  summary { @apply rounded-sm px-2 py-2 font-medium text-accent; }
+40|}
+41|
+42|@layer components {
+43|  .kg-button { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-sm bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover disabled:opacity-50; }
+44|  .kg-button-secondary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-sm border border-line bg-surface px-5 py-2.5 text-sm font-semibold text-strong transition-colors hover:bg-muted disabled:opacity-50; }
+45|  .kg-secondary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-sm border border-line bg-surface px-4 py-2.5 text-sm font-medium text-strong transition-colors hover:bg-muted disabled:opacity-50; }
+46|  .kg-field { @apply w-full rounded-sm border border-control bg-surface px-3.5 py-2.5 text-strong outline-none transition-colors placeholder:text-subtle focus:border-accent focus:ring-2 focus:ring-accent/15; }
+47|  .kg-panel { @apply rounded-2xl border border-line/80 bg-surface p-5 sm:p-6; }
+48|  .kg-page-heading { @apply text-[26px] font-semibold leading-tight tracking-[-0.02em] text-strong sm:text-3xl; }
+49|  .kg-intro { @apply mt-3 max-w-2xl text-base leading-relaxed text-subtle; }
+50|  .kg-notice { @apply rounded-xl border border-line bg-surface p-4 text-sm leading-relaxed; }
+51|  .kg-shell { @apply min-h-[100dvh]; }
+52|  .kg-main { @apply mx-auto flex w-full min-w-0 max-w-[1320px] flex-1 flex-col px-4 py-6 sm:px-8 sm:py-8 xl:px-12; }
+53|  /* Chỉ khối NỘI DUNG mới giãn hết chiều cao. Nếu cho mọi phần tử giãn, trang nào mở đầu bằng
+54|     <PageHeading> (thẻ <header>) sẽ bị kéo heading cao hết trang và đẩy nội dung xuống đáy. */
+55|  .kg-main > :first-child:is(div, main, section, form, article) { @apply min-w-0 flex-1; }
+56|  .kg-page { @apply flex min-w-0 flex-1 flex-col; }
+57|  .kg-main > main { max-width: none; padding: 0; }
+58|  .kg-reading { @apply mx-auto w-full max-w-[78ch] rounded-2xl border border-line/70 bg-surface p-5 sm:p-10; }
+59|  .kg-main form > label, .kg-main label.space-y-1 { @apply text-sm font-medium; }
+60|  .kg-main label > input, .kg-main label > select, .kg-main label > textarea { margin-top: 6px; }
+61|  .kg-main section > h2 { margin-bottom: 8px; }
+62|  .kg-main [role="alert"] { @apply rounded-xl border border-danger/25 bg-danger/10 p-4 text-danger; }
+63|  .kg-main [role="status"] { @apply rounded-xl border border-line bg-muted/50 p-4 text-body; }
+64|  .kg-main fieldset { @apply rounded-xl bg-surface; }
+65|  .kg-main fieldset label:has(input:checked):not([data-result]) { @apply border-accent bg-accent-soft; }
+66|  .kg-main fieldset:not(:disabled) label:hover { @apply bg-muted; }
+67|}
+68|
+69|/* Keep the server's sanitized answer vocabulary, with a legible light reading surface. */
+70|.answer-html { @apply space-y-5 text-base leading-[1.8] text-body; overflow-wrap: break-word; }
+71|/* Mobile: long code fences must scroll inside the card, never widen the page. */
+72|.answer-html pre { max-width: 100%; overflow-x: auto; font-size: 0.8125rem; line-height: 1.6; }
+73|.answer-html img, .answer-html iframe, .answer-html video { max-width: 100%; height: auto; }
+74|/* Identifiers, URLs and diagram nodes may break anywhere; prose must not. */
+75|.answer-html pre, .answer-html code, .answer-html a, .answer-html th, .answer-html td,
+76|.answer-html .flow-node, .answer-html .flow-arrow, .answer-html .arch-box { overflow-wrap: anywhere; }
+77|.answer-html h1 { @apply mt-8 text-2xl; }
+78|.answer-html h2 { @apply mt-8 text-xl; }
+79|.answer-html h3, .answer-html h4 { @apply mt-6 text-lg; }
+80|.answer-html a { @apply text-accent underline; }
+81|.answer-html ul, .answer-html ol { @apply ml-5 list-outside space-y-2; }
+82|.answer-html ul { @apply list-disc; }
+83|.answer-html ol { @apply list-decimal; }
+84|.answer-html blockquote { @apply rounded-lg border border-line bg-muted/50 px-5 py-4 text-body; }
+85|.answer-html .ans-block { @apply space-y-3 rounded-xl border border-line/70 p-5; }
+86|.answer-html .ans-label { @apply text-sm font-semibold text-accent; }
+87|.answer-html .callout { @apply space-y-2 rounded-xl border border-line bg-accent-soft/50 px-5 py-4; }
+88|.answer-html .callout-title { @apply text-base font-semibold text-strong; }
+89|.answer-html .callout-warning, .answer-html .callout-warn { @apply border-warning/30 bg-[#faf0e4]; }
+90|.answer-html .callout-warning .callout-title, .answer-html .callout-warn .callout-title { @apply text-warning; }
+91|.answer-html table, .answer-html .feature-table { @apply w-full max-w-full border-collapse text-sm; }
+92|.answer-html th, .answer-html td { @apply border border-line px-4 py-3 text-left align-top; }
+93|.answer-html th { @apply bg-muted font-semibold text-strong; }
+94|.answer-html caption { @apply pt-2 pb-3 text-sm text-subtle; }
+95|
+96|/* Phones: a 4-5 column grid is unreadable, so every row becomes a label/value card.
+97|   Labels come from the header text captured as `data-label` in lib/sanitize-html.ts. */
+98|@media (max-width: 639px) {
+99|  .answer-html table[data-kg-table] { display: block; }
+100|  .answer-html table[data-kg-table] thead,
+101|  .answer-html table[data-kg-table] [data-kg-head-row] { display: none; }
+102|  .answer-html table[data-kg-table] tbody,
+103|  .answer-html table[data-kg-table] tr,
+104|  .answer-html table[data-kg-table] td,
+105|  .answer-html table[data-kg-table] th { display: block; width: auto; }
+106|  .answer-html table[data-kg-table] tr { @apply mb-3 rounded-xl border border-line bg-surface p-4; }
+107|  .answer-html table[data-kg-table] td { @apply border-0 border-b border-line/60 px-0 py-2; }
+108|  .answer-html table[data-kg-table] td:last-child { @apply border-b-0; }
+109|  .answer-html table[data-kg-table] td::before { @apply mb-1 block text-[0.6875rem] font-semibold uppercase tracking-wide text-subtle; content: attr(data-label); }
+110|  .answer-html table[data-kg-table] [data-kg-title] { @apply border-b border-line pb-2 text-base font-semibold text-strong; }
+111|  .answer-html table[data-kg-table] [data-kg-title]::before,
+112|  .answer-html table[data-kg-table] td:not([data-label])::before { display: none; }
+113|}
+114|.answer-html pre, .answer-html code { @apply font-mono text-[0.9em]; }
+115|.answer-html .code-block, .answer-html pre { @apply overflow-x-auto rounded-xl border border-line bg-[#eae5da] p-5 text-strong; }
+116|.answer-html code:not(pre code):not(.code-block code) { @apply rounded bg-muted px-1.5 py-0.5 text-accent; line-height: inherit; }
+117|.answer-html .tok-keyword { color: #395d83; }
+118|.answer-html .tok-class { color: #8a482a; }
+119|.answer-html .tok-string { color: #386345; }
+120|.answer-html .tok-number { color: #7046a0; }
+121|.answer-html .tok-comment { color: #59635f; font-style: italic; }
+122|.answer-html .tok-function { color: #7a4e22; }
+123|.answer-html .tok-annotation { color: #395d83; }
+124|.answer-html .flow-diagram { @apply my-5 space-y-3 rounded-xl border border-line bg-muted/40 p-5; }
+125|.answer-html .flow-row { @apply flex flex-wrap items-stretch gap-3; }
+126|.answer-html .flow-node { @apply min-w-[8rem] flex-1 rounded-lg border border-line bg-surface px-4 py-3 text-sm text-strong; }
+127|.answer-html .flow-node.primary { @apply border-accent/40 text-accent; }
+128|.answer-html .flow-node.secondary { @apply text-body; }
+129|.answer-html .flow-node.success { @apply border-positive/40 text-positive; }
+130|.answer-html .flow-arrow { @apply px-2 py-2 text-lg text-subtle; }
+131|.answer-html .compare-grid { @apply grid gap-4 sm:grid-cols-2; }
+132|.answer-html .compare-col { @apply rounded-xl border border-line bg-muted/30 p-5; }
+133|.answer-html .erd-table { @apply my-3 rounded-xl border border-line p-5 font-mono text-xs; }
+134|.answer-html .erd-name { @apply mb-3 text-sm font-semibold text-accent; }
+135|.answer-html .erd-cols { @apply space-y-1 text-body; }
+136|.answer-html .pk { @apply text-positive; }
+137|.answer-html .idx { @apply text-subtle; }
+138|.answer-html .stat-card { @apply inline-flex flex-col rounded-lg border border-line px-4 py-3; }
+139|.answer-html .stat-value { @apply text-xl font-semibold text-strong; }
+140|.answer-html .stat-label { @apply text-xs text-subtle; }
+141|.answer-html .step-badge { @apply mr-2 inline-block rounded border border-accent/30 px-2 py-1 text-xs text-accent; }
+142|
+143|/* --- Từ vựng nội dung (chuẩn hoá): mọi class dùng trong answer_html phải có style --- */
+144|.answer-html .callout-info,
+145|.answer-html .callout-success,
+146|.answer-html .callout-danger { @apply space-y-2 rounded-xl border px-5 py-4; }
+147|.answer-html .callout-info { @apply border-accent/25 bg-accent-soft/60; }
+148|.answer-html .callout-info .callout-title { @apply text-accent; }
+149|.answer-html .callout-success { @apply border-positive/30 bg-positive/10; }
+150|.answer-html .callout-success .callout-title { @apply text-positive; }
+151|.answer-html .callout-danger { @apply border-danger/30 bg-danger/10; }
+152|.answer-html .callout-danger .callout-title { @apply text-danger; }
+153|.answer-html .callout.danger,
+154|.answer-html .callout.warning { @apply border-warning/30 bg-[#faf0e4]; }
+155|.answer-html .callout.danger .callout-title { @apply text-danger; }
+156|.answer-html .callout.warning .callout-title { @apply text-warning; }
+157|
+158|/* flow-diagram: node có số thứ tự + tên bước */
+159|.answer-html .flow-node { @apply flex flex-col gap-1; }
+160|.answer-html .flow-idx { @apply inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-on-accent; }
+161|.answer-html .flow-name { @apply text-sm font-semibold text-strong; }
+162|.answer-html .flow-node.primary .flow-name { @apply text-accent; }
+163|.answer-html .flow-node.success .flow-name { @apply text-positive; }
+164|.answer-html .arrow-label { @apply inline-block rounded-full border border-line bg-surface px-2.5 py-1 text-xs font-medium text-body; }
+165|
+166|/* arch-diagram: sơ đồ kiến trúc dọc (box có phụ đề, mũi tên có nhãn) */
+167|.answer-html .arch-diagram { @apply my-5 space-y-2 rounded-xl border border-line bg-muted/40 p-5; }
+168|.answer-html .arch-row { @apply flex flex-wrap items-stretch gap-3; }
+169|.answer-html .arch-box { @apply flex min-w-[9rem] flex-1 flex-col gap-1 rounded-lg border border-line bg-surface px-4 py-3 text-sm text-strong; }
+170|.answer-html .arch-box.host { @apply border-line/80 bg-muted/50; }
+171|.answer-html .arch-box.server { @apply border-accent/30; }
+172|.answer-html .arch-box.edge { @apply border-sage/50 bg-sage/10; }
+173|.answer-html .arch-sub { @apply text-xs font-normal text-subtle; }
+174|.answer-html .arch-arrow { @apply relative flex justify-center py-6; }
+175|.answer-html .arch-arrow::before { content: ""; @apply absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-line; }
+176|.answer-html .arch-arrow::after { content: "\25BE"; @apply absolute bottom-0 left-1/2 -translate-x-1/2 text-xs leading-none text-subtle; }
+177|.answer-html .arch-arrow .arrow-label { @apply relative z-10 bg-surface; }
+178|
+179|/* khối phụ trợ */
+180|.answer-html .stat-row { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); }
+181|.answer-html .stat-card { @apply w-full; }
+182|.answer-html .source-line,
+183|.answer-html .source { @apply mt-5 border-t border-line pt-3 text-xs text-subtle; }
+184|.answer-html .compare-bad { @apply border-danger/30 bg-danger/5 text-danger; }
+185|.answer-html .compare-mid { @apply border-warning/30 bg-warning/5 text-warning; }
+186|
+187|/* Reading tools share the same warm palette as the authoring preview. */
+188|.answer-html { container-type: inline-size; min-width: 0; }
+189|.answer-html pre { white-space: pre; overflow-wrap: normal; tab-size: 2; line-height: 1.8; }
+190|.answer-html pre code { padding: 0; background: transparent; font-size: inherit; }
+191|.answer-html .kg-code-toolbar { @apply flex flex-wrap items-center justify-between gap-2 rounded-t-xl border border-line bg-muted px-4 text-xs text-subtle; }
+192|.answer-html .kg-code-toolbar button { @apply min-h-11 rounded-md px-3 font-sans text-xs font-medium text-accent hover:bg-surface; }
+193|.answer-html .kg-code-toolbar + pre:not([hidden]) { margin-top: 0; border-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
+194|.answer-html .hljs-keyword, .answer-html .hljs-selector-tag, .answer-html .hljs-literal { color: #395d83; }
+195|.answer-html .hljs-title, .answer-html .hljs-type, .answer-html .hljs-built_in { color: #8a482a; }
+196|.answer-html .hljs-string, .answer-html .hljs-regexp, .answer-html .hljs-attr { color: #386345; }
+197|.answer-html .hljs-number, .answer-html .hljs-symbol { color: #7046a0; }
+198|.answer-html .hljs-comment { color: #59635f; font-style: italic; }
+199|.answer-html .flow-row { flex-flow: row wrap; justify-content: center; gap: 0.5rem; }
+200|.answer-html .flow-node { min-width: 0; text-align: center; overflow-wrap: anywhere; }
+201|.answer-html .flow-node.primary { @apply bg-accent-soft; }
+202|.answer-html .flow-node.success { @apply bg-sage; }
+203|/* Không xoay mũi tên: nội dung dùng cả "→" (chuỗi ngang) lẫn "↓" (sơ đồ lồng nhau),
+204|   xoay 90° sẽ biến "↓ chứa" thành mũi tên ngang và đè lên nhãn box. */
+205|.answer-html .flow-arrow { flex: 0 0 auto; align-self: center; text-align: center; white-space: nowrap; }
+206|
+207|/* Điện thoại: nhãn dài trong sơ đồ (vd "↓ 1. Ghi Undo Log (rollback) + Redo vào WAL")
+208|   với white-space:nowrap sẽ kéo rộng cả trang; cho mũi tên co lại và bọc chữ. */
+209|@media (max-width: 639px) {
+210|  .answer-html .flow-diagram,
+211|  .answer-html .flow-row,
+212|  .answer-html .flow-node,
+213|  .answer-html .flow-arrow,
+214|  .answer-html .icon-node { max-width: 100%; }
+215|  .answer-html .flow-arrow { flex: 0 1 auto; min-width: 0; white-space: normal; }
+216|  .answer-html .icon-node { overflow-wrap: anywhere; }
+217|  /* flex-basis 0 của desktop chia đều 1 hàng -> 6-7 node bị bóp còn ~45px, chữ dọc.
+218|     Cho node tối thiểu 8rem để hàng tự xuống dòng thay vì bóp. */
+219|  .answer-html .flow-row > .flow-node { flex: 1 1 8rem; }
+220|  /* Khối mã: dòng dài ~60 ký tự (≈516px) trong khi vùng đọc chỉ ~272px ⇒ cuộn ngang che
+221|     mất nửa dòng, người đọc tưởng code bị cắt cụt. Cho bọc dòng ở khoảng trắng (chỉ bẻ
+222|     token khi chính token dài hơn khung), thu chữ và padding để đỡ phải bọc. */
+223|  .answer-html pre,
+224|  .answer-html .code-block { white-space: pre-wrap; overflow-wrap: break-word; }
+225|  .answer-html pre { overflow-x: hidden; }
+226|  .answer-html .code-block,
+227|  .answer-html .kg-code-toolbar + pre { padding: 0.75rem 0.85rem; }
+228|  .answer-html pre,
+229|  .answer-html pre code,
+230|  .answer-html .code-block code { font-size: 0.8rem; line-height: 1.65; }
+231|}
+232|
+233|@media (prefers-reduced-motion: reduce) {
+234|  html:not([data-motion="on"]) *, html:not([data-motion="on"]) *::before, html:not([data-motion="on"]) *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+235|}
+236|
+237|/* ══════════════════════════════════════════════════════════════
+238|   AWS visual system (module AWS / DVA-C02) — icon + diagram
+239|   Icon lấy từ AWS Architecture Icons (48px), phục vụ /aws-icons/<alias>.png
+240|   Dùng trong answer_html: <span class="aws-ico lambda"></span>
+241|   ══════════════════════════════════════════════════════════════ */
+242|.answer-html .aws-ico {
+243|  display: inline-block; width: 40px; height: 40px; flex: none;
+244|  background-repeat: no-repeat; background-position: center; background-size: contain;
+245|}
+246|.answer-html .aws-ico.sm { width: 28px; height: 28px; }
+247|.answer-html .aws-ico.lg { width: 56px; height: 56px; }
+248|.answer-html .aws-ico.acm { background-image: url("/aws-icons/acm.svg"); }
+249|.answer-html .aws-ico.alb { background-image: url("/aws-icons/alb.svg"); }
+250|.answer-html .aws-ico.apigateway { background-image: url("/aws-icons/apigateway.svg"); }
+251|.answer-html .aws-ico.apprunner { background-image: url("/aws-icons/apprunner.svg"); }
+252|.answer-html .aws-ico.appsync { background-image: url("/aws-icons/appsync.svg"); }
+253|.answer-html .aws-ico.athena { background-image: url("/aws-icons/athena.svg"); }
+254|.answer-html .aws-ico.aurora { background-image: url("/aws-icons/aurora.svg"); }
+255|.answer-html .aws-ico.backup { background-image: url("/aws-icons/backup.svg"); }
+256|.answer-html .aws-ico.batch { background-image: url("/aws-icons/batch.svg"); }
+257|.answer-html .aws-ico.beanstalk { background-image: url("/aws-icons/beanstalk.svg"); }
+258|.answer-html .aws-ico.cdk { background-image: url("/aws-icons/cdk.svg"); }
+259|.answer-html .aws-ico.clb { background-image: url("/aws-icons/clb.svg"); }
+260|.answer-html .aws-ico.cloud { background-image: url("/aws-icons/cloud.svg"); }
+261|.answer-html .aws-ico.cloudformation { background-image: url("/aws-icons/cloudformation.svg"); }
+262|.answer-html .aws-ico.cloudfront { background-image: url("/aws-icons/cloudfront.svg"); }
+263|.answer-html .aws-ico.cloudtrail { background-image: url("/aws-icons/cloudtrail.svg"); }
+264|.answer-html .aws-ico.cloudwatch { background-image: url("/aws-icons/cloudwatch.svg"); }
+265|.answer-html .aws-ico.codebuild { background-image: url("/aws-icons/codebuild.svg"); }
+266|.answer-html .aws-ico.codecommit { background-image: url("/aws-icons/codecommit.svg"); }
+267|.answer-html .aws-ico.codedeploy { background-image: url("/aws-icons/codedeploy.svg"); }
+268|.answer-html .aws-ico.codepipeline { background-image: url("/aws-icons/codepipeline.svg"); }
+269|.answer-html .aws-ico.cognito { background-image: url("/aws-icons/cognito.svg"); }
+270|.answer-html .aws-ico.config { background-image: url("/aws-icons/config.svg"); }
+271|.answer-html .aws-ico.datasync { background-image: url("/aws-icons/datasync.svg"); }
+272|.answer-html .aws-ico.dax { background-image: url("/aws-icons/dax.svg"); }
+273|.answer-html .aws-ico.directconnect { background-image: url("/aws-icons/directconnect.svg"); }
+274|.answer-html .aws-ico.docdb { background-image: url("/aws-icons/docdb.svg"); }
+275|.answer-html .aws-ico.dynamodb { background-image: url("/aws-icons/dynamodb.svg"); }
+276|.answer-html .aws-ico.ebs { background-image: url("/aws-icons/ebs.svg"); }
+277|.answer-html .aws-ico.ec2 { background-image: url("/aws-icons/ec2.svg"); }
+278|.answer-html .aws-ico.ecr { background-image: url("/aws-icons/ecr.svg"); }
+279|.answer-html .aws-ico.ecs { background-image: url("/aws-icons/ecs.svg"); }
+280|.answer-html .aws-ico.efs { background-image: url("/aws-icons/efs.svg"); }
+281|.answer-html .aws-ico.eks { background-image: url("/aws-icons/eks.svg"); }
+282|.answer-html .aws-ico.elasticache { background-image: url("/aws-icons/elasticache.svg"); }
+283|.answer-html .aws-ico.emr { background-image: url("/aws-icons/emr.svg"); }
+284|.answer-html .aws-ico.eventbridge { background-image: url("/aws-icons/eventbridge.svg"); }
+285|.answer-html .aws-ico.eventbridge-pipes { background-image: url("/aws-icons/eventbridge-pipes.svg"); }
+286|.answer-html .aws-ico.fargate { background-image: url("/aws-icons/fargate.svg"); }
+287|.answer-html .aws-ico.fsx { background-image: url("/aws-icons/fsx.svg"); }
+288|.answer-html .aws-ico.generic { background-image: url("/aws-icons/generic.svg"); }
+289|.answer-html .aws-ico.glacier { background-image: url("/aws-icons/glacier.svg"); }
+290|.answer-html .aws-ico.global-accelerator { background-image: url("/aws-icons/global-accelerator.svg"); }
+291|.answer-html .aws-ico.glue { background-image: url("/aws-icons/glue.svg"); }
+292|.answer-html .aws-ico.guardduty { background-image: url("/aws-icons/guardduty.svg"); }
+293|.answer-html .aws-ico.iam { background-image: url("/aws-icons/iam.svg"); }
+294|.answer-html .aws-ico.inspector { background-image: url("/aws-icons/inspector.svg"); }
+295|.answer-html .aws-ico.kinesis { background-image: url("/aws-icons/kinesis.svg"); }
+296|.answer-html .aws-ico.kinesisfirehose { background-image: url("/aws-icons/kinesisfirehose.svg"); }
+297|.answer-html .aws-ico.kms { background-image: url("/aws-icons/kms.svg"); }
+298|.answer-html .aws-ico.lambda { background-image: url("/aws-icons/lambda.svg"); }
+299|.answer-html .aws-ico.lightsail { background-image: url("/aws-icons/lightsail.svg"); }
+300|.answer-html .aws-ico.macie { background-image: url("/aws-icons/macie.svg"); }
+301|.answer-html .aws-ico.mq { background-image: url("/aws-icons/mq.svg"); }
+302|.answer-html .aws-ico.msk { background-image: url("/aws-icons/msk.svg"); }
+303|.answer-html .aws-ico.neptune { background-image: url("/aws-icons/neptune.svg"); }
+304|.answer-html .aws-ico.network-firewall { background-image: url("/aws-icons/network-firewall.svg"); }
+305|.answer-html .aws-ico.nlb { background-image: url("/aws-icons/nlb.svg"); }
+306|.answer-html .aws-ico.onprem { background-image: url("/aws-icons/onprem.svg"); }
+307|.answer-html .aws-ico.opensearch { background-image: url("/aws-icons/opensearch.svg"); }
+308|.answer-html .aws-ico.organizations { background-image: url("/aws-icons/organizations.svg"); }
+309|.answer-html .aws-ico.privatelink { background-image: url("/aws-icons/privatelink.svg"); }
+310|.answer-html .aws-ico.quicksight { background-image: url("/aws-icons/quicksight.svg"); }
+311|.answer-html .aws-ico.rds { background-image: url("/aws-icons/rds.svg"); }
+312|.answer-html .aws-ico.redshift { background-image: url("/aws-icons/redshift.svg"); }
+313|.answer-html .aws-ico.region { background-image: url("/aws-icons/region.svg"); }
+314|.answer-html .aws-ico.route53 { background-image: url("/aws-icons/route53.svg"); }
+315|.answer-html .aws-ico.s3 { background-image: url("/aws-icons/s3.svg"); }
+316|.answer-html .aws-ico.scheduler { background-image: url("/aws-icons/scheduler.svg"); }
+317|.answer-html .aws-ico.secretsmanager { background-image: url("/aws-icons/secretsmanager.svg"); }
+318|.answer-html .aws-ico.serverless { background-image: url("/aws-icons/serverless.svg"); }
+319|.answer-html .aws-ico.shield { background-image: url("/aws-icons/shield.svg"); }
+320|.answer-html .aws-ico.snowball { background-image: url("/aws-icons/snowball.svg"); }
+321|.answer-html .aws-ico.sns { background-image: url("/aws-icons/sns.svg"); }
+322|.answer-html .aws-ico.sqs { background-image: url("/aws-icons/sqs.svg"); }
+323|.answer-html .aws-ico.ssm { background-image: url("/aws-icons/ssm.svg"); }
+324|.answer-html .aws-ico.stepfunctions { background-image: url("/aws-icons/stepfunctions.svg"); }
+325|.answer-html .aws-ico.storage-gateway { background-image: url("/aws-icons/storage-gateway.svg"); }
+326|.answer-html .aws-ico.sts { background-image: url("/aws-icons/sts.svg"); }
+327|.answer-html .aws-ico.transit-gateway { background-image: url("/aws-icons/transit-gateway.svg"); }
+328|.answer-html .aws-ico.vpc { background-image: url("/aws-icons/vpc.svg"); }
+329|.answer-html .aws-ico.vpc-endpoint { background-image: url("/aws-icons/vpc-endpoint.svg"); }
+330|.answer-html .aws-ico.vpc-net { background-image: url("/aws-icons/vpc-net.svg"); }
+331|.answer-html .aws-ico.vpn { background-image: url("/aws-icons/vpn.svg"); }
+332|.answer-html .aws-ico.waf { background-image: url("/aws-icons/waf.svg"); }
+333|.answer-html .aws-ico.xray { background-image: url("/aws-icons/xray.svg"); }
+334|.answer-html .aws-ico.user::before { content: "👤"; font-size: 1.5rem; line-height: 40px; }
+335|.answer-html .aws-ico.mobile::before { content: "📱"; font-size: 1.5rem; line-height: 40px; }
+336|.answer-html .aws-ico.az::before { content: "AZ"; font-size: 1.5rem; line-height: 40px; }
+337|.answer-html .aws-ico.sam::before { content: "SAM"; font-size: 1.5rem; line-height: 40px; }
+338|
+339|.answer-html .aws-ico.eni { background-image: url("/aws-icons/eni.svg"); }
+340|.answer-html .aws-ico.flow-logs { background-image: url("/aws-icons/flow-logs.svg"); }
+341|.answer-html .aws-ico.igw { background-image: url("/aws-icons/igw.svg"); }
+342|.answer-html .aws-ico.nacl { background-image: url("/aws-icons/nacl.svg"); }
+343|.answer-html .aws-ico.nat-gateway { background-image: url("/aws-icons/nat-gateway.svg"); }
+344|.answer-html .aws-ico.route-table { background-image: url("/aws-icons/route-table.svg"); }
+345|
+346|/* ── Luồng icon ngang ── */
+347|.answer-html .icon-flow {
+348|  display: flex; flex-wrap: wrap; align-items: stretch; gap: .5rem .6rem;
+349|  margin: 1rem 0; padding: .9rem 1rem; border: 1px solid var(--line);
+350|  border-radius: 14px; background: linear-gradient(180deg, #fdf6ea, #fbf3e6);
+351|}
+352|.answer-html .icon-node {
+353|  display: flex; flex-direction: column; align-items: center; gap: .2rem; flex: 1 1 8rem;
+354|  min-width: 7.5rem; padding: .6rem .5rem; border: 1px solid var(--line);
+355|  border-radius: 12px; background: var(--surface); text-align: center;
+356|}
+357|.answer-html .icon-label { font-size: .82rem; font-weight: 600; line-height: 1.25; color: var(--foreground); }
+358|.answer-html .icon-note { font-size: .72rem; line-height: 1.3; color: #6b6257; }
+359|.answer-html .icon-arrow {
+360|  display: flex; flex-direction: column; align-items: center; justify-content: center;
+361|  gap: .1rem; font-size: 1.15rem; line-height: 1; color: #c2410c; flex: 0 0 auto; padding: 0 .15rem;
+362|}
+363|.answer-html .arrow-note { font-size: .66rem; max-width: 7.5rem; text-align: center; color: #6b6257; }
+364|
+365|/* ── Lưới service (chọn service nào) ── */
+366|.answer-html .service-grid {
+367|  display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+368|  gap: .6rem; margin: 1rem 0;
+369|}
+370|.answer-html .service-grid .icon-node { flex: none; min-width: 0; }
+371|
+372|/* ── Xếp lớp (Region / AZ / VPC / subnet) ── */
+373|.answer-html .stack {
+374|  margin: .8rem 0; padding: .75rem .85rem; border: 1px dashed #dcae7a;
+375|  border-radius: 14px; background: rgba(234, 88, 12, .04);
+376|}
+377|.answer-html .stack-title {
+378|  font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+379|  color: #9a3412; margin-bottom: .45rem;
+380|}
+381|.answer-html .sub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: .6rem; }
+382|.answer-html .stack .icon-node { background: var(--surface); }
+383|
+384|/* ── Nhãn nhỏ ── */
+385|.answer-html .pill {
+386|  display: inline-block; margin: 0 .15rem; padding: .1rem .5rem; border-radius: 999px;
+387|  border: 1px solid var(--line); background: var(--surface); font-size: .72rem; color: #4b5563;
+388|}
+389|.answer-html .pill-ok { border-color: #a7c4a0; color: #2f6b3a; background: #f1f7ee; }
+390|.answer-html .pill-warn { border-color: #e0b083; color: #9a3412; background: #fdf3e7; }
+391|
+392|@media (max-width: 640px) {
+393|  .answer-html .icon-flow { padding: .7rem .6rem; gap: .45rem; }
+394|  .answer-html .icon-node { flex: 1 1 6.5rem; min-width: 6.5rem; }
+395|  .answer-html .icon-arrow { font-size: 1rem; }
+396|  .answer-html .arrow-note { display: none; }
+397|  .answer-html .aws-ico { width: 34px; height: 34px; }
+398|  .answer-html .service-grid { grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); }
+399|
 
-:root {
-  color-scheme: light;
-  --background: #f3eee4;
-  --foreground: #273c4a;
-  --surface: #fffcf6;
-  --line: #d5cdbf;
-  --accent: #345f73;
-  --selection: #dce7d9;
-}
+  /* Ghi chú neo đoạn văn trong bài đang đọc */
+  .kg-note-pick { @apply absolute z-20 flex items-center gap-1 rounded-full border border-line bg-surface px-1.5 py-1 shadow-lg; }
+  .kg-note-pick-btn { @apply rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-on-accent; }
+  .kg-note-pick-close { @apply rounded-full px-2 py-1 text-xs text-subtle hover:text-strong; }
+  .kg-note-panel { @apply mt-6 rounded-xl border border-line/70 bg-muted/30 p-4 sm:p-5; }
+  .kg-note-panel-head { @apply flex flex-wrap items-center justify-between gap-2; }
+  .kg-note-mini { @apply inline-flex min-h-[2rem] items-center rounded-sm border border-line bg-surface px-2.5 py-1 text-xs font-medium text-strong transition-colors hover:bg-muted disabled:opacity-50; }
+  .kg-note-mini-danger { @apply border-warning/60 text-warning; }
+  .kg-note-composer { @apply mt-3 rounded-lg border border-line bg-surface p-3; }
+  .kg-note-quote { @apply max-h-32 overflow-y-auto border-l-2 border-accent/50 pl-3 text-sm italic text-subtle; }
+  .kg-note-hint { @apply mt-3 text-xs text-subtle; }
+  .kg-note-empty { @apply mt-4 text-sm text-subtle; }
+  .kg-note-group { @apply text-xs font-semibold uppercase tracking-wide text-subtle; }
+  .kg-note-item { @apply rounded-lg border border-line/60 bg-surface p-3; }
+  .kg-note-item-active { @apply border-accent/60 ring-2 ring-accent/20; }
+  .kg-note-quote-link { @apply block w-full border-l-2 border-accent/40 pl-2 text-left text-xs italic text-subtle hover:text-strong; }
+  .kg-note-mark { @apply cursor-pointer rounded-sm; background: color-mix(in srgb, rgb(var(--kg-accent)) 22%, transparent); box-shadow: inset 0 -2px 0 rgb(var(--kg-accent)); }
+  .kg-note-mark[data-current="false"] { background: color-mix(in srgb, rgb(var(--kg-accent)) 10%, transparent); box-shadow: inset 0 -1px 0 rgb(var(--kg-control)); }
 
-@layer base {
-  * { @apply border-line; }
-  body { @apply bg-canvas font-sans text-body antialiased; }
-  h1, h2, h3, h4 { @apply font-display font-semibold text-strong; text-wrap: balance; }
-  h1 { letter-spacing: -0.035em; line-height: 1.15; }
-  h2, h3 { letter-spacing: -0.02em; }
-  p { text-wrap: pretty; }
-  button, input, select, textarea { font: inherit; }
-  button, a, input, select, textarea, summary { -webkit-tap-highlight-color: transparent; }
-  button:not(:disabled), summary { cursor: pointer; }
-  button:disabled { cursor: not-allowed; }
-  input, select, textarea { accent-color: var(--accent); caret-color: var(--accent); }
-  input::placeholder, textarea::placeholder { color: #59635f; opacity: 1; }
-  input:not([type="checkbox"]):not([type="radio"]), select, textarea { min-height: 44px; }
-  input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; flex-shrink: 0; }
-  a { text-underline-offset: 4px; }
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
-  ::selection { background: var(--selection); color: var(--foreground); }
-  * { scrollbar-width: thin; scrollbar-color: rgb(var(--kg-control)) rgb(var(--kg-surface)); }
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: rgb(var(--kg-surface)); }
-  ::-webkit-scrollbar-thumb { background: rgb(var(--kg-control)); border: 2px solid rgb(var(--kg-surface)); border-radius: 6px; }
-  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--kg-accent)); }
-  progress { accent-color: var(--accent); }
-  summary { @apply rounded-sm px-2 py-2 font-medium text-accent; }
-}
-
-@layer components {
-  .kg-button { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-sm bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover disabled:opacity-50; }
-  .kg-button-secondary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-sm border border-line bg-surface px-5 py-2.5 text-sm font-semibold text-strong transition-colors hover:bg-muted disabled:opacity-50; }
-  .kg-secondary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-sm border border-line bg-surface px-4 py-2.5 text-sm font-medium text-strong transition-colors hover:bg-muted disabled:opacity-50; }
-  .kg-field { @apply w-full rounded-sm border border-control bg-surface px-3.5 py-2.5 text-strong outline-none transition-colors placeholder:text-subtle focus:border-accent focus:ring-2 focus:ring-accent/15; }
-  .kg-panel { @apply rounded-2xl border border-line/80 bg-surface p-5 sm:p-6; }
-  .kg-page-heading { @apply text-[26px] font-semibold leading-tight tracking-[-0.02em] text-strong sm:text-3xl; }
-  .kg-intro { @apply mt-3 max-w-2xl text-base leading-relaxed text-subtle; }
-  .kg-notice { @apply rounded-xl border border-line bg-surface p-4 text-sm leading-relaxed; }
-  .kg-shell { @apply min-h-[100dvh]; }
-  .kg-main { @apply mx-auto flex w-full min-w-0 max-w-[1320px] flex-1 flex-col px-4 py-6 sm:px-8 sm:py-8 xl:px-12; }
-  /* Chỉ khối NỘI DUNG mới giãn hết chiều cao. Nếu cho mọi phần tử giãn, trang nào mở đầu bằng
-     <PageHeading> (thẻ <header>) sẽ bị kéo heading cao hết trang và đẩy nội dung xuống đáy. */
-  .kg-main > :first-child:is(div, main, section, form, article) { @apply min-w-0 flex-1; }
-  .kg-page { @apply flex min-w-0 flex-1 flex-col; }
-  .kg-main > main { max-width: none; padding: 0; }
-  .kg-reading { @apply mx-auto w-full max-w-[78ch] rounded-2xl border border-line/70 bg-surface p-5 sm:p-10; }
-  .kg-main form > label, .kg-main label.space-y-1 { @apply text-sm font-medium; }
-  .kg-main label > input, .kg-main label > select, .kg-main label > textarea { margin-top: 6px; }
-  .kg-main section > h2 { margin-bottom: 8px; }
-  .kg-main [role="alert"] { @apply rounded-xl border border-danger/25 bg-danger/10 p-4 text-danger; }
-  .kg-main [role="status"] { @apply rounded-xl border border-line bg-muted/50 p-4 text-body; }
-  .kg-main fieldset { @apply rounded-xl bg-surface; }
-  .kg-main fieldset label:has(input:checked):not([data-result]) { @apply border-accent bg-accent-soft; }
-  .kg-main fieldset:not(:disabled) label:hover { @apply bg-muted; }
-}
-
-/* Keep the server's sanitized answer vocabulary, with a legible light reading surface. */
-.answer-html { @apply space-y-5 text-base leading-[1.8] text-body; overflow-wrap: break-word; }
-/* Mobile: long code fences must scroll inside the card, never widen the page. */
-.answer-html pre { max-width: 100%; overflow-x: auto; font-size: 0.8125rem; line-height: 1.6; }
-.answer-html img, .answer-html iframe, .answer-html video { max-width: 100%; height: auto; }
-/* Identifiers, URLs and diagram nodes may break anywhere; prose must not. */
-.answer-html pre, .answer-html code, .answer-html a, .answer-html th, .answer-html td,
-.answer-html .flow-node, .answer-html .flow-arrow, .answer-html .arch-box { overflow-wrap: anywhere; }
-.answer-html h1 { @apply mt-8 text-2xl; }
-.answer-html h2 { @apply mt-8 text-xl; }
-.answer-html h3, .answer-html h4 { @apply mt-6 text-lg; }
-.answer-html a { @apply text-accent underline; }
-.answer-html ul, .answer-html ol { @apply ml-5 list-outside space-y-2; }
-.answer-html ul { @apply list-disc; }
-.answer-html ol { @apply list-decimal; }
-.answer-html blockquote { @apply rounded-lg border border-line bg-muted/50 px-5 py-4 text-body; }
-.answer-html .ans-block { @apply space-y-3 rounded-xl border border-line/70 p-5; }
-.answer-html .ans-label { @apply text-sm font-semibold text-accent; }
-.answer-html .callout { @apply space-y-2 rounded-xl border border-line bg-accent-soft/50 px-5 py-4; }
-.answer-html .callout-title { @apply text-base font-semibold text-strong; }
-.answer-html .callout-warning, .answer-html .callout-warn { @apply border-warning/30 bg-[#faf0e4]; }
-.answer-html .callout-warning .callout-title, .answer-html .callout-warn .callout-title { @apply text-warning; }
-.answer-html table, .answer-html .feature-table { @apply w-full max-w-full border-collapse text-sm; }
-.answer-html th, .answer-html td { @apply border border-line px-4 py-3 text-left align-top; }
-.answer-html th { @apply bg-muted font-semibold text-strong; }
-.answer-html caption { @apply pt-2 pb-3 text-sm text-subtle; }
-
-/* Phones: a 4-5 column grid is unreadable, so every row becomes a label/value card.
-   Labels come from the header text captured as `data-label` in lib/sanitize-html.ts. */
-@media (max-width: 639px) {
-  .answer-html table[data-kg-table] { display: block; }
-  .answer-html table[data-kg-table] thead,
-  .answer-html table[data-kg-table] [data-kg-head-row] { display: none; }
-  .answer-html table[data-kg-table] tbody,
-  .answer-html table[data-kg-table] tr,
-  .answer-html table[data-kg-table] td,
-  .answer-html table[data-kg-table] th { display: block; width: auto; }
-  .answer-html table[data-kg-table] tr { @apply mb-3 rounded-xl border border-line bg-surface p-4; }
-  .answer-html table[data-kg-table] td { @apply border-0 border-b border-line/60 px-0 py-2; }
-  .answer-html table[data-kg-table] td:last-child { @apply border-b-0; }
-  .answer-html table[data-kg-table] td::before { @apply mb-1 block text-[0.6875rem] font-semibold uppercase tracking-wide text-subtle; content: attr(data-label); }
-  .answer-html table[data-kg-table] [data-kg-title] { @apply border-b border-line pb-2 text-base font-semibold text-strong; }
-  .answer-html table[data-kg-table] [data-kg-title]::before,
-  .answer-html table[data-kg-table] td:not([data-label])::before { display: none; }
-}
-.answer-html pre, .answer-html code { @apply font-mono text-[0.9em]; }
-.answer-html .code-block, .answer-html pre { @apply overflow-x-auto rounded-xl border border-line bg-[#eae5da] p-5 text-strong; }
-.answer-html code:not(pre code):not(.code-block code) { @apply rounded bg-muted px-1.5 py-0.5 text-accent; line-height: inherit; }
-.answer-html .tok-keyword { color: #395d83; }
-.answer-html .tok-class { color: #8a482a; }
-.answer-html .tok-string { color: #386345; }
-.answer-html .tok-number { color: #7046a0; }
-.answer-html .tok-comment { color: #59635f; font-style: italic; }
-.answer-html .tok-function { color: #7a4e22; }
-.answer-html .tok-annotation { color: #395d83; }
-.answer-html .flow-diagram { @apply my-5 space-y-3 rounded-xl border border-line bg-muted/40 p-5; }
-.answer-html .flow-row { @apply flex flex-wrap items-stretch gap-3; }
-.answer-html .flow-node { @apply min-w-[8rem] flex-1 rounded-lg border border-line bg-surface px-4 py-3 text-sm text-strong; }
-.answer-html .flow-node.primary { @apply border-accent/40 text-accent; }
-.answer-html .flow-node.secondary { @apply text-body; }
-.answer-html .flow-node.success { @apply border-positive/40 text-positive; }
-.answer-html .flow-arrow { @apply px-2 py-2 text-lg text-subtle; }
-.answer-html .compare-grid { @apply grid gap-4 sm:grid-cols-2; }
-.answer-html .compare-col { @apply rounded-xl border border-line bg-muted/30 p-5; }
-.answer-html .erd-table { @apply my-3 rounded-xl border border-line p-5 font-mono text-xs; }
-.answer-html .erd-name { @apply mb-3 text-sm font-semibold text-accent; }
-.answer-html .erd-cols { @apply space-y-1 text-body; }
-.answer-html .pk { @apply text-positive; }
-.answer-html .idx { @apply text-subtle; }
-.answer-html .stat-card { @apply inline-flex flex-col rounded-lg border border-line px-4 py-3; }
-.answer-html .stat-value { @apply text-xl font-semibold text-strong; }
-.answer-html .stat-label { @apply text-xs text-subtle; }
-.answer-html .step-badge { @apply mr-2 inline-block rounded border border-accent/30 px-2 py-1 text-xs text-accent; }
-
-/* --- Từ vựng nội dung (chuẩn hoá): mọi class dùng trong answer_html phải có style --- */
-.answer-html .callout-info,
-.answer-html .callout-success,
-.answer-html .callout-danger { @apply space-y-2 rounded-xl border px-5 py-4; }
-.answer-html .callout-info { @apply border-accent/25 bg-accent-soft/60; }
-.answer-html .callout-info .callout-title { @apply text-accent; }
-.answer-html .callout-success { @apply border-positive/30 bg-positive/10; }
-.answer-html .callout-success .callout-title { @apply text-positive; }
-.answer-html .callout-danger { @apply border-danger/30 bg-danger/10; }
-.answer-html .callout-danger .callout-title { @apply text-danger; }
-.answer-html .callout.danger,
-.answer-html .callout.warning { @apply border-warning/30 bg-[#faf0e4]; }
-.answer-html .callout.danger .callout-title { @apply text-danger; }
-.answer-html .callout.warning .callout-title { @apply text-warning; }
-
-/* flow-diagram: node có số thứ tự + tên bước */
-.answer-html .flow-node { @apply flex flex-col gap-1; }
-.answer-html .flow-idx { @apply inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-on-accent; }
-.answer-html .flow-name { @apply text-sm font-semibold text-strong; }
-.answer-html .flow-node.primary .flow-name { @apply text-accent; }
-.answer-html .flow-node.success .flow-name { @apply text-positive; }
-.answer-html .arrow-label { @apply inline-block rounded-full border border-line bg-surface px-2.5 py-1 text-xs font-medium text-body; }
-
-/* arch-diagram: sơ đồ kiến trúc dọc (box có phụ đề, mũi tên có nhãn) */
-.answer-html .arch-diagram { @apply my-5 space-y-2 rounded-xl border border-line bg-muted/40 p-5; }
-.answer-html .arch-row { @apply flex flex-wrap items-stretch gap-3; }
-.answer-html .arch-box { @apply flex min-w-[9rem] flex-1 flex-col gap-1 rounded-lg border border-line bg-surface px-4 py-3 text-sm text-strong; }
-.answer-html .arch-box.host { @apply border-line/80 bg-muted/50; }
-.answer-html .arch-box.server { @apply border-accent/30; }
-.answer-html .arch-box.edge { @apply border-sage/50 bg-sage/10; }
-.answer-html .arch-sub { @apply text-xs font-normal text-subtle; }
-.answer-html .arch-arrow { @apply relative flex justify-center py-6; }
-.answer-html .arch-arrow::before { content: ""; @apply absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-line; }
-.answer-html .arch-arrow::after { content: "\25BE"; @apply absolute bottom-0 left-1/2 -translate-x-1/2 text-xs leading-none text-subtle; }
-.answer-html .arch-arrow .arrow-label { @apply relative z-10 bg-surface; }
-
-/* khối phụ trợ */
-.answer-html .stat-row { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); }
-.answer-html .stat-card { @apply w-full; }
-.answer-html .source-line,
-.answer-html .source { @apply mt-5 border-t border-line pt-3 text-xs text-subtle; }
-.answer-html .compare-bad { @apply border-danger/30 bg-danger/5 text-danger; }
-.answer-html .compare-mid { @apply border-warning/30 bg-warning/5 text-warning; }
-
-/* Reading tools share the same warm palette as the authoring preview. */
-.answer-html { container-type: inline-size; min-width: 0; }
-.answer-html pre { white-space: pre; overflow-wrap: normal; tab-size: 2; line-height: 1.8; }
-.answer-html pre code { padding: 0; background: transparent; font-size: inherit; }
-.answer-html .kg-code-toolbar { @apply flex flex-wrap items-center justify-between gap-2 rounded-t-xl border border-line bg-muted px-4 text-xs text-subtle; }
-.answer-html .kg-code-toolbar button { @apply min-h-11 rounded-md px-3 font-sans text-xs font-medium text-accent hover:bg-surface; }
-.answer-html .kg-code-toolbar + pre:not([hidden]) { margin-top: 0; border-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
-.answer-html .hljs-keyword, .answer-html .hljs-selector-tag, .answer-html .hljs-literal { color: #395d83; }
-.answer-html .hljs-title, .answer-html .hljs-type, .answer-html .hljs-built_in { color: #8a482a; }
-.answer-html .hljs-string, .answer-html .hljs-regexp, .answer-html .hljs-attr { color: #386345; }
-.answer-html .hljs-number, .answer-html .hljs-symbol { color: #7046a0; }
-.answer-html .hljs-comment { color: #59635f; font-style: italic; }
-.answer-html .flow-row { flex-flow: row wrap; justify-content: center; gap: 0.5rem; }
-.answer-html .flow-node { min-width: 0; text-align: center; overflow-wrap: anywhere; }
-.answer-html .flow-node.primary { @apply bg-accent-soft; }
-.answer-html .flow-node.success { @apply bg-sage; }
-/* Không xoay mũi tên: nội dung dùng cả "→" (chuỗi ngang) lẫn "↓" (sơ đồ lồng nhau),
-   xoay 90° sẽ biến "↓ chứa" thành mũi tên ngang và đè lên nhãn box. */
-.answer-html .flow-arrow { flex: 0 0 auto; align-self: center; text-align: center; white-space: nowrap; }
-
-/* Điện thoại: nhãn dài trong sơ đồ (vd "↓ 1. Ghi Undo Log (rollback) + Redo vào WAL")
-   với white-space:nowrap sẽ kéo rộng cả trang; cho mũi tên co lại và bọc chữ. */
-@media (max-width: 639px) {
-  .answer-html .flow-diagram,
-  .answer-html .flow-row,
-  .answer-html .flow-node,
-  .answer-html .flow-arrow,
-  .answer-html .icon-node { max-width: 100%; }
-  .answer-html .flow-arrow { flex: 0 1 auto; min-width: 0; white-space: normal; }
-  .answer-html .icon-node { overflow-wrap: anywhere; }
-  /* flex-basis 0 của desktop chia đều 1 hàng -> 6-7 node bị bóp còn ~45px, chữ dọc.
-     Cho node tối thiểu 8rem để hàng tự xuống dòng thay vì bóp. */
-  .answer-html .flow-row > .flow-node { flex: 1 1 8rem; }
-  /* Khối mã: dòng dài ~60 ký tự (≈516px) trong khi vùng đọc chỉ ~272px ⇒ cuộn ngang che
-     mất nửa dòng, người đọc tưởng code bị cắt cụt. Cho bọc dòng ở khoảng trắng (chỉ bẻ
-     token khi chính token dài hơn khung), thu chữ và padding để đỡ phải bọc. */
-  .answer-html pre,
-  .answer-html .code-block { white-space: pre-wrap; overflow-wrap: break-word; }
-  .answer-html pre { overflow-x: hidden; }
-  .answer-html .code-block,
-  .answer-html .kg-code-toolbar + pre { padding: 0.75rem 0.85rem; }
-  .answer-html pre,
-  .answer-html pre code,
-  .answer-html .code-block code { font-size: 0.8rem; line-height: 1.65; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html:not([data-motion="on"]) *, html:not([data-motion="on"]) *::before, html:not([data-motion="on"]) *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
-}
-
-/* ══════════════════════════════════════════════════════════════
-   AWS visual system (module AWS / DVA-C02) — icon + diagram
-   Icon lấy từ AWS Architecture Icons (48px), phục vụ /aws-icons/<alias>.png
-   Dùng trong answer_html: <span class="aws-ico lambda"></span>
-   ══════════════════════════════════════════════════════════════ */
-.answer-html .aws-ico {
-  display: inline-block; width: 40px; height: 40px; flex: none;
-  background-repeat: no-repeat; background-position: center; background-size: contain;
-}
-.answer-html .aws-ico.sm { width: 28px; height: 28px; }
-.answer-html .aws-ico.lg { width: 56px; height: 56px; }
-.answer-html .aws-ico.acm { background-image: url("/aws-icons/acm.svg"); }
-.answer-html .aws-ico.alb { background-image: url("/aws-icons/alb.svg"); }
-.answer-html .aws-ico.apigateway { background-image: url("/aws-icons/apigateway.svg"); }
-.answer-html .aws-ico.apprunner { background-image: url("/aws-icons/apprunner.svg"); }
-.answer-html .aws-ico.appsync { background-image: url("/aws-icons/appsync.svg"); }
-.answer-html .aws-ico.athena { background-image: url("/aws-icons/athena.svg"); }
-.answer-html .aws-ico.aurora { background-image: url("/aws-icons/aurora.svg"); }
-.answer-html .aws-ico.backup { background-image: url("/aws-icons/backup.svg"); }
-.answer-html .aws-ico.batch { background-image: url("/aws-icons/batch.svg"); }
-.answer-html .aws-ico.beanstalk { background-image: url("/aws-icons/beanstalk.svg"); }
-.answer-html .aws-ico.cdk { background-image: url("/aws-icons/cdk.svg"); }
-.answer-html .aws-ico.clb { background-image: url("/aws-icons/clb.svg"); }
-.answer-html .aws-ico.cloud { background-image: url("/aws-icons/cloud.svg"); }
-.answer-html .aws-ico.cloudformation { background-image: url("/aws-icons/cloudformation.svg"); }
-.answer-html .aws-ico.cloudfront { background-image: url("/aws-icons/cloudfront.svg"); }
-.answer-html .aws-ico.cloudtrail { background-image: url("/aws-icons/cloudtrail.svg"); }
-.answer-html .aws-ico.cloudwatch { background-image: url("/aws-icons/cloudwatch.svg"); }
-.answer-html .aws-ico.codebuild { background-image: url("/aws-icons/codebuild.svg"); }
-.answer-html .aws-ico.codecommit { background-image: url("/aws-icons/codecommit.svg"); }
-.answer-html .aws-ico.codedeploy { background-image: url("/aws-icons/codedeploy.svg"); }
-.answer-html .aws-ico.codepipeline { background-image: url("/aws-icons/codepipeline.svg"); }
-.answer-html .aws-ico.cognito { background-image: url("/aws-icons/cognito.svg"); }
-.answer-html .aws-ico.config { background-image: url("/aws-icons/config.svg"); }
-.answer-html .aws-ico.datasync { background-image: url("/aws-icons/datasync.svg"); }
-.answer-html .aws-ico.dax { background-image: url("/aws-icons/dax.svg"); }
-.answer-html .aws-ico.directconnect { background-image: url("/aws-icons/directconnect.svg"); }
-.answer-html .aws-ico.docdb { background-image: url("/aws-icons/docdb.svg"); }
-.answer-html .aws-ico.dynamodb { background-image: url("/aws-icons/dynamodb.svg"); }
-.answer-html .aws-ico.ebs { background-image: url("/aws-icons/ebs.svg"); }
-.answer-html .aws-ico.ec2 { background-image: url("/aws-icons/ec2.svg"); }
-.answer-html .aws-ico.ecr { background-image: url("/aws-icons/ecr.svg"); }
-.answer-html .aws-ico.ecs { background-image: url("/aws-icons/ecs.svg"); }
-.answer-html .aws-ico.efs { background-image: url("/aws-icons/efs.svg"); }
-.answer-html .aws-ico.eks { background-image: url("/aws-icons/eks.svg"); }
-.answer-html .aws-ico.elasticache { background-image: url("/aws-icons/elasticache.svg"); }
-.answer-html .aws-ico.emr { background-image: url("/aws-icons/emr.svg"); }
-.answer-html .aws-ico.eventbridge { background-image: url("/aws-icons/eventbridge.svg"); }
-.answer-html .aws-ico.eventbridge-pipes { background-image: url("/aws-icons/eventbridge-pipes.svg"); }
-.answer-html .aws-ico.fargate { background-image: url("/aws-icons/fargate.svg"); }
-.answer-html .aws-ico.fsx { background-image: url("/aws-icons/fsx.svg"); }
-.answer-html .aws-ico.generic { background-image: url("/aws-icons/generic.svg"); }
-.answer-html .aws-ico.glacier { background-image: url("/aws-icons/glacier.svg"); }
-.answer-html .aws-ico.global-accelerator { background-image: url("/aws-icons/global-accelerator.svg"); }
-.answer-html .aws-ico.glue { background-image: url("/aws-icons/glue.svg"); }
-.answer-html .aws-ico.guardduty { background-image: url("/aws-icons/guardduty.svg"); }
-.answer-html .aws-ico.iam { background-image: url("/aws-icons/iam.svg"); }
-.answer-html .aws-ico.inspector { background-image: url("/aws-icons/inspector.svg"); }
-.answer-html .aws-ico.kinesis { background-image: url("/aws-icons/kinesis.svg"); }
-.answer-html .aws-ico.kinesisfirehose { background-image: url("/aws-icons/kinesisfirehose.svg"); }
-.answer-html .aws-ico.kms { background-image: url("/aws-icons/kms.svg"); }
-.answer-html .aws-ico.lambda { background-image: url("/aws-icons/lambda.svg"); }
-.answer-html .aws-ico.lightsail { background-image: url("/aws-icons/lightsail.svg"); }
-.answer-html .aws-ico.macie { background-image: url("/aws-icons/macie.svg"); }
-.answer-html .aws-ico.mq { background-image: url("/aws-icons/mq.svg"); }
-.answer-html .aws-ico.msk { background-image: url("/aws-icons/msk.svg"); }
-.answer-html .aws-ico.neptune { background-image: url("/aws-icons/neptune.svg"); }
-.answer-html .aws-ico.network-firewall { background-image: url("/aws-icons/network-firewall.svg"); }
-.answer-html .aws-ico.nlb { background-image: url("/aws-icons/nlb.svg"); }
-.answer-html .aws-ico.onprem { background-image: url("/aws-icons/onprem.svg"); }
-.answer-html .aws-ico.opensearch { background-image: url("/aws-icons/opensearch.svg"); }
-.answer-html .aws-ico.organizations { background-image: url("/aws-icons/organizations.svg"); }
-.answer-html .aws-ico.privatelink { background-image: url("/aws-icons/privatelink.svg"); }
-.answer-html .aws-ico.quicksight { background-image: url("/aws-icons/quicksight.svg"); }
-.answer-html .aws-ico.rds { background-image: url("/aws-icons/rds.svg"); }
-.answer-html .aws-ico.redshift { background-image: url("/aws-icons/redshift.svg"); }
-.answer-html .aws-ico.region { background-image: url("/aws-icons/region.svg"); }
-.answer-html .aws-ico.route53 { background-image: url("/aws-icons/route53.svg"); }
-.answer-html .aws-ico.s3 { background-image: url("/aws-icons/s3.svg"); }
-.answer-html .aws-ico.scheduler { background-image: url("/aws-icons/scheduler.svg"); }
-.answer-html .aws-ico.secretsmanager { background-image: url("/aws-icons/secretsmanager.svg"); }
-.answer-html .aws-ico.serverless { background-image: url("/aws-icons/serverless.svg"); }
-.answer-html .aws-ico.shield { background-image: url("/aws-icons/shield.svg"); }
-.answer-html .aws-ico.snowball { background-image: url("/aws-icons/snowball.svg"); }
-.answer-html .aws-ico.sns { background-image: url("/aws-icons/sns.svg"); }
-.answer-html .aws-ico.sqs { background-image: url("/aws-icons/sqs.svg"); }
-.answer-html .aws-ico.ssm { background-image: url("/aws-icons/ssm.svg"); }
-.answer-html .aws-ico.stepfunctions { background-image: url("/aws-icons/stepfunctions.svg"); }
-.answer-html .aws-ico.storage-gateway { background-image: url("/aws-icons/storage-gateway.svg"); }
-.answer-html .aws-ico.sts { background-image: url("/aws-icons/sts.svg"); }
-.answer-html .aws-ico.transit-gateway { background-image: url("/aws-icons/transit-gateway.svg"); }
-.answer-html .aws-ico.vpc { background-image: url("/aws-icons/vpc.svg"); }
-.answer-html .aws-ico.vpc-endpoint { background-image: url("/aws-icons/vpc-endpoint.svg"); }
-.answer-html .aws-ico.vpc-net { background-image: url("/aws-icons/vpc-net.svg"); }
-.answer-html .aws-ico.vpn { background-image: url("/aws-icons/vpn.svg"); }
-.answer-html .aws-ico.waf { background-image: url("/aws-icons/waf.svg"); }
-.answer-html .aws-ico.xray { background-image: url("/aws-icons/xray.svg"); }
-.answer-html .aws-ico.user::before { content: "👤"; font-size: 1.5rem; line-height: 40px; }
-.answer-html .aws-ico.mobile::before { content: "📱"; font-size: 1.5rem; line-height: 40px; }
-.answer-html .aws-ico.az::before { content: "AZ"; font-size: 1.5rem; line-height: 40px; }
-.answer-html .aws-ico.sam::before { content: "SAM"; font-size: 1.5rem; line-height: 40px; }
-
-.answer-html .aws-ico.eni { background-image: url("/aws-icons/eni.svg"); }
-.answer-html .aws-ico.flow-logs { background-image: url("/aws-icons/flow-logs.svg"); }
-.answer-html .aws-ico.igw { background-image: url("/aws-icons/igw.svg"); }
-.answer-html .aws-ico.nacl { background-image: url("/aws-icons/nacl.svg"); }
-.answer-html .aws-ico.nat-gateway { background-image: url("/aws-icons/nat-gateway.svg"); }
-.answer-html .aws-ico.route-table { background-image: url("/aws-icons/route-table.svg"); }
-
-/* ── Luồng icon ngang ── */
-.answer-html .icon-flow {
-  display: flex; flex-wrap: wrap; align-items: stretch; gap: .5rem .6rem;
-  margin: 1rem 0; padding: .9rem 1rem; border: 1px solid var(--line);
-  border-radius: 14px; background: linear-gradient(180deg, #fdf6ea, #fbf3e6);
-}
-.answer-html .icon-node {
-  display: flex; flex-direction: column; align-items: center; gap: .2rem; flex: 1 1 8rem;
-  min-width: 7.5rem; padding: .6rem .5rem; border: 1px solid var(--line);
-  border-radius: 12px; background: var(--surface); text-align: center;
-}
-.answer-html .icon-label { font-size: .82rem; font-weight: 600; line-height: 1.25; color: var(--foreground); }
-.answer-html .icon-note { font-size: .72rem; line-height: 1.3; color: #6b6257; }
-.answer-html .icon-arrow {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: .1rem; font-size: 1.15rem; line-height: 1; color: #c2410c; flex: 0 0 auto; padding: 0 .15rem;
-}
-.answer-html .arrow-note { font-size: .66rem; max-width: 7.5rem; text-align: center; color: #6b6257; }
-
-/* ── Lưới service (chọn service nào) ── */
-.answer-html .service-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
-  gap: .6rem; margin: 1rem 0;
-}
-.answer-html .service-grid .icon-node { flex: none; min-width: 0; }
-
-/* ── Xếp lớp (Region / AZ / VPC / subnet) ── */
-.answer-html .stack {
-  margin: .8rem 0; padding: .75rem .85rem; border: 1px dashed #dcae7a;
-  border-radius: 14px; background: rgba(234, 88, 12, .04);
-}
-.answer-html .stack-title {
-  font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
-  color: #9a3412; margin-bottom: .45rem;
-}
-.answer-html .sub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: .6rem; }
-.answer-html .stack .icon-node { background: var(--surface); }
-
-/* ── Nhãn nhỏ ── */
-.answer-html .pill {
-  display: inline-block; margin: 0 .15rem; padding: .1rem .5rem; border-radius: 999px;
-  border: 1px solid var(--line); background: var(--surface); font-size: .72rem; color: #4b5563;
-}
-.answer-html .pill-ok { border-color: #a7c4a0; color: #2f6b3a; background: #f1f7ee; }
-.answer-html .pill-warn { border-color: #e0b083; color: #9a3412; background: #fdf3e7; }
-
-@media (max-width: 640px) {
-  .answer-html .icon-flow { padding: .7rem .6rem; gap: .45rem; }
-  .answer-html .icon-node { flex: 1 1 6.5rem; min-width: 6.5rem; }
-  .answer-html .icon-arrow { font-size: 1rem; }
-  .answer-html .arrow-note { display: none; }
-  .answer-html .aws-ico { width: 34px; height: 34px; }
-  .answer-html .service-grid { grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); }
 }

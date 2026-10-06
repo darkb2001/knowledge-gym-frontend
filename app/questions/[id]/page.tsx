@@ -8,6 +8,7 @@ import { RequireAuth, ContentLanguageNotice } from "@/components/ui";
 
 import { getQuestion, listQuestions } from "@/lib/questions";
 import { LearningContent } from "@/components/LearningContent";
+import { ReadingNotesLayer } from "@/components/ReadingNotesLayer";
 import type { QuestionDetail, QuestionSummary } from "@/lib/types";
 
 /** Chỉ chấp nhận đường dẫn nội bộ để `?returnTo=` không thành open redirect. */
@@ -102,7 +103,10 @@ function QuestionDetailView() {
       ) : null}
 
       <ContentLanguageNotice />
-      <LearningContent html={question.answerHtml} className="mt-8 border-t border-line pt-8" />
+      <div id="kg-reading-content">
+        <LearningContent html={question.answerHtml} className="mt-8 border-t border-line pt-8" />
+      </div>
+      <ReadingNotesLayer rootId="kg-reading-content" questionId={question.id} moduleId={question.moduleId} />
 
       <footer className="mt-12 border-t border-line pt-7">
         <h2 className="text-lg text-strong">{t("Luyện tiếp với module này")}</h2>
