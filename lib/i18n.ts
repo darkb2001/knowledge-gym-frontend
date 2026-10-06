@@ -245,6 +245,7 @@ export const messages: Record<string, string> = {
   "Sơ đồ module kiến thức": "Knowledge module map", "Chọn một module để bắt đầu quiz.": "Choose a module to start a quiz.", "Không tải được mindmap": "Could not load the knowledge map",
   "Knowledge Gym Blog": "Knowledge Gym articles", "RSS feed": "RSS feed", "Đang tải bài viết…": "Loading articles…",
   "Chưa có bài viết được xuất bản.": "No published articles yet.", "lượt xem": "views", "lượt thích": "likes",
+  "Theo dõi bằng RSS": "Follow via RSS",
   "← Tất cả bài viết": "All articles", "Thích ·": "Like ·", "Bình luận (": "Comments (", "Viết bình luận…": "Write a comment…", "Gửi bình luận": "Post comment",
   "Không tải được bài viết": "Could not load articles", "Lỗi tải blog": "Could not load articles", "Không tìm thấy bài viết": "Article not found", "Lỗi tải bài viết": "Could not load the article",
   "Đã thích bài viết": "Article liked", "Đăng nhập để thích bài viết": "Sign in to like articles", "Đăng nhập để bình luận": "Sign in to comment",

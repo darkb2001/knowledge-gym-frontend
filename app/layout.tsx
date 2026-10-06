@@ -18,6 +18,7 @@ const geistMono = localFont({ src: "./fonts/GeistMono-Variable.woff2", variable:
 export const metadata: Metadata = {
   title: "Knowledge Gym",
   description: "Choose a topic, practise IT knowledge and build lasting understanding with Knowledge Gym.",
+  alternates: { types: { "application/rss+xml": "/feed.xml" } },
 };
 
 export default function RootLayout({

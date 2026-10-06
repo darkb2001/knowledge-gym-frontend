@@ -48,6 +48,7 @@ export default function BlogPage() {
 
   return <PublicShell>
     <PageHeading title="Bài viết" description="Đọc một chút. Hiểu thêm một chút." />
+    <p className="text-sm"><a href="/feed.xml" className="inline-flex min-h-11 items-center gap-2 font-medium text-accent hover:underline" hrefLang="vi">{t("Theo dõi bằng RSS")}</a></p>
     {loading && <p role="status" className="kg-panel">{t("Đang tải bài viết…")}</p>}
     {error && <p role="alert" className="kg-panel">{t(error)}<button type="button" onClick={() => { setPage(1); setReload(value => value + 1); }} className="ml-4 inline-flex min-h-11 items-center underline">{t("Thử lại")}</button></p>}
     {!loading && !error && posts.length === 0 && <p className="kg-panel text-subtle">{t("Chưa có bài viết được xuất bản.")}</p>}
