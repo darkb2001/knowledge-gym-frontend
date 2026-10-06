@@ -67,6 +67,12 @@ export function sanitizeAnswerHtml(html: string): string {
   if (!doc) return html;
   const holder = doc.createElement("div");
   holder.appendChild(fragment);
+  // Article images must be externally verifiable HTTPS resources; drop relative,
+  // data:, blob: and protocol-relative image URLs.
+  for (const image of Array.from(holder.querySelectorAll("img"))) {
+    const src = image.getAttribute("src") ?? "";
+    if (!/^https:\/\//i.test(src)) image.remove();
+  }
   decorateTables(holder);
   return holder.innerHTML;
 }
