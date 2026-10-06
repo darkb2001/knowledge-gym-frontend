@@ -9,8 +9,11 @@ import { MOTION_INIT_SCRIPT } from "@/lib/motion";
 import "./globals.css";
 import "./scenic.css";
 
-const geist = localFont({ src: "./fonts/GeistVF.woff", variable: "--font-geist", weight: "100 900", display: "swap" });
-const geistMono = localFont({ src: "./fonts/GeistMonoVF.woff", variable: "--font-geist-mono", weight: "100 900", display: "swap" });
+// Geist chính thức (variable, đầy đủ tiếng Việt: 90/90 ký tự U+1EA0–U+1EF9). Bản nhúng
+// trước đây là subset 645 glyph chỉ có 6/90 ký tự vùng dấu tiếng Việt, nên chữ có dấu rơi
+// xuống font hệ thống và trộn hai font trong cùng một dòng.
+const geist = localFont({ src: "./fonts/Geist-Variable.woff2", variable: "--font-geist", weight: "100 900", display: "swap" });
+const geistMono = localFont({ src: "./fonts/GeistMono-Variable.woff2", variable: "--font-geist-mono", weight: "100 900", display: "swap" });
 
 export const metadata: Metadata = {
   title: "Knowledge Gym",
