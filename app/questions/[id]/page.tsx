@@ -88,7 +88,11 @@ function QuestionDetailView() {
     return <p className="animate-soft-pulse text-subtle">{t("Đang mở đáp án…")}</p>;
   }
 
-  const withReturn = (target: string) => `${target}${target.includes("?") ? "&" : "?"}returnTo=${encodeURIComponent(`/questions/${id}`)}`;
+  // Keep the original list/filter context while moving between adjacent questions.
+  // Otherwise "Câu trước/Câu tiếp theo" rewrites returnTo to the current detail page,
+  // so "← Danh sách" can bounce through the question chain instead of returning to
+  // the exact filtered page the learner opened.
+  const withReturn = (target: string) => `${target}${target.includes("?") ? "&" : "?"}returnTo=${encodeURIComponent(backHref)}`;
 
   return (
     <article className="kg-reading">
