@@ -12,6 +12,7 @@ import {
 } from "@phosphor-icons/react";
 import { useLocale } from "@/components/locale";
 import {
+  attachVolumeGraph,
   LOOP_TRACKS,
   MUSIC_DEFAULT,
   readMusicPrefs,
@@ -19,6 +20,7 @@ import {
   trackSrc,
   trackTime,
   writeMusicPrefs,
+  type AudioGraph,
   type MusicPrefs,
 } from "@/lib/music";
 
@@ -40,9 +42,49 @@ export default function UtilityBubble() {
   const trigger = useRef<HTMLButtonElement | null>(null);
   // Âm lượng đọc qua ref để việc kéo thanh trượt không vô tình phát lại bài đang tạm dừng.
   const volumeRef = useRef(MUSIC_DEFAULT.volume);
+  // Trên iOS, `element.volume` không ghi được: âm lượng phải đi qua Web Audio GainNode
+  // (xem attachVolumeGraph). Chỉ dựng một lần cho mỗi phần tử audio, và chỉ trong thao
+  // tác của người dùng — dựng ngoài thao tác thì AudioContext bị treo và mất tiếng.
+  const graphRef = useRef<AudioGraph | null>(null);
+  const graphFailed = useRef(false);
 
   const index = trackIndex(prefs.track);
   const track = LOOP_TRACKS[index] ?? LOOP_TRACKS[0];
+
+  /** Dựng đường GainNode trong chính thao tác người dùng; trả null nếu không hỗ trợ. */
+  const ensureVolumeGraph = useCallback((): AudioGraph | null => {
+    if (graphRef.current) return graphRef.current;
+    if (graphFailed.current) return null;
+    const element = audio.current;
+    const Ctor =
+      typeof window === "undefined"
+        ? undefined
+        : window.AudioContext ??
+          (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!element || !Ctor) {
+      graphFailed.current = true;
+      return null;
+    }
+    const created = attachVolumeGraph(element, volumeRef.current, () => new Ctor());
+    if (!created) {
+      graphFailed.current = true;
+      return null;
+    }
+    graphRef.current = created;
+    created.resume();
+    return created;
+  }, []);
+
+  /** Ghi âm lượng: ưu tiên GainNode (chạy trên cả iOS), nơi khác dùng element.volume. */
+  const applyVolume = useCallback((value: number) => {
+    volumeRef.current = value;
+    if (graphRef.current) {
+      graphRef.current.setVolume(value);
+      return;
+    }
+    const element = audio.current;
+    if (element) element.volume = value;
+  }, []);
 
   // Đọc lựa chọn đã lưu sau khi mount để bản dựng trên máy chủ và trên máy khách giống nhau.
   useEffect(() => {
@@ -55,7 +97,7 @@ export default function UtilityBubble() {
     if (!hydrated) return;
     const element = audio.current;
     if (!element) return;
-    element.volume = volumeRef.current;
+    applyVolume(volumeRef.current);
     if (!prefs.enabled) {
       element.pause();
       setPlaying(false);
@@ -73,13 +115,11 @@ export default function UtilityBubble() {
         setPlaying(false);
         setBlocked(true);
       });
-  }, [hydrated, prefs.enabled, prefs.track]);
+  }, [applyVolume, hydrated, prefs.enabled, prefs.track]);
 
   useEffect(() => {
-    volumeRef.current = prefs.volume;
-    const element = audio.current;
-    if (element) element.volume = prefs.volume;
-  }, [prefs.volume]);
+    applyVolume(prefs.volume);
+  }, [applyVolume, prefs.volume]);
 
   useEffect(() => {
     if (hydrated) writeMusicPrefs(prefs);
@@ -112,7 +152,9 @@ export default function UtilityBubble() {
     setPrefs(current => ({ ...current, enabled: next }));
     const element = audio.current;
     if (!element) return;
-    element.volume = volumeRef.current;
+    // Dựng GainNode ngay trong cú bấm: iOS chỉ mở khoá Web Audio từ thao tác người dùng.
+    ensureVolumeGraph();
+    applyVolume(volumeRef.current);
     if (next) {
       // Phát ngay trong cú bấm: Safari/Firefox chỉ mở khoá âm thanh từ thao tác của người dùng.
       element
@@ -127,7 +169,7 @@ export default function UtilityBubble() {
       setPlaying(false);
       setBlocked(false);
     }
-  }, [prefs.enabled]);
+  }, [applyVolume, ensureVolumeGraph, prefs.enabled]);
 
   const togglePlayback = useCallback(() => {
     const element = audio.current;
@@ -137,7 +179,8 @@ export default function UtilityBubble() {
       setPlaying(false);
       return;
     }
-    element.volume = volumeRef.current;
+    ensureVolumeGraph();
+    applyVolume(volumeRef.current);
     element
       .play()
       .then(() => {
@@ -145,7 +188,7 @@ export default function UtilityBubble() {
         setBlocked(false);
       })
       .catch(() => setBlocked(true));
-  }, []);
+  }, [applyVolume, ensureVolumeGraph]);
 
   const skip = useCallback((step: number) => {
     setPrefs(current => ({ ...current, track: trackIndex(current.track + step) }));
@@ -241,10 +284,20 @@ export default function UtilityBubble() {
                     max={1}
                     step={0.05}
                     value={prefs.volume}
-                    onChange={event => setPrefs(current => ({ ...current, volume: Number(event.target.value) }))}
+                    onChange={event => {
+                      const value = Number(event.target.value);
+                      // Kéo thanh trượt cũng là thao tác người dùng: dựng GainNode ở đây để
+                      // iPhone đổi tiếng ngay, và để lần phát sau đã sẵn đường âm lượng.
+                      ensureVolumeGraph();
+                      applyVolume(value);
+                      setPrefs(current => ({ ...current, volume: value }));
+                    }}
                     aria-label={t("Âm lượng")}
                     className="h-8 min-w-0 flex-1 accent-accent"
                   />
+                  <span className="w-8 shrink-0 text-right font-mono tabular-nums text-subtle">
+                    {Math.round(prefs.volume * 100)}%
+                  </span>
                 </label>
                 {blocked ? (
                   <p className="mt-2 text-xs text-warning">{t("Trình duyệt đang chặn tự phát — bấm Phát để nghe.")}</p>

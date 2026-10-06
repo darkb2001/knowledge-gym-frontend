@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { statSync } from "node:fs";
 import { resolve } from "node:path";
 import {
+  attachVolumeGraph,
   LOOP_TRACKS,
   MUSIC_DEFAULT,
   MUSIC_KEY,
@@ -13,6 +14,7 @@ import {
   trackSrc,
   trackTime,
   writeMusicPrefs,
+  type AudioGraphContext,
 } from "./music";
 
 describe("lo-fi study music", () => {
@@ -82,5 +84,83 @@ describe("lo-fi study music", () => {
       const file = statSync(resolve(__dirname, "../public/lofi", `${track.slug}.mp3`));
       expect(file.size).toBeGreaterThan(500_000);
     }
+  });
+
+  // iPhone: `element.volume` là read-only trên iOS nên kéo thanh âm lượng không có tác
+  // dụng gì. Đường đi thật phải là audio -> GainNode -> loa, và gain đổi theo thanh trượt.
+  it("puts volume on a Web Audio GainNode so the iOS slider actually changes the sound", () => {
+    const element = { volume: 0.35 } as HTMLAudioElement;
+    const gainParam = { value: 0 };
+    const visited: unknown[] = [];
+    const gain = {
+      gain: gainParam,
+      connect(target: unknown) {
+        visited.push(target);
+        return target;
+      },
+    };
+    const destination = { speakers: true };
+    let resumes = 0;
+    const context = {
+      createGain: () => gain,
+      createMediaElementSource(media: HTMLAudioElement) {
+        visited.push(media);
+        return {
+          connect(target: unknown) {
+            visited.push(target);
+            return target;
+          },
+        };
+      },
+      destination,
+      resume: () => {
+        resumes += 1;
+      },
+    };
+
+    const graph = attachVolumeGraph(element, 0.35, () => context as unknown as AudioGraphContext);
+    expect(graph).not.toBeNull();
+    expect(gainParam.value).toBe(0.35);
+    // Phần tử bị đẩy về 1: âm lượng đã do gain quyết định, để nguyên sẽ suy giảm hai lần.
+    expect(element.volume).toBe(1);
+    expect(visited).toEqual([element, gain, destination]);
+
+    graph?.setVolume(0.1);
+    expect(gainParam.value).toBe(0.1);
+    graph?.setVolume(4);
+    expect(gainParam.value).toBe(1);
+    graph?.setVolume(Number.NaN);
+    expect(gainParam.value).toBe(MUSIC_DEFAULT.volume);
+
+    graph?.resume();
+    expect(resumes).toBe(1);
+  });
+
+  it("leaves the element alone when Web Audio is missing, so desktop still gets volume", () => {
+    const element = { volume: 0.5 } as HTMLAudioElement;
+    const graph = attachVolumeGraph(element, 0.2, () => {
+      throw new Error("no AudioContext here");
+    });
+    expect(graph).toBeNull();
+    expect(element.volume).toBe(0.5);
+  });
+
+  it("survives a context without resume and a resume that iOS refuses", () => {
+    const element = { volume: 0.5 } as HTMLAudioElement;
+    const gainParam = { value: 0 };
+    const base = {
+      createGain: () => ({ gain: gainParam, connect: (target: unknown) => target }),
+      createMediaElementSource: () => ({ connect: (target: unknown) => target }),
+      destination: {},
+    };
+    const bare = attachVolumeGraph(element, 0.4, () => base as unknown as AudioGraphContext);
+    expect(() => bare?.resume()).not.toThrow();
+    expect(gainParam.value).toBe(0.4);
+    const refused = attachVolumeGraph(
+      element,
+      0.4,
+      () => ({ ...base, resume: () => Promise.reject(new Error("suspended")) }) as unknown as AudioGraphContext,
+    );
+    expect(() => refused?.resume()).not.toThrow();
   });
 });
