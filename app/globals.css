@@ -396,6 +396,57 @@
 .answer-html .pill-ok { border-color: #a7c4a0; color: #2f6b3a; background: #f1f7ee; }
 .answer-html .pill-warn { border-color: #e0b083; color: #9a3412; background: #fdf3e7; }
 
+/* ── AWS architecture diagrams: connected Mermaid/draw.io-like flow ── */
+.answer-html .aws-architecture {
+  display: grid; gap: 1rem; margin: 1.5rem 0; padding: 1.25rem;
+  border: 1px solid #b8c6d1; border-radius: 16px; background: #f7fafc;
+  overflow: hidden;
+}
+.answer-html .aws-architecture .aws-lane {
+  display: grid; grid-template-columns: minmax(8rem, 1fr) auto minmax(8rem, 1fr) auto minmax(8rem, 1fr);
+  align-items: center; gap: .6rem; min-width: 0;
+}
+.answer-html .aws-architecture .aws-node {
+  display: flex; min-width: 0; min-height: 5rem; flex-direction: column;
+  align-items: center; justify-content: center; gap: .35rem; padding: .7rem .6rem;
+  border: 1.5px solid #94aabd; border-radius: 12px; background: #fff;
+  text-align: center; box-shadow: 0 2px 5px rgb(39 60 74 / 8%);
+}
+.answer-html .aws-architecture .aws-node.bus { border-color: #8b5cf6; background: #faf7ff; }
+.answer-html .aws-architecture .aws-node.queue { border-color: #f59e0b; background: #fffaf0; }
+.answer-html .aws-architecture .aws-node.topic { border-color: #d946ef; background: #fff7fe; }
+.answer-html .aws-architecture .aws-node.consumer { border-color: #0f766e; background: #f0fdfa; }
+.answer-html .aws-architecture .aws-node .aws-ico { width: 42px; height: 42px; }
+.answer-html .aws-architecture .aws-node-name { font-size: .82rem; font-weight: 700; line-height: 1.25; color: #273c4a; }
+.answer-html .aws-architecture .aws-node-note { font-size: .7rem; line-height: 1.25; color: #59635f; }
+.answer-html .aws-architecture .aws-connector {
+  display: flex; min-width: 2.5rem; flex-direction: column; align-items: center;
+  justify-content: center; gap: .15rem; color: #345f73; font-size: 1.25rem; font-weight: 700;
+}
+.answer-html .aws-architecture .aws-connector::after { content: ""; display: block; width: 0; height: 0; border-top: .32rem solid transparent; border-bottom: .32rem solid transparent; border-left: .5rem solid currentColor; }
+.answer-html .aws-architecture .aws-connector-label { font-size: .62rem; font-weight: 600; line-height: 1.1; text-align: center; color: #59635f; }
+.answer-html .aws-architecture .aws-branch { display: grid; grid-template-columns: minmax(9rem, 1fr) auto minmax(9rem, 1fr); align-items: center; gap: .6rem; }
+.answer-html .aws-architecture .aws-branch-line { height: 1.5px; background: #94aabd; position: relative; }
+.answer-html .aws-architecture .aws-branch-line::after { content: ""; position: absolute; right: 0; top: 50%; width: 0; height: 0; border-top: .3rem solid transparent; border-bottom: .3rem solid transparent; border-left: .45rem solid #94aabd; transform: translateY(-50%); }
+.answer-html .aws-architecture .aws-branch-label { font-size: .68rem; font-weight: 600; color: #59635f; text-align: center; }
+.answer-html .aws-architecture .aws-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem .8rem; padding-top: .2rem; font-size: .7rem; color: #59635f; }
+.answer-html .aws-architecture .aws-legend span { display: inline-flex; align-items: center; gap: .25rem; }
+.answer-html .aws-architecture .aws-legend b { width: .55rem; height: .55rem; border-radius: 50%; background: #f59e0b; }
+.answer-html .aws-architecture .aws-legend .topic-dot { background: #d946ef; }
+.answer-html .aws-architecture .aws-legend .bus-dot { background: #8b5cf6; }
+@media (max-width: 640px) {
+  .answer-html .aws-architecture { padding: .8rem .65rem; gap: .7rem; }
+  .answer-html .aws-architecture .aws-lane { grid-template-columns: 1fr; gap: .35rem; }
+  .answer-html .aws-architecture .aws-node { min-height: 4.3rem; flex-direction: row; justify-content: flex-start; text-align: left; }
+  .answer-html .aws-architecture .aws-node .aws-ico { width: 34px; height: 34px; }
+  .answer-html .aws-architecture .aws-connector { min-height: 1.5rem; flex-direction: row; font-size: 0; }
+  .answer-html .aws-architecture .aws-connector::after { transform: rotate(90deg); }
+  .answer-html .aws-architecture .aws-branch { grid-template-columns: 1fr; gap: .35rem; }
+  .answer-html .aws-architecture .aws-branch-line { width: 1.5px; height: 1.2rem; justify-self: center; }
+  .answer-html .aws-architecture .aws-branch-line::after { right: auto; left: 50%; top: auto; bottom: -.1rem; transform: translateX(-50%) rotate(90deg); }
+  .answer-html .aws-architecture .aws-branch-label { order: -1; }
+}
+
 @media (max-width: 640px) {
   .answer-html .icon-flow { padding: .7rem .6rem; gap: .45rem; }
   .answer-html .icon-node { flex: 1 1 6.5rem; min-width: 6.5rem; }
