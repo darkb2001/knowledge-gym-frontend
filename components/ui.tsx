@@ -17,6 +17,7 @@ const navigation = [
   { href: "/search", label: "Tìm kiếm", icon: MagnifyingGlass },
   { href: "/review", label: "Ôn tập hôm nay", icon: Repeat },
   { href: "/mock-interview", label: "Luyện phỏng vấn", icon: UsersThree },
+  { href: "/english", label: "Phòng học tiếng Anh", icon: BookOpen },
   { href: "/dashboard", label: "Tiến độ học tập", icon: ChartLine },
   { href: "/profile", label: "Hồ sơ", icon: UserCircle },
   { href: "/notes", label: "Ghi chú", icon: Notebook },

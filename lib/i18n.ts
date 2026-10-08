@@ -4,6 +4,7 @@ export const localeTag = (locale: Locale) => locale === "en" ? "en-US" : "vi-VN"
 
 /** UI messages only. API-authored learning content is deliberately not translated. */
 export const messages: Record<string, string> = {
+  "Phòng học tiếng Anh": "English Studio",
   "Đã khôi phục phiên đang làm dở dang của bạn.": "We restored your unfinished session.",
   "Bỏ phiên này": "Discard this session",
   "Bỏ chọn": "Clear selection",

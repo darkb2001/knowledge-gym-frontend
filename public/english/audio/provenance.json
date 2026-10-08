@@ -1,0 +1,8 @@
+{
+  "source": "Original Knowledge Gym practice scripts; not official VSTEP audio",
+  "generator": "@echogarden/espeak-ng-emscripten 0.3.5 (GPL-3.0 engine, build-time only); ffmpeg MP3 96 kbps",
+  "engineSource": "https://github.com/echogarden-project/espeak-ng-emscripten",
+  "voices": "en-us; dialogue alternates en-us+f3 / en-us+m3",
+  "scripts": "Versioned EnglishCatalog.java; plain-text copies in docs/english/audio-scripts",
+  "notice": "Synthetic practice speech, not recorded exam speakers. Speech engine is not bundled."
+}
