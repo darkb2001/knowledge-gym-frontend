@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Knowledge Gym · Module & dependency direction",
+    "output": ".archify/architecture-knowledge-gym-20261010-223040/layers.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/darkb2001/knowledge-gym.git",
+      "revision": "b1d6c34af8438edcd60ad3f44b4858d56555ea5a",
+      "provider": "github",
+      "link_mode": "web"
+    }
+  },
+  "components": [
+    {
+      "id": "presentation",
+      "type": "frontend",
+      "label": "kg-presentation",
+      "sublabel": "REST + Boot composition",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-presentation/build.gradle.kts",
+          "line": 1,
+          "end_line": 42
+        }
+      ]
+    },
+    {
+      "id": "core",
+      "type": "backend",
+      "label": "kg-core",
+      "sublabel": "Domain + application + ports",
+      "pos": [
+        460,
+        80
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-core/build.gradle.kts",
+          "line": 1,
+          "end_line": 23
+        }
+      ]
+    },
+    {
+      "id": "infra",
+      "type": "backend",
+      "label": "kg-infrastructure",
+      "sublabel": "Adapters + Spring Security",
+      "pos": [
+        460,
+        330
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-infrastructure/build.gradle.kts",
+          "line": 1,
+          "end_line": 74
+        }
+      ]
+    },
+    {
+      "id": "agent",
+      "type": "backend",
+      "label": "kg-agent",
+      "sublabel": "Schedulers + consumers",
+      "pos": [
+        40,
+        330
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-agent/build.gradle.kts",
+          "line": 1,
+          "end_line": 23
+        }
+      ]
+    },
+    {
+      "id": "stores",
+      "type": "database",
+      "label": "External systems",
+      "sublabel": "JPA / Redis / Kafka / S3 / ES",
+      "pos": [
+        460,
+        570
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-infrastructure/build.gradle.kts",
+          "line": 1,
+          "end_line": 74
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "usecases",
+      "from": "presentation",
+      "to": "core",
+      "label": "Gọi use case"
+    },
+    {
+      "id": "ports",
+      "from": "infra",
+      "to": "core",
+      "label": "Implement ports"
+    },
+    {
+      "id": "agent-usecases",
+      "from": "agent",
+      "to": "infra",
+      "label": "Adapter dependency"
+    },
+    {
+      "id": "bootstrap",
+      "from": "presentation",
+      "to": "agent",
+      "label": "Boot includes"
+    },
+    {
+      "id": "io",
+      "from": "infra",
+      "to": "stores",
+      "label": "I/O adapters"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Một modular monolith",
+      "items": [
+        "Bốn Gradle modules được đóng gói trong một Boot app.",
+        "kg-agent không phải worker service deploy riêng.",
+        "Domain không phụ thuộc Spring; application dùng compileOnly annotations."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Không nhầm dependency với network",
+      "items": [
+        "Mũi tên ở đây là dependency/call của code.",
+        "Presentation cũng includes infrastructure để lắp ghép runtime.",
+        "Port abstraction giúp thay adapter và kiểm thử use case."
+      ]
+    }
+  ]
+}

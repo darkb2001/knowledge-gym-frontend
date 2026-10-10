@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Knowledge Gym · Refresh rotation & rolling session",
+    "output": ".archify/architecture-knowledge-gym-20261010-223040/refresh.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/darkb2001/knowledge-gym.git",
+      "revision": "b1d6c34af8438edcd60ad3f44b4858d56555ea5a",
+      "provider": "github",
+      "link_mode": "web"
+    },
+    "viewBox": [
+      1080,
+      690
+    ],
+    "column_fit": "spread"
+  },
+  "participants": [
+    {
+      "id": "browser",
+      "type": "frontend",
+      "label": "Browser",
+      "sublabel": "Cookie được gửi tự động",
+      "sources": [
+        {
+          "path": "kg-presentation/src/main/java/com/knowledgegym/presentation/rest/auth/AuthController.java",
+          "line": 110,
+          "end_line": 131
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "type": "security",
+      "label": "Refresh API",
+      "sublabel": "Verify JWT + rotate",
+      "sources": [
+        {
+          "path": "kg-core/src/main/java/com/knowledgegym/identity/application/RefreshTokenUseCase.java",
+          "line": 1,
+          "end_line": 117
+        }
+      ]
+    },
+    {
+      "id": "redis",
+      "type": "database",
+      "label": "Redis",
+      "sublabel": "Revoked / blacklist / active",
+      "sources": [
+        {
+          "path": "kg-infrastructure/src/main/java/com/knowledgegym/infrastructure/security/RedisRefreshTokenCacheAdapter.java",
+          "line": 1,
+          "end_line": 64
+        }
+      ]
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "PostgreSQL",
+      "sublabel": "Fallback + CAS transaction",
+      "sources": [
+        {
+          "path": "kg-core/src/main/java/com/knowledgegym/identity/application/RefreshTokenUseCase.java",
+          "line": 1,
+          "end_line": 117
+        }
+      ]
+    }
+  ],
+  "messages": [
+    {
+      "id": "request",
+      "from": "browser",
+      "to": "api",
+      "y": 170,
+      "label": "POST /auth/refresh + cookie",
+      "variant": "emphasis"
+    },
+    {
+      "id": "policy",
+      "from": "api",
+      "to": "redis",
+      "y": 215,
+      "label": "Kiểm tra revoked family / blacklist",
+      "variant": "security"
+    },
+    {
+      "id": "lookup",
+      "from": "api",
+      "to": "redis",
+      "y": 260,
+      "label": "Lookup SHA-256 hash"
+    },
+    {
+      "id": "fallback",
+      "from": "api",
+      "to": "db",
+      "y": 305,
+      "label": "Nếu cache miss: tìm audit chưa revoked"
+    },
+    {
+      "id": "warm",
+      "from": "api",
+      "to": "redis",
+      "y": 350,
+      "label": "Nếu PG tìm thấy: dựng lại active cache"
+    },
+    {
+      "id": "account",
+      "from": "api",
+      "to": "db",
+      "y": 395,
+      "label": "Đọc user: blocked / verified / role"
+    },
+    {
+      "id": "rotate",
+      "from": "api",
+      "to": "db",
+      "y": 440,
+      "label": "Insert mới + CAS revoke cũ / replaced_by"
+    },
+    {
+      "id": "cache-new",
+      "from": "api",
+      "to": "redis",
+      "y": 485,
+      "label": "Sau CAS thắng: blacklist cũ + store mới"
+    },
+    {
+      "id": "result",
+      "from": "api",
+      "to": "browser",
+      "y": 530,
+      "label": "Access mới 15m + refresh mới 7d · cùng family",
+      "variant": "return"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Vì sao hơn một tuần?",
+      "items": [
+        "Mỗi rotation đặt exp = now + 7 ngày; cookie cũng Max-Age 7 ngày.",
+        "Không có absolute family lifetime trong use case này.",
+        "Cache miss có PG fallback nhưng Redis vẫn phải dùng được."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Nhánh lỗi cần phân biệt",
+      "items": [
+        "JWT expired/missing, blocked, unverified hoặc family revoked: reject.",
+        "CAS loser trả 401, không gọi revokeFamily.",
+        "Reuse branch gọi revokeFamily; cần kiểm chứng rollback của transaction."
+      ]
+    }
+  ]
+}

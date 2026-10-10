@@ -1,0 +1,83 @@
+{
+  "generatedAt": "2026-10-10T15:51:37.778Z",
+  "evidence": "Repository snapshot; not live production telemetry",
+  "artifacts": [
+    {
+      "slug": "deployment",
+      "sha256": "b2109bf2624e60f3c2732438f9f1d99a63e6e4313e2de6be59059fec9fda1415",
+      "bytes": 769610,
+      "gates": {
+        "validate": "pass",
+        "deliver": "pass",
+        "check": "pass",
+        "browser-check": "pass"
+      }
+    },
+    {
+      "slug": "layers",
+      "sha256": "f63ce2ef2ff95c29dfbc8bf2045618af4e965fb6bdaa8bed7c6efd3b1afc2433",
+      "bytes": 753238,
+      "gates": {
+        "validate": "pass",
+        "deliver": "pass",
+        "check": "pass",
+        "browser-check": "pass"
+      }
+    },
+    {
+      "slug": "async",
+      "sha256": "068e6701c228303f9430920dacc4cb23573a8daf93b8d84ad76a9b104ee8b436",
+      "bytes": 758293,
+      "gates": {
+        "validate": "pass",
+        "deliver": "pass",
+        "check": "pass",
+        "browser-check": "pass"
+      }
+    },
+    {
+      "slug": "password",
+      "sha256": "cfdc59b866eab61cf279b17dfcc05857ae9ac2152f1e2ba2f16dd8896ddb8dc6",
+      "bytes": 752495,
+      "gates": {
+        "validate": "pass",
+        "deliver": "pass",
+        "check": "pass",
+        "browser-check": "pass"
+      }
+    },
+    {
+      "slug": "google",
+      "sha256": "8f60386ed96ded87b18ad84d1bcc5eb438e3bd61abaa2a12200b3d24d298d962",
+      "bytes": 755201,
+      "gates": {
+        "validate": "pass",
+        "deliver": "pass",
+        "check": "pass",
+        "browser-check": "pass"
+      }
+    },
+    {
+      "slug": "refresh",
+      "sha256": "86ff2b1bdd2fc2343a6c39016df3b2926b9423f40ff0df4f8d68c0fff6069ef6",
+      "bytes": 754839,
+      "gates": {
+        "validate": "pass",
+        "deliver": "pass",
+        "check": "pass",
+        "browser-check": "pass"
+      }
+    },
+    {
+      "slug": "sessions",
+      "sha256": "534aaab10454cf4cf7b8e12805f46c61108b5c99afda301a120c18c260f98efa",
+      "bytes": 757205,
+      "gates": {
+        "validate": "pass",
+        "deliver": "pass",
+        "check": "pass",
+        "browser-check": "pass"
+      }
+    }
+  ]
+}

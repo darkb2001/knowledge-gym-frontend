@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Knowledge Gym · Phiên theo refresh-token family",
+    "output": ".archify/architecture-knowledge-gym-20261010-223040/sessions.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/darkb2001/knowledge-gym.git",
+      "revision": "b1d6c34af8438edcd60ad3f44b4858d56555ea5a",
+      "provider": "github",
+      "link_mode": "web"
+    }
+  },
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "Một user",
+      "sublabel": "Không phải hardware fingerprint",
+      "pos": [
+        370,
+        40
+      ],
+      "size": [
+        220,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-core/src/main/java/com/knowledgegym/identity/application/SessionManagementUseCase.java",
+          "line": 41,
+          "end_line": 101
+        }
+      ]
+    },
+    {
+      "id": "family-a",
+      "type": "security",
+      "label": "Family A",
+      "sublabel": "Login trình duyệt A",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        220,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-core/src/main/java/com/knowledgegym/identity/application/LoginUseCase.java",
+          "line": 36,
+          "end_line": 71
+        }
+      ]
+    },
+    {
+      "id": "family-b",
+      "type": "security",
+      "label": "Family B",
+      "sublabel": "Login trình duyệt B",
+      "pos": [
+        700,
+        260
+      ],
+      "size": [
+        220,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-core/src/main/java/com/knowledgegym/identity/application/LoginUseCase.java",
+          "line": 36,
+          "end_line": 71
+        }
+      ]
+    },
+    {
+      "id": "tokens-a",
+      "type": "database",
+      "label": "Chuỗi token A",
+      "sublabel": "Rotate giữ fid · đổi jti / hash",
+      "pos": [
+        40,
+        480
+      ],
+      "size": [
+        220,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-core/src/main/java/com/knowledgegym/identity/application/RefreshTokenUseCase.java",
+          "line": 42,
+          "end_line": 115
+        }
+      ]
+    },
+    {
+      "id": "tokens-b",
+      "type": "database",
+      "label": "Chuỗi token B",
+      "sublabel": "IP + User-Agent là metadata",
+      "pos": [
+        700,
+        480
+      ],
+      "size": [
+        220,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-core/src/main/java/com/knowledgegym/identity/application/RefreshTokenUseCase.java",
+          "line": 42,
+          "end_line": 115
+        }
+      ]
+    },
+    {
+      "id": "cutoff",
+      "type": "security",
+      "label": "User-level cutoff",
+      "sublabel": "tokens_invalid_before",
+      "pos": [
+        370,
+        710
+      ],
+      "size": [
+        220,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-infrastructure/src/main/java/com/knowledgegym/infrastructure/security/JdbcAccessTokenGuard.java",
+          "line": 22,
+          "end_line": 41
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "login-a",
+      "from": "user",
+      "to": "family-a",
+      "label": "Login tạo UUID"
+    },
+    {
+      "id": "login-b",
+      "from": "user",
+      "to": "family-b",
+      "label": "Login tạo UUID"
+    },
+    {
+      "id": "rotate-a",
+      "from": "family-a",
+      "to": "tokens-a",
+      "label": "Refresh cùng family"
+    },
+    {
+      "id": "rotate-b",
+      "from": "family-b",
+      "to": "tokens-b",
+      "label": "Refresh cùng family"
+    },
+    {
+      "id": "revoke-a",
+      "from": "tokens-a",
+      "to": "cutoff",
+      "label": "Logout cắt access"
+    },
+    {
+      "id": "revoke-b",
+      "from": "tokens-b",
+      "to": "cutoff",
+      "label": "Logout cắt access"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Revoke có hai phạm vi",
+      "items": [
+        "Refresh chỉ revoke family được chọn; family khác có thể refresh lại.",
+        "Access cutoff ở cấp user: access cũ ở mọi thiết bị bị từ chối.",
+        "Access JWT không mang fid; không phải revoke access riêng từng device."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Metadata không phải định danh",
+      "items": [
+        "Hai tab cùng browser thường chia sẻ cookie; không phải hai thiết bị độc lập.",
+        "Đổi IP không tự tạo phiên mới; login lại tạo family mới.",
+        "lastSeen là lần rotate; query active rows không phản ánh mọi click hay login gốc."
+      ]
+    }
+  ]
+}

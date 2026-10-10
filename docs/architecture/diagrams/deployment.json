@@ -1,0 +1,347 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Knowledge Gym · Kiến trúc triển khai",
+    "output": ".archify/architecture-knowledge-gym-20261010-223040/deployment.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/darkb2001/knowledge-gym.git",
+      "revision": "b1d6c34af8438edcd60ad3f44b4858d56555ea5a",
+      "provider": "github",
+      "link_mode": "web"
+    }
+  },
+  "components": [
+    {
+      "id": "browser",
+      "type": "external",
+      "label": "Trình duyệt",
+      "sublabel": "Frontend được host riêng",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "infra/nginx.prod.conf",
+          "line": 1,
+          "end_line": 153
+        }
+      ]
+    },
+    {
+      "id": "edge",
+      "type": "cloud",
+      "label": "Cloudflare Tunnel",
+      "sublabel": "Ingress qua cloudflared",
+      "pos": [
+        339.2,
+        260
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "docker-compose.prod.yml",
+          "line": 1,
+          "end_line": 8
+        }
+      ]
+    },
+    {
+      "id": "nginx",
+      "type": "security",
+      "label": "Nginx 1.27",
+      "sublabel": "Rate limit + reverse proxy",
+      "pos": [
+        638.4,
+        260
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "infra/nginx.prod.conf",
+          "line": 1,
+          "end_line": 153
+        }
+      ]
+    },
+    {
+      "id": "app",
+      "type": "backend",
+      "label": "Spring Boot 4.1.1",
+      "sublabel": "Một runtime · /api/v1",
+      "pos": [
+        638.4,
+        490
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "gradle/libs.versions.toml",
+          "line": 1,
+          "end_line": 107
+        },
+        {
+          "path": "docker-compose.prod.yml",
+          "line": 50,
+          "end_line": 176
+        }
+      ]
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "PostgreSQL 16",
+      "sublabel": "Dữ liệu gốc + outbox",
+      "pos": [
+        339.2,
+        490
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "docker-compose.prod.yml",
+          "line": 177,
+          "end_line": 203
+        }
+      ]
+    },
+    {
+      "id": "redis",
+      "type": "database",
+      "label": "Redis 7",
+      "sublabel": "Refresh hash + blacklist",
+      "pos": [
+        937.6,
+        490
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-infrastructure/src/main/java/com/knowledgegym/infrastructure/security/RedisRefreshTokenCacheAdapter.java",
+          "line": 1,
+          "end_line": 64
+        }
+      ]
+    },
+    {
+      "id": "kafka",
+      "type": "messagebus",
+      "label": "Kafka 3.8.1",
+      "sublabel": "Event bus · bật theo flag",
+      "pos": [
+        339.2,
+        730
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-infrastructure/src/main/java/com/knowledgegym/infrastructure/blog/OutboxKafkaPublisher.java",
+          "line": 1,
+          "end_line": 117
+        },
+        {
+          "path": "docker-compose.prod.yml",
+          "line": 231,
+          "end_line": 275
+        }
+      ]
+    },
+    {
+      "id": "es",
+      "type": "database",
+      "label": "Elasticsearch 9.1.5",
+      "sublabel": "Search index · có fallback",
+      "pos": [
+        638.4,
+        730
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-core/src/main/java/com/knowledgegym/search/application/GlobalSearchUseCase.java",
+          "line": 1,
+          "end_line": 85
+        },
+        {
+          "path": "docker-compose.prod.yml",
+          "line": 276,
+          "end_line": 317
+        }
+      ]
+    },
+    {
+      "id": "garage",
+      "type": "database",
+      "label": "Garage S3",
+      "sublabel": "Object storage nội bộ",
+      "pos": [
+        937.6,
+        730
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "docker-compose.prod.yml",
+          "line": 318,
+          "end_line": 348
+        }
+      ]
+    },
+    {
+      "id": "prom",
+      "type": "backend",
+      "label": "Prometheus",
+      "sublabel": "Scrape qua Nginx · 15s",
+      "pos": [
+        638.4,
+        40
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "infra/prometheus.yml",
+          "line": 1,
+          "end_line": 45
+        }
+      ]
+    },
+    {
+      "id": "grafana",
+      "type": "frontend",
+      "label": "Grafana 11.1",
+      "sublabel": "Đọc metrics Prometheus",
+      "pos": [
+        937.6,
+        40
+      ],
+      "size": [
+        190,
+        72
+      ],
+      "sources": [
+        {
+          "path": "docker-compose.prod.yml",
+          "line": 383,
+          "end_line": 406
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "entry",
+      "from": "browser",
+      "to": "edge",
+      "label": "HTTPS",
+      "variant": "emphasis"
+    },
+    {
+      "id": "tunnel",
+      "from": "edge",
+      "to": "nginx",
+      "label": "Loopback :80"
+    },
+    {
+      "id": "proxy",
+      "from": "nginx",
+      "to": "app",
+      "label": "HTTP :8080"
+    },
+    {
+      "id": "sql",
+      "from": "app",
+      "to": "db",
+      "label": "SQL / JDBC"
+    },
+    {
+      "id": "cache",
+      "from": "app",
+      "to": "redis",
+      "label": "Redis / TTL"
+    },
+    {
+      "id": "index",
+      "from": "app",
+      "to": "es",
+      "label": "Search / relay"
+    },
+    {
+      "id": "events",
+      "from": "app",
+      "to": "kafka",
+      "label": "Outbox / async",
+      "variant": "dashed"
+    },
+    {
+      "id": "objects",
+      "from": "app",
+      "to": "garage",
+      "label": "S3 API"
+    },
+    {
+      "id": "scrape",
+      "from": "prom",
+      "to": "nginx",
+      "label": "Scrape metrics"
+    },
+    {
+      "id": "dashboards",
+      "from": "grafana",
+      "to": "prom",
+      "label": "PromQL"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Ranh giới ingress",
+      "items": [
+        "Chỉ Nginx publish 127.0.0.1:80; data services không publish port.",
+        "kg-internal không dùng internal:true vì app cần egress.",
+        "Đây là cấu hình repo, không phải kết quả kiểm tra production."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Dữ liệu & tùy chọn",
+      "items": [
+        "PostgreSQL là nguồn dữ liệu gốc; ES là read projection có fallback.",
+        "SMTP, AI writer, collector, Turnstile bật theo cấu hình.",
+        "Alertmanager thuộc ops stack riêng; không nằm trong compose app."
+      ]
+    }
+  ]
+}

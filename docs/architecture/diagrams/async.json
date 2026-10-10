@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Knowledge Gym · Outbox, event & search projection",
+    "output": ".archify/architecture-knowledge-gym-20261010-223040/async.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/darkb2001/knowledge-gym.git",
+      "revision": "b1d6c34af8438edcd60ad3f44b4858d56555ea5a",
+      "provider": "github",
+      "link_mode": "web"
+    }
+  },
+  "components": [
+    {
+      "id": "pg",
+      "type": "database",
+      "label": "PostgreSQL outbox",
+      "sublabel": "event_outbox · durable rows",
+      "pos": [
+        40,
+        300
+      ],
+      "size": [
+        220,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-infrastructure/src/main/java/com/knowledgegym/infrastructure/blog/OutboxKafkaPublisher.java",
+          "line": 37,
+          "end_line": 89
+        }
+      ]
+    },
+    {
+      "id": "relay",
+      "type": "backend",
+      "label": "Outbox relay",
+      "sublabel": "Claim TX ngắn · publish ngoài TX",
+      "pos": [
+        440,
+        300
+      ],
+      "size": [
+        220,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-infrastructure/src/main/java/com/knowledgegym/infrastructure/blog/OutboxKafkaPublisher.java",
+          "line": 37,
+          "end_line": 89
+        }
+      ]
+    },
+    {
+      "id": "kafka",
+      "type": "messagebus",
+      "label": "Kafka topics",
+      "sublabel": "blog.collected / blog.published",
+      "pos": [
+        840,
+        300
+      ],
+      "size": [
+        220,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-infrastructure/src/main/java/com/knowledgegym/infrastructure/blog/OutboxKafkaPublisher.java",
+          "line": 37,
+          "end_line": 89
+        }
+      ]
+    },
+    {
+      "id": "consumer",
+      "type": "backend",
+      "label": "kg-agent consumers",
+      "sublabel": "Score item / acknowledge publish",
+      "pos": [
+        840,
+        540
+      ],
+      "size": [
+        220,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-agent/src/main/java/com/knowledgegym/agent/CollectedItemConsumer.java",
+          "line": 10,
+          "end_line": 25
+        }
+      ]
+    },
+    {
+      "id": "search-relay",
+      "type": "backend",
+      "label": "Search relay",
+      "sublabel": "search_outbox · bulk / retry",
+      "pos": [
+        40,
+        60
+      ],
+      "size": [
+        220,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-infrastructure/src/main/java/com/knowledgegym/infrastructure/search/SearchIndexRelay.java",
+          "line": 77,
+          "end_line": 130
+        }
+      ]
+    },
+    {
+      "id": "index",
+      "type": "database",
+      "label": "Elasticsearch",
+      "sublabel": "Read projection · eventual",
+      "pos": [
+        440,
+        60
+      ],
+      "size": [
+        220,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-infrastructure/src/main/java/com/knowledgegym/infrastructure/search/SearchIndexRelay.java",
+          "line": 77,
+          "end_line": 130
+        }
+      ]
+    },
+    {
+      "id": "fallback",
+      "type": "backend",
+      "label": "GlobalSearchUseCase",
+      "sublabel": "ES lỗi → PostgreSQL",
+      "pos": [
+        440,
+        540
+      ],
+      "size": [
+        220,
+        72
+      ],
+      "sources": [
+        {
+          "path": "kg-core/src/main/java/com/knowledgegym/search/application/GlobalSearchUseCase.java",
+          "line": 67,
+          "end_line": 83
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "poll",
+      "from": "relay",
+      "to": "pg",
+      "label": "SKIP LOCKED"
+    },
+    {
+      "id": "publish",
+      "from": "relay",
+      "to": "kafka",
+      "label": "Bật Kafka flag",
+      "variant": "dashed"
+    },
+    {
+      "id": "consume",
+      "from": "kafka",
+      "to": "consumer",
+      "label": "KafkaListener"
+    },
+    {
+      "id": "claim-search",
+      "from": "search-relay",
+      "to": "pg",
+      "label": "Poll search_outbox"
+    },
+    {
+      "id": "bulk",
+      "from": "search-relay",
+      "to": "index",
+      "label": "Index / delete bulk"
+    },
+    {
+      "id": "fallback-read",
+      "from": "fallback",
+      "to": "pg",
+      "label": "PG khi ES lỗi"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Không đồng nhất hai outbox",
+      "items": [
+        "event_outbox phát Kafka; search_outbox đồng bộ ES trực tiếp.",
+        "Eventual consistency: write DB xong chưa chắc index đã cập nhật.",
+        "Relay retry có giới hạn; cần theo dõi failed/stuck rows."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Những gì chưa được hứa",
+      "items": [
+        "Không hứa exactly-once; redelivery cần idempotent consumer.",
+        "BlogPublishedConsumer hiện acknowledge/log, không phải fan-out email hoàn chỉnh.",
+        "AI jobs dùng queue trong PG và budget; không suy ra mọi job chạy qua Kafka."
+      ]
+    }
+  ]
+}

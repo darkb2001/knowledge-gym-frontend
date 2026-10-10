@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Knowledge Gym · Google OAuth2 authorization code",
+    "output": ".archify/architecture-knowledge-gym-20261010-223040/google.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/darkb2001/knowledge-gym.git",
+      "revision": "b1d6c34af8438edcd60ad3f44b4858d56555ea5a",
+      "provider": "github",
+      "link_mode": "web"
+    },
+    "viewBox": [
+      1080,
+      690
+    ],
+    "column_fit": "spread"
+  },
+  "participants": [
+    {
+      "id": "browser",
+      "type": "frontend",
+      "label": "Browser",
+      "sublabel": "Điều hướng toàn trang",
+      "sources": [
+        {
+          "path": "kg-infrastructure/src/main/java/com/knowledgegym/infrastructure/security/OAuth2SuccessHandler.java",
+          "line": 1,
+          "end_line": 190
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "type": "security",
+      "label": "Spring Security",
+      "sublabel": "OAuth2 + app JWT",
+      "sources": [
+        {
+          "path": "kg-infrastructure/src/main/java/com/knowledgegym/infrastructure/config/SecurityConfig.java",
+          "line": 1,
+          "end_line": 132
+        },
+        {
+          "path": "kg-infrastructure/src/main/java/com/knowledgegym/infrastructure/security/OAuth2SuccessHandler.java",
+          "line": 1,
+          "end_line": 190
+        }
+      ]
+    },
+    {
+      "id": "google",
+      "type": "external",
+      "label": "Google",
+      "sublabel": "Authorization + user info",
+      "sources": [
+        {
+          "path": "kg-presentation/src/main/resources/application.yml",
+          "line": 1,
+          "end_line": 258
+        }
+      ]
+    },
+    {
+      "id": "stores",
+      "type": "database",
+      "label": "PG + Redis",
+      "sublabel": "User + refresh hash",
+      "sources": [
+        {
+          "path": "kg-infrastructure/src/main/java/com/knowledgegym/infrastructure/security/OAuth2SuccessHandler.java",
+          "line": 1,
+          "end_line": 190
+        }
+      ]
+    }
+  ],
+  "messages": [
+    {
+      "id": "start",
+      "from": "browser",
+      "to": "api",
+      "y": 170,
+      "label": "GET /oauth2/authorization/google",
+      "variant": "emphasis"
+    },
+    {
+      "id": "request-cookie",
+      "from": "api",
+      "to": "browser",
+      "y": 215,
+      "label": "kg_oauth_req · AES-GCM · 300s · Lax",
+      "variant": "return"
+    },
+    {
+      "id": "navigate",
+      "from": "browser",
+      "to": "google",
+      "y": 260,
+      "label": "Redirect authorization + state"
+    },
+    {
+      "id": "callback",
+      "from": "google",
+      "to": "browser",
+      "y": 305,
+      "label": "Redirect callback với code + state",
+      "variant": "return"
+    },
+    {
+      "id": "return-code",
+      "from": "browser",
+      "to": "api",
+      "y": 350,
+      "label": "GET /login/oauth2/code/google + cookie"
+    },
+    {
+      "id": "exchange",
+      "from": "api",
+      "to": "google",
+      "y": 395,
+      "label": "Spring đổi code + lấy user info",
+      "variant": "security"
+    },
+    {
+      "id": "identity",
+      "from": "api",
+      "to": "stores",
+      "y": 440,
+      "label": "Verified email / sub; không silent-link LOCAL"
+    },
+    {
+      "id": "issue",
+      "from": "api",
+      "to": "stores",
+      "y": 485,
+      "label": "Tạo app JWT + family; lưu refresh hash"
+    },
+    {
+      "id": "redirect",
+      "from": "api",
+      "to": "browser",
+      "y": 530,
+      "label": "Set refresh cookie + redirect FE #accessToken",
+      "variant": "return"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "OAuth token khác app token",
+      "items": [
+        "Google xác minh danh tính; API của app dùng JWT do app phát.",
+        "Request cookie mã hóa state và attributes; xóa khi callback.",
+        "Repository có thể lưu code_verifier nếu Spring cung cấp; không suy ra PKCE luôn bật."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Hoàn tất ở frontend",
+      "items": [
+        "FE đọc fragment, xóa URL bằng replaceState, giữ access trong memory.",
+        "Nếu fragment thiếu nhưng có ?oauth: dùng refresh cookie fallback.",
+        "verifySession gọi /users/me; API vẫn là nơi quyết định quyền."
+      ]
+    }
+  ]
+}

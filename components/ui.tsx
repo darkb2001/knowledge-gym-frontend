@@ -34,7 +34,7 @@ function Brand() {
 function Navigation({ user, onNavigate }: { user: User | null; onNavigate?: () => void }) {
   const pathname = usePathname();
   const { t, locale } = useLocale();
-  const adminLabels: Record<string, string> = { "/admin/content": "Content library", "/admin/blog": "Blog & AI drafts", "/admin/users": "Accounts, comments & learning", "/admin/knowledge": "AI knowledge intake", "/admin/knowledge/drafts": "AI learning drafts", "/admin/system": "System administration" };
+  const adminLabels: Record<string, string> = { "/admin/content": "Content library", "/admin/blog": "Blog & AI drafts", "/admin/users": "Accounts, comments & learning", "/admin/knowledge": "AI knowledge intake", "/admin/knowledge/drafts": "AI learning drafts", "/admin/system": "System administration", "/admin/architecture": "Architecture & auth flows" };
   const admin = user?.role === "ADMIN" || user?.role === "ROLE_ADMIN";
   const links = (items: typeof navigation) => items.map(({ href, label, icon: Icon }) => {
     const active = (pathname === href || pathname.startsWith(href + "/")) && !items.some(item => item.href !== href && item.href.startsWith(href + "/") && (pathname === item.href || pathname.startsWith(item.href + "/")));
@@ -60,7 +60,10 @@ function Navigation({ user, onNavigate }: { user: User | null; onNavigate?: () =
     },
     {
       label: "Hệ thống",
-      items: [{ href: "/admin/system", label: "Hệ thống & tìm kiếm", icon: GearSix }],
+      items: [
+        { href: "/admin/system", label: "Hệ thống & tìm kiếm", icon: GearSix },
+        { href: "/admin/architecture", label: "Kiến trúc & xác thực", icon: Stack },
+      ],
     },
   ];
   return <nav aria-label={t("Điều hướng chính")} className="space-y-1">
