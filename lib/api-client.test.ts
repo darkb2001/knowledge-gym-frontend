@@ -82,6 +82,58 @@ describe("api-client refresh coalescing", () => {
     await expect(ensureAccessToken()).resolves.toBe(false);
     expect(getAccessToken()).toBeNull();
   });
+
+  it("runs refresh inside the cross-tab Web Lock and serializes waiters", async () => {
+    const fetchMock = vi.mocked(fetch);
+    fetchMock.mockResolvedValueOnce(
+      new Response(JSON.stringify({ accessToken: "tok-locked" }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }),
+    );
+
+    const lockNames: string[] = [];
+    let active = 0;
+    let maxActive = 0;
+    vi.stubGlobal("navigator", {
+      locks: {
+        async request<T>(name: string, callback: () => Promise<T>): Promise<T> {
+          lockNames.push(name);
+          active += 1;
+          maxActive = Math.max(maxActive, active);
+          try {
+            return await callback();
+          } finally {
+            active -= 1;
+          }
+        },
+      },
+    });
+
+    const [a, b] = await Promise.all([ensureAccessToken(), ensureAccessToken()]);
+
+    expect(a).toBe(true);
+    expect(b).toBe(true);
+    expect(lockNames).toEqual(["kg-auth-refresh"]);
+    expect(maxActive).toBe(1);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("falls back to a direct refresh when Web Locks is unavailable", async () => {
+    const fetchMock = vi.mocked(fetch);
+    fetchMock.mockResolvedValueOnce(
+      new Response(JSON.stringify({ accessToken: "tok-nolock" }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }),
+    );
+    // navigator tồn tại nhưng không có locks (Safari cũ / môi trường SSR).
+    vi.stubGlobal("navigator", {});
+
+    await expect(ensureAccessToken()).resolves.toBe(true);
+    expect(getAccessToken()).toBe("tok-nolock");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe("applyOAuthHash", () => {

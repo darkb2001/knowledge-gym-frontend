@@ -21,6 +21,9 @@ let sessionVersion = 0;
 let logoutBlocked = false;
 const LOGOUT_INTENT_KEY = "kg.logout-intent";
 
+/** Tên lock dùng chung giữa các tab cùng origin (Web Locks API). */
+const REFRESH_LOCK_NAME = "kg-auth-refresh";
+
 function hasLogoutIntent(): boolean {
   try {
     return logoutBlocked || hasLogoutIntentCookie() || (typeof localStorage !== "undefined" && localStorage.getItem(LOGOUT_INTENT_KEY) === "1");
@@ -171,6 +174,27 @@ function bounceToLogin(): void {
 }
 
 /**
+ * Web Locks API: serializes refresh ACROSS TABS of the same origin.
+ *
+ * `refreshInFlight` only coalesces within one tab's module state. Without a cross-tab lock, three
+ * tabs whose access token expired at the same moment all POST /auth/refresh with the same cookie;
+ * the backend CAS lets one win and the losers get 401 — which the UI reads as "session dead" and
+ * bounces to /login. Holding one lock means tab B refreshes only after tab A finished, so it sends
+ * the *rotated* cookie and succeeds.
+ *
+ * Falls back to running the task directly when Web Locks is unavailable (older browsers, SSR, tests).
+ */
+type LockManagerLike = {
+  request: <T>(name: string, callback: () => Promise<T>) => Promise<T>;
+};
+
+function withRefreshLock<T>(task: () => Promise<T>): Promise<T> {
+  const locks = (globalThis as { navigator?: { locks?: LockManagerLike } }).navigator?.locks;
+  if (!locks || typeof locks.request !== "function") return task();
+  return locks.request(REFRESH_LOCK_NAME, task);
+}
+
+/**
  * @returns `true` if a new access token was stored.
  * @returns `false` if the refresh cookie is definitively invalid (401/403 or missing token).
  * @throws {RefreshUnreachableError} on network failure / abort.
@@ -180,44 +204,61 @@ async function tryRefresh(): Promise<boolean> {
   if (hasLogoutIntent()) { clearSession(); return false; }
   if (refreshInFlight) return refreshInFlight;
   const version = sessionVersion;
+  // Ảnh chụp token lúc bắt đầu chờ lock: tab khác có thể đã refresh xong trước khi tới lượt ta.
+  const tokenBeforeLock = accessToken;
   refreshInFlight = (async () => {
     try {
-      const res = await fetch(`${API_BASE}/auth/refresh`, {
-        method: "POST",
-        credentials: "include",
+      return await withRefreshLock(() => {
+        if (version !== sessionVersion || hasLogoutIntent()) return Promise.resolve(false);
+        if (accessToken !== tokenBeforeLock) return Promise.resolve(true);
+        return refreshUnderLock(version);
       });
-      if (version !== sessionVersion || hasLogoutIntent()) return false;
-      // Definitive auth failure only — cookie gone / revoked / expired.
-      if (res.status === 401 || res.status === 403) {
-        clearSession();
-        return false;
-      }
-      if (!res.ok) {
-        // 5xx / 429 / etc. — do not wipe the in-memory JWT; caller can retry later.
-        throw new ApiError(res.status, await parseProblem(res));
-      }
-      const data = (await res.json()) as { accessToken?: string };
-      if (version !== sessionVersion || hasLogoutIntent()) return false;
-      if (!data.accessToken) {
-        clearSession();
-        return false;
-      }
-      setAccessToken(data.accessToken);
-      // Refresh thành công ⇒ phiên còn sống: dựng lại marker cho middleware (tab reload làm mất state).
-      markSessionAlive();
-      return true;
-    } catch (err) {
-      if (version !== sessionVersion || hasLogoutIntent()) return false;
-      if (err instanceof ApiError) throw err;
-      // TypeError (failed to fetch), AbortError, DNS, CORS, etc.
-      throw new RefreshUnreachableError(
-        err instanceof Error ? err.message : undefined,
-      );
     } finally {
       if (version === sessionVersion) refreshInFlight = null;
     }
   })();
   return refreshInFlight;
+}
+
+/** Chạy bên trong cross-tab lock. Không được gọi trực tiếp ngoài {@link tryRefresh}. */
+async function refreshUnderLock(version: number): Promise<boolean> {
+  if (version !== sessionVersion || hasLogoutIntent()) return false;
+  // KHÔNG kiểm tra hasUsableAccessToken() ở đây: luồng gọi phổ biến là "vừa nhận 401 từ server",
+  // tức token trong bộ nhớ vẫn còn hạn theo đồng hồ máy nhưng đã bị backend từ chối. Bỏ qua refresh
+  // ở bước này sẽ khiến request retry lại đúng token chết đó.
+  try {
+    const res = await fetch(`${API_BASE}/auth/refresh`, {
+      method: "POST",
+      credentials: "include",
+    });
+    if (version !== sessionVersion || hasLogoutIntent()) return false;
+    // Definitive auth failure only — cookie gone / revoked / expired.
+    if (res.status === 401 || res.status === 403) {
+      clearSession();
+      return false;
+    }
+    if (!res.ok) {
+      // 5xx / 429 / etc. — do not wipe the in-memory JWT; caller can retry later.
+      throw new ApiError(res.status, await parseProblem(res));
+    }
+    const data = (await res.json()) as { accessToken?: string };
+    if (version !== sessionVersion || hasLogoutIntent()) return false;
+    if (!data.accessToken) {
+      clearSession();
+      return false;
+    }
+    setAccessToken(data.accessToken);
+    // Refresh thành công ⇒ phiên còn sống: dựng lại marker cho middleware (tab reload làm mất state).
+    markSessionAlive();
+    return true;
+  } catch (err) {
+    if (version !== sessionVersion || hasLogoutIntent()) return false;
+    if (err instanceof ApiError) throw err;
+    // TypeError (failed to fetch), AbortError, DNS, CORS, etc.
+    throw new RefreshUnreachableError(
+      err instanceof Error ? err.message : undefined,
+    );
+  }
 }
 
 /**

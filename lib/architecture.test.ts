@@ -35,7 +35,7 @@ describe("architecture documentation snapshot", () => {
   });
 
   it("documents actual storage and includes all domains", () => {
-    expect(AUTH_SNAPSHOT).toEqual({ accessMinutes: 15, refreshDays: 7, oauthRequestSeconds: 300 });
+    expect(AUTH_SNAPSHOT).toEqual({ accessMinutes: 15, refreshDays: 7, absoluteSessionDays: 30, oauthRequestSeconds: 300 });
     expect(storage.find(item => item.name === "Access JWT")?.location[1]).toContain("memory");
     expect(storage.find(item => item.name === "Refresh JWT")?.location[1]).toContain("HttpOnly");
     expect(domains.map(item => item.name)).toContain("challenge schema");
@@ -46,8 +46,9 @@ describe("architecture documentation snapshot", () => {
     const html = renderToStaticMarkup(createElement(LocaleProvider, null, createElement(ArchitectureWorkspace)));
     for (const id of ["system-diagrams", "technical-roles", "domain-map", "token-storage", "session-lifetime", "device-sessions", "source-evidence"]) expect(html).toContain(`id="${id}"`);
     expect(html).toContain('sandbox="allow-scripts allow-downloads allow-popups"');
-    expect(html).toContain("không có cross-tab lock");
-    expect(html).toContain("absolute family expiry");
+    expect(html).toContain("Web Locks API");
+    expect(html).toContain("absolute-family-ttl");
+    expect(html).toContain("OriginGuardFilter");
   });
 });
 
@@ -62,5 +63,12 @@ describe("rolling session teaching example", () => {
   it("ignores future refreshes and does not resurrect a token at its expiry", () => {
     expect(rollingSessionExample([6, 12, 18], 10)).toEqual({ lastIssuedDay: 6, expiresDay: 13, expired: false });
     expect(rollingSessionExample([7], 7).expired).toBe(true);
+  });
+  it("caps a continuously refreshed session at the absolute limit", () => {
+    // Refresh đúng hạn mỗi 6 ngày vẫn không sống quá absoluteSessionDays kể từ login đầu.
+    const everySixDays = Array.from({ length: 8 }, (_, index) => index * 6).slice(1);
+    const result = rollingSessionExample(everySixDays, 40);
+    expect(result.expiresDay).toBe(AUTH_SNAPSHOT.absoluteSessionDays);
+    expect(result.expired).toBe(true);
   });
 });
