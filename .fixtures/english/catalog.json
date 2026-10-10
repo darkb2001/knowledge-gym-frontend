@@ -3535,6 +3535,1054 @@
     }
   },
   {
+    "id": "hcmus-grammar-study-v1",
+    "skill": "WRITING",
+    "title": "Sentence completion: study and planning",
+    "focus": "HCMUS original preparation · 15 questions",
+    "minutes": 15,
+    "minimumWords": 0,
+    "prompt": "Choose the best answer. Original practice aligned to current HCMUS task types; not a past examination paper, topic forecast or calibrated assessment. Explanations appear after submission.",
+    "passage": "",
+    "audioPath": "",
+    "transcript": "",
+    "items": [
+      {
+        "id": "x1",
+        "stem": "By the time we arrived yesterday, the talk ___.",
+        "options": [
+          "ends",
+          "had ended",
+          "has ending",
+          "will end"
+        ],
+        "correctIndex": 1,
+        "explanation": "The talk ended before a past arrival, so the earlier event takes past perfect."
+      },
+      {
+        "id": "x2",
+        "stem": "The student ___ notebook was missing contacted reception.",
+        "options": [
+          "which",
+          "who",
+          "whose",
+          "where"
+        ],
+        "correctIndex": 2,
+        "explanation": "Whose introduces possession: the student's notebook."
+      },
+      {
+        "id": "x3",
+        "stem": "Please turn off the lights before ___ the room.",
+        "options": [
+          "leaving",
+          "leave",
+          "left",
+          "to leaving"
+        ],
+        "correctIndex": 0,
+        "explanation": "Before as a preposition can be followed by the -ing form."
+      },
+      {
+        "id": "x4",
+        "stem": "If the office were open now, I ___ the form there.",
+        "options": [
+          "submit",
+          "submitted",
+          "had submit",
+          "would submit"
+        ],
+        "correctIndex": 3,
+        "explanation": "An unreal present condition uses would plus the base verb."
+      },
+      {
+        "id": "x5",
+        "stem": "The new timetable ___ on the noticeboard every Monday.",
+        "options": [
+          "posts",
+          "is posted",
+          "is posting",
+          "has posting"
+        ],
+        "correctIndex": 1,
+        "explanation": "A timetable receives the action: present-simple passive is is posted."
+      },
+      {
+        "id": "x6",
+        "stem": "There are ___ chairs for all twelve participants; nobody needs to stand.",
+        "options": [
+          "enough",
+          "much",
+          "every",
+          "a little"
+        ],
+        "correctIndex": 0,
+        "explanation": "Enough expresses sufficient quantity before a plural noun."
+      },
+      {
+        "id": "x7",
+        "stem": "I look forward to ___ from you.",
+        "options": [
+          "hear",
+          "heard",
+          "hearing",
+          "have hear"
+        ],
+        "correctIndex": 2,
+        "explanation": "To in look forward to is a preposition, followed by a gerund."
+      },
+      {
+        "id": "x8",
+        "stem": "The second route is not as long ___ the first.",
+        "options": [
+          "than",
+          "like",
+          "that",
+          "as"
+        ],
+        "correctIndex": 3,
+        "explanation": "The equal-comparison construction is as adjective as."
+      },
+      {
+        "id": "x9",
+        "stem": "No one was in the office ___ I called at noon yesterday.",
+        "options": [
+          "unless",
+          "when",
+          "despite",
+          "during"
+        ],
+        "correctIndex": 1,
+        "explanation": "When links the visit/call time with the past situation."
+      },
+      {
+        "id": "x10",
+        "stem": "The instructions were so clear ___ we finished without asking for help.",
+        "options": [
+          "that",
+          "than",
+          "as",
+          "for"
+        ],
+        "correctIndex": 0,
+        "explanation": "So adjective that introduces a result clause."
+      },
+      {
+        "id": "x11",
+        "stem": "She suggested ___ the survey on a smaller group first.",
+        "options": [
+          "test",
+          "to testing",
+          "testing",
+          "tested"
+        ],
+        "correctIndex": 2,
+        "explanation": "Suggest takes an -ing complement in this construction."
+      },
+      {
+        "id": "x12",
+        "stem": "The files must ___ before the computer is replaced.",
+        "options": [
+          "back up",
+          "backing up",
+          "backed up",
+          "be backed up"
+        ],
+        "correctIndex": 3,
+        "explanation": "Modal passive uses modal + be + past participle."
+      },
+      {
+        "id": "x13",
+        "stem": "I have not seen that lecturer ___ last semester.",
+        "options": [
+          "for",
+          "since",
+          "during",
+          "until"
+        ],
+        "correctIndex": 1,
+        "explanation": "Since marks the starting point of a period continuing to now."
+      },
+      {
+        "id": "x14",
+        "stem": "Although the room was small, ___ comfortable.",
+        "options": [
+          "it was",
+          "being",
+          "was it to",
+          "its"
+        ],
+        "correctIndex": 0,
+        "explanation": "The second clause needs its subject and finite verb."
+      },
+      {
+        "id": "x15",
+        "stem": "Would you mind ___ the window?",
+        "options": [
+          "close",
+          "to close",
+          "closing",
+          "closed"
+        ],
+        "correctIndex": 2,
+        "explanation": "Mind takes a gerund in a polite request."
+      }
+    ],
+    "checklist": [
+      "Use grammatical and contextual evidence.",
+      "Check distractors, not just the first familiar word.",
+      "Review errors after submission; correct counts are not an official weighted score."
+    ],
+    "parts": [],
+    "scope": "TASK_PRACTICE",
+    "curriculum": "HCMUS_PREPARATION",
+    "referenceResponse": null
+  },
+  {
+    "id": "hcmus-grammar-community-v1",
+    "skill": "WRITING",
+    "title": "Sentence completion: community and services",
+    "focus": "HCMUS original preparation · 15 questions",
+    "minutes": 15,
+    "minimumWords": 0,
+    "prompt": "Choose the best answer. Original practice aligned to current HCMUS task types; not a past examination paper, topic forecast or calibrated assessment. Explanations appear after submission.",
+    "passage": "",
+    "audioPath": "",
+    "transcript": "",
+    "items": [
+      {
+        "id": "x1",
+        "stem": "The appointment has been moved ___ Friday morning.",
+        "options": [
+          "at",
+          "by",
+          "to",
+          "since"
+        ],
+        "correctIndex": 2,
+        "explanation": "An appointment is moved to a new time or date."
+      },
+      {
+        "id": "x2",
+        "stem": "There is very ___ milk left; we should buy some.",
+        "options": [
+          "little",
+          "few",
+          "many",
+          "several"
+        ],
+        "correctIndex": 0,
+        "explanation": "Little expresses a small amount of an uncountable noun."
+      },
+      {
+        "id": "x3",
+        "stem": "This is the shop ___ I bought the replacement part.",
+        "options": [
+          "whose",
+          "whom",
+          "which it",
+          "where"
+        ],
+        "correctIndex": 3,
+        "explanation": "Where introduces the location of the purchase."
+      },
+      {
+        "id": "x4",
+        "stem": "Neither of these two answers ___ correct in formal written English.",
+        "options": [
+          "are",
+          "is",
+          "be",
+          "were"
+        ],
+        "correctIndex": 1,
+        "explanation": "Neither of takes a singular verb in the formal convention tested here."
+      },
+      {
+        "id": "x5",
+        "stem": "We avoided ___ during the busiest hour.",
+        "options": [
+          "travel",
+          "to travel",
+          "travelling",
+          "travelled"
+        ],
+        "correctIndex": 2,
+        "explanation": "Avoid takes an -ing complement."
+      },
+      {
+        "id": "x6",
+        "stem": "You ___ smoke here; smoking is prohibited.",
+        "options": [
+          "must not",
+          "need not",
+          "do not have to",
+          "may"
+        ],
+        "correctIndex": 0,
+        "explanation": "Must not expresses prohibition, not absence of necessity."
+      },
+      {
+        "id": "x7",
+        "stem": "The bag was ___ heavy for the child to lift.",
+        "options": [
+          "enough",
+          "so much",
+          "such",
+          "too"
+        ],
+        "correctIndex": 3,
+        "explanation": "Too adjective to expresses exceeding a practical limit."
+      },
+      {
+        "id": "x8",
+        "stem": "If she had brought the receipt, the shop ___ a refund yesterday.",
+        "options": [
+          "will offer",
+          "would have offered",
+          "offers",
+          "had offering"
+        ],
+        "correctIndex": 1,
+        "explanation": "An unreal past result takes would have + past participle."
+      },
+      {
+        "id": "x9",
+        "stem": "The road ___ when we drove past, so we took another route.",
+        "options": [
+          "is repairing",
+          "repairs",
+          "was being repaired",
+          "has repair"
+        ],
+        "correctIndex": 2,
+        "explanation": "The ongoing past action received by the road uses was being repaired."
+      },
+      {
+        "id": "x10",
+        "stem": "She asked me where I ___ the following day.",
+        "options": [
+          "would go",
+          "will I go",
+          "do I go",
+          "have went"
+        ],
+        "correctIndex": 0,
+        "explanation": "Reported future from a past reporting verb uses would in normal statement order."
+      },
+      {
+        "id": "x11",
+        "stem": "Despite ___ tired, he completed the form carefully.",
+        "options": [
+          "he was",
+          "was",
+          "to be",
+          "being"
+        ],
+        "correctIndex": 3,
+        "explanation": "Despite is a preposition, so being can introduce the adjective."
+      },
+      {
+        "id": "x12",
+        "stem": "The guide spoke slowly ___ everyone could follow the directions.",
+        "options": [
+          "because of",
+          "so that",
+          "in spite",
+          "instead"
+        ],
+        "correctIndex": 1,
+        "explanation": "So that introduces the intended result/purpose clause."
+      },
+      {
+        "id": "x13",
+        "stem": "Each participant ___ received a copy of the safety leaflet.",
+        "options": [
+          "have",
+          "are",
+          "has",
+          "were"
+        ],
+        "correctIndex": 2,
+        "explanation": "Each participant is singular and takes has."
+      },
+      {
+        "id": "x14",
+        "stem": "The more carefully you read, ___ mistakes you are likely to make.",
+        "options": [
+          "the fewer",
+          "the less",
+          "the little",
+          "the few"
+        ],
+        "correctIndex": 0,
+        "explanation": "The paired comparative uses fewer for countable mistakes."
+      },
+      {
+        "id": "x15",
+        "stem": "The technician advised us ___ the device until it had been checked.",
+        "options": [
+          "not use",
+          "do not using",
+          "to not used",
+          "not to use"
+        ],
+        "correctIndex": 3,
+        "explanation": "Advise someone not to do something is the required pattern."
+      }
+    ],
+    "checklist": [
+      "Use grammatical and contextual evidence.",
+      "Check distractors, not just the first familiar word.",
+      "Review errors after submission; correct counts are not an official weighted score."
+    ],
+    "parts": [],
+    "scope": "TASK_PRACTICE",
+    "curriculum": "HCMUS_PREPARATION",
+    "referenceResponse": null
+  },
+  {
+    "id": "hcmus-cloze-garden-v1",
+    "skill": "WRITING",
+    "title": "Cloze: a community garden",
+    "focus": "HCMUS original preparation · 10 questions",
+    "minutes": 12,
+    "minimumWords": 0,
+    "prompt": "Choose the best answer. Original practice aligned to current HCMUS task types; not a past examination paper, topic forecast or calibrated assessment. Explanations appear after submission.",
+    "passage": "A small community garden opened beside a library last year. Before planting, the organisers asked local residents (1) ___ they wanted to grow. Several people had never gardened before, (2) ___ the group offered an introductory session. Tools were kept in a locked cupboard and could be (3) ___ during supervised sessions. Each volunteer was responsible (4) ___ one small area, but members also helped each other. The team chose plants (5) ___ did not need much water. After three months, they compared their notes (6) ___ the original plan. Some plants grew well; others needed more shade. Instead of blaming volunteers, the organisers decided (7) ___ the planting arrangements. The garden has now become a place where neighbours can share practical (8) ___. Attendance is not compulsory, and members can choose sessions that fit their (9) ___. The group hopes to continue the project if enough people remain (10) ___ in it.\n",
+    "audioPath": "",
+    "transcript": "",
+    "items": [
+      {
+        "id": "x1",
+        "stem": "Gap 1",
+        "options": [
+          "what",
+          "which it",
+          "where",
+          "whose"
+        ],
+        "correctIndex": 0,
+        "explanation": "What introduces the object of wanted to grow."
+      },
+      {
+        "id": "x2",
+        "stem": "Gap 2",
+        "options": [
+          "although",
+          "unless",
+          "so",
+          "despite"
+        ],
+        "correctIndex": 2,
+        "explanation": "So connects the lack of experience with the resulting introductory session."
+      },
+      {
+        "id": "x3",
+        "stem": "Gap 3",
+        "options": [
+          "lent from",
+          "borrowed",
+          "spent",
+          "owed"
+        ],
+        "correctIndex": 1,
+        "explanation": "Tools temporarily used and returned are borrowed."
+      },
+      {
+        "id": "x4",
+        "stem": "Gap 4",
+        "options": [
+          "at",
+          "to",
+          "with",
+          "for"
+        ],
+        "correctIndex": 3,
+        "explanation": "The collocation is responsible for."
+      },
+      {
+        "id": "x5",
+        "stem": "Gap 5",
+        "options": [
+          "that",
+          "whom",
+          "where",
+          "whose"
+        ],
+        "correctIndex": 0,
+        "explanation": "That is the relative pronoun functioning as subject for plants."
+      },
+      {
+        "id": "x6",
+        "stem": "Gap 6",
+        "options": [
+          "of",
+          "by",
+          "with",
+          "from"
+        ],
+        "correctIndex": 2,
+        "explanation": "Compare one thing with another."
+      },
+      {
+        "id": "x7",
+        "stem": "Gap 7",
+        "options": [
+          "change",
+          "to change",
+          "changing",
+          "changed"
+        ],
+        "correctIndex": 1,
+        "explanation": "Decide takes an infinitive complement."
+      },
+      {
+        "id": "x8",
+        "stem": "Gap 8",
+        "options": [
+          "know",
+          "known",
+          "knowingly",
+          "knowledge"
+        ],
+        "correctIndex": 3,
+        "explanation": "Knowledge is the uncountable noun needed after practical."
+      },
+      {
+        "id": "x9",
+        "stem": "Gap 9",
+        "options": [
+          "schedule",
+          "weight",
+          "temperature",
+          "height"
+        ],
+        "correctIndex": 0,
+        "explanation": "Sessions fit a person's schedule."
+      },
+      {
+        "id": "x10",
+        "stem": "Gap 10",
+        "options": [
+          "interesting",
+          "interest",
+          "interested",
+          "interestingly"
+        ],
+        "correctIndex": 2,
+        "explanation": "People remain interested in a project."
+      }
+    ],
+    "checklist": [
+      "Use grammatical and contextual evidence.",
+      "Check distractors, not just the first familiar word.",
+      "Review errors after submission; correct counts are not an official weighted score."
+    ],
+    "parts": [],
+    "scope": "TASK_PRACTICE",
+    "curriculum": "HCMUS_PREPARATION",
+    "referenceResponse": null
+  },
+  {
+    "id": "hcmus-cloze-repair-v1",
+    "skill": "WRITING",
+    "title": "Cloze: learning through repair",
+    "focus": "HCMUS original preparation · 10 questions",
+    "minutes": 12,
+    "minimumWords": 0,
+    "prompt": "Choose the best answer. Original practice aligned to current HCMUS task types; not a past examination paper, topic forecast or calibrated assessment. Explanations appear after submission.",
+    "passage": "A repair workshop recently started offering evening sessions. Its organisers wanted to make the service available to people (1) ___ worked during the day. At first, they expected everyone to bring electrical equipment, (2) ___ many visitors arrived with torn bags or broken furniture instead. A volunteer asks each visitor to describe the problem before any work (3) ___. Safety is more important (4) ___ speed. Volunteers do not promise to repair every object; some items are too damaged to use (5) ___. Visitors are encouraged to watch so that they can learn (6) ___ the process. The team keeps a record of common problems and uses it to plan future training. Since the evening sessions began, more residents (7) ___ involved. The organisers are considering (8) ___ an extra session, but they first need enough volunteers. They believe that sharing skills can reduce waste and help people feel more (9) ___. However, the workshop is a community learning activity, not a guarantee that every repair will be (10) ___.\n",
+    "audioPath": "",
+    "transcript": "",
+    "items": [
+      {
+        "id": "x1",
+        "stem": "Gap 1",
+        "options": [
+          "whose",
+          "where",
+          "who",
+          "whom it"
+        ],
+        "correctIndex": 2,
+        "explanation": "Who introduces a relative clause about people."
+      },
+      {
+        "id": "x2",
+        "stem": "Gap 2",
+        "options": [
+          "but",
+          "because",
+          "unless",
+          "despite"
+        ],
+        "correctIndex": 0,
+        "explanation": "But contrasts the organisers' expectation with what visitors brought."
+      },
+      {
+        "id": "x3",
+        "stem": "Gap 3",
+        "options": [
+          "begin",
+          "beginning",
+          "to begin",
+          "begins"
+        ],
+        "correctIndex": 3,
+        "explanation": "Before introduces the point when work starts; work is singular here."
+      },
+      {
+        "id": "x4",
+        "stem": "Gap 4",
+        "options": [
+          "as",
+          "than",
+          "that",
+          "like"
+        ],
+        "correctIndex": 1,
+        "explanation": "A comparative adjective is followed by than."
+      },
+      {
+        "id": "x5",
+        "stem": "Gap 5",
+        "options": [
+          "safe",
+          "safety",
+          "safely",
+          "safer"
+        ],
+        "correctIndex": 2,
+        "explanation": "The adverb safely modifies use."
+      },
+      {
+        "id": "x6",
+        "stem": "Gap 6",
+        "options": [
+          "from",
+          "at",
+          "of",
+          "by it"
+        ],
+        "correctIndex": 0,
+        "explanation": "Learn from an experience or process."
+      },
+      {
+        "id": "x7",
+        "stem": "Gap 7",
+        "options": [
+          "becomes",
+          "was become",
+          "have becoming",
+          "have become"
+        ],
+        "correctIndex": 3,
+        "explanation": "Since the sessions began connects the change to now; residents is plural."
+      },
+      {
+        "id": "x8",
+        "stem": "Gap 8",
+        "options": [
+          "add",
+          "adding",
+          "to add",
+          "added"
+        ],
+        "correctIndex": 1,
+        "explanation": "Consider takes an -ing complement."
+      },
+      {
+        "id": "x9",
+        "stem": "Gap 9",
+        "options": [
+          "capability",
+          "capably",
+          "capable",
+          "capabilities"
+        ],
+        "correctIndex": 2,
+        "explanation": "Capable is an adjective describing increased ability."
+      },
+      {
+        "id": "x10",
+        "stem": "Gap 10",
+        "options": [
+          "successful",
+          "success",
+          "succeed",
+          "successfully"
+        ],
+        "correctIndex": 0,
+        "explanation": "Successful is the adjective complement after will be."
+      }
+    ],
+    "checklist": [
+      "Use grammatical and contextual evidence.",
+      "Check distractors, not just the first familiar word.",
+      "Review errors after submission; correct counts are not an official weighted score."
+    ],
+    "parts": [],
+    "scope": "TASK_PRACTICE",
+    "curriculum": "HCMUS_PREPARATION",
+    "referenceResponse": null
+  },
+  {
+    "id": "hcmus-vocabulary-context-v1",
+    "skill": "READING",
+    "title": "Vocabulary: context and word families",
+    "focus": "HCMUS original preparation · 10 questions",
+    "minutes": 10,
+    "minimumWords": 0,
+    "prompt": "Choose the best answer. Original practice aligned to current HCMUS task types; not a past examination paper, topic forecast or calibrated assessment. Explanations appear after submission.",
+    "passage": "",
+    "audioPath": "",
+    "transcript": "",
+    "items": [
+      {
+        "id": "x1",
+        "stem": "The museum offers free ___ to students on Wednesdays.",
+        "options": [
+          "advice",
+          "admission",
+          "equipment",
+          "permission slips only"
+        ],
+        "correctIndex": 1,
+        "explanation": "Admission means permission to enter a venue."
+      },
+      {
+        "id": "x2",
+        "stem": "We need a ___ explanation, not a description full of unfamiliar terms.",
+        "options": [
+          "crowded",
+          "broken",
+          "distant",
+          "straightforward"
+        ],
+        "correctIndex": 3,
+        "explanation": "Straightforward describes something clear and easy to follow."
+      },
+      {
+        "id": "x3",
+        "stem": "Please ___ your booking if you can no longer attend.",
+        "options": [
+          "cancel",
+          "borrow",
+          "raise",
+          "recognise"
+        ],
+        "correctIndex": 0,
+        "explanation": "Cancel means withdraw a booking or arrangement."
+      },
+      {
+        "id": "x4",
+        "stem": "The two accounts ___; one says Tuesday and the other says Thursday.",
+        "options": [
+          "agree",
+          "repair",
+          "differ",
+          "repeat exactly"
+        ],
+        "correctIndex": 2,
+        "explanation": "Differ means be unlike each other."
+      },
+      {
+        "id": "x5",
+        "stem": "The project was delayed because the team lacked the necessary ___.",
+        "options": [
+          "habits",
+          "resources",
+          "holidays",
+          "conclusions"
+        ],
+        "correctIndex": 1,
+        "explanation": "Resources are the materials, time or support needed for a project."
+      },
+      {
+        "id": "x6",
+        "stem": "We should check whether the information is ___ before sharing it.",
+        "options": [
+          "crowded",
+          "portable",
+          "shallow",
+          "accurate"
+        ],
+        "correctIndex": 3,
+        "explanation": "Accurate means correct and not misleading."
+      },
+      {
+        "id": "x7",
+        "stem": "The new system is more ___; it uses less energy to do the same job.",
+        "options": [
+          "efficient",
+          "expensive",
+          "uncertain",
+          "distant"
+        ],
+        "correctIndex": 0,
+        "explanation": "Efficient describes achieving a result with less waste."
+      },
+      {
+        "id": "x8",
+        "stem": "The report's main ___ is that small changes should be tested first.",
+        "options": [
+          "equipment",
+          "appointment",
+          "conclusion",
+          "permission"
+        ],
+        "correctIndex": 2,
+        "explanation": "A conclusion expresses the finding reached from the discussion/evidence."
+      },
+      {
+        "id": "x9",
+        "stem": "Only ___ staff may enter the storage room; visitors need an escort.",
+        "options": [
+          "unrelated",
+          "authorised",
+          "delayed",
+          "missing"
+        ],
+        "correctIndex": 1,
+        "explanation": "Authorised means having official permission for the action."
+      },
+      {
+        "id": "x10",
+        "stem": "The team will ___ the old signs with clearer ones.",
+        "options": [
+          "depend",
+          "refuse",
+          "avoid",
+          "replace"
+        ],
+        "correctIndex": 3,
+        "explanation": "Replace means put something new in place of something old."
+      }
+    ],
+    "checklist": [
+      "Use grammatical and contextual evidence.",
+      "Check distractors, not just the first familiar word.",
+      "Review errors after submission; correct counts are not an official weighted score."
+    ],
+    "parts": [],
+    "scope": "TASK_PRACTICE",
+    "curriculum": "HCMUS_PREPARATION",
+    "referenceResponse": null
+  },
+  {
+    "id": "hcmus-reading-wetland-v1",
+    "skill": "READING",
+    "title": "Reading: access and wetland protection",
+    "focus": "HCMUS original preparation · 10 questions",
+    "minutes": 15,
+    "minimumWords": 0,
+    "prompt": "Choose the best answer. Original practice aligned to current HCMUS task types; not a past examination paper, topic forecast or calibrated assessment. Explanations appear after submission.",
+    "passage": "A town council was deciding how to improve a wetland beside a busy walking route. Some residents wanted a cafe and brighter lighting throughout the area. Others worried that more visitors would disturb wildlife. Instead of immediately choosing either proposal, the council asked a small team to observe how the site was used. The team counted visitors at different times, spoke with residents and recorded areas where people left the marked path.\n\nTheir observations challenged several early assumptions. Most visitors came for a short walk before work or after school, rather than for a whole afternoon. Some people avoided the route because the entrance sign was difficult to read. Others thought the wetland was closed to the public because a damaged gate had been left across the main entrance. These problems did not require building a new cafe. Clearer information and a repaired gate could improve access at relatively low cost.\n\nWildlife protection still mattered. A narrow strip near the water was used by nesting birds, and walkers sometimes entered it without realising that it was sensitive. The team suggested keeping the existing route but adding a simple boundary and explaining why visitors should remain outside that strip. The proposal aimed to guide behaviour, not exclude people from the entire wetland. Bright lights near the nesting area were not recommended.\n\nThe council approved a six-month trial of these smaller changes. It agreed to review visitor feedback and repeat observations before considering major construction. Counting the number of new signs would not show whether people understood them, so observers also checked how visitors responded. The team did not claim that its first survey represented every season or every resident. It argued that a limited trial, followed by a careful review, could reveal which changes were useful and which needed adjustment. The approach combined access with protection rather than treating them as goals that could never coexist.\n",
+    "audioPath": "",
+    "transcript": "",
+    "items": [
+      {
+        "id": "x1",
+        "stem": "What is the passage mainly about?",
+        "options": [
+          "Why every wetland needs a cafe",
+          "How to exclude all walkers",
+          "Testing small improvements using evidence",
+          "Why surveys never help planning"
+        ],
+        "correctIndex": 2,
+        "explanation": "It describes an evidence-led trial balancing access and protection."
+      },
+      {
+        "id": "x2",
+        "stem": "Why did the council arrange observations?",
+        "options": [
+          "To understand the site before deciding",
+          "To prove every visitor wanted a cafe",
+          "To replace every resident's opinion",
+          "To measure only the number of birds"
+        ],
+        "correctIndex": 0,
+        "explanation": "It wanted to understand use before choosing a proposal."
+      },
+      {
+        "id": "x3",
+        "stem": "When did most visitors use the route?",
+        "options": [
+          "Only during the night",
+          "For whole afternoons",
+          "Only on public holidays",
+          "Before work or after school"
+        ],
+        "correctIndex": 3,
+        "explanation": "The observations found short visits before work or after school."
+      },
+      {
+        "id": "x4",
+        "stem": "Why did some residents think the site was closed?",
+        "options": [
+          "A cafe had closed permanently",
+          "A damaged gate blocked the entrance",
+          "A survey banned visitors",
+          "All signs prohibited walking"
+        ],
+        "correctIndex": 1,
+        "explanation": "A damaged gate had been left across the main entrance."
+      },
+      {
+        "id": "x5",
+        "stem": "What does 'These problems' in paragraph 2 refer to?",
+        "options": [
+          "Every seasonal change",
+          "The cafe's opening hours",
+          "Unclear information and the damaged gate",
+          "A lack of bright nesting-area lights"
+        ],
+        "correctIndex": 2,
+        "explanation": "It refers to unclear entrance information and the obstructing gate."
+      },
+      {
+        "id": "x6",
+        "stem": "What was the purpose of the simple boundary?",
+        "options": [
+          "To protect a nesting area while retaining access",
+          "To close the entire wetland",
+          "To prevent the council from observing",
+          "To mark a new cafe building"
+        ],
+        "correctIndex": 0,
+        "explanation": "It would guide walkers away from the sensitive nesting strip."
+      },
+      {
+        "id": "x7",
+        "stem": "Which change was not recommended near the nesting area?",
+        "options": [
+          "A simple boundary",
+          "An explanation for visitors",
+          "Keeping walkers on the route",
+          "Bright lighting"
+        ],
+        "correctIndex": 3,
+        "explanation": "The passage explicitly rejects bright lights near that area."
+      },
+      {
+        "id": "x8",
+        "stem": "What would happen after six months?",
+        "options": [
+          "Major construction would automatically begin",
+          "Feedback and observations would be reviewed",
+          "The route would permanently close",
+          "The team would stop gathering evidence"
+        ],
+        "correctIndex": 1,
+        "explanation": "The council planned to review feedback and repeat observations."
+      },
+      {
+        "id": "x9",
+        "stem": "Why was counting new signs insufficient?",
+        "options": [
+          "Signs cannot ever be counted",
+          "Every sign had identical wording",
+          "Counts do not show understanding or behaviour",
+          "Residents were forbidden to read signs"
+        ],
+        "correctIndex": 2,
+        "explanation": "It would not establish whether visitors understood or acted on them."
+      },
+      {
+        "id": "x10",
+        "stem": "What attitude does the team take towards its findings?",
+        "options": [
+          "Cautious and willing to revise",
+          "Certain that every season is identical",
+          "Unwilling to consider residents",
+          "Committed to building immediately"
+        ],
+        "correctIndex": 0,
+        "explanation": "It recognises the survey's limits and recommends review."
+      }
+    ],
+    "checklist": [
+      "Use grammatical and contextual evidence.",
+      "Check distractors, not just the first familiar word.",
+      "Review errors after submission; correct counts are not an official weighted score."
+    ],
+    "parts": [],
+    "scope": "TASK_PRACTICE",
+    "curriculum": "HCMUS_PREPARATION",
+    "referenceResponse": null
+  },
+  {
+    "id": "hcmus-transformations-practice-v1",
+    "skill": "WRITING",
+    "title": "Sentence transformation: meaning and structure",
+    "focus": "HCMUS original preparation · 5 transformations",
+    "minutes": 12,
+    "minimumWords": 0,
+    "prompt": "Rewrite each sentence using the opening given, keeping the meaning. 1. The office will send the results tomorrow. → The results ... 2. I started working here three years ago and still work here. → I have ... 3. The box is too heavy for me to carry. → The box is not ... 4. 'I am waiting for the bus now,' Mai said. → Mai said that ... 5. We did not attend because we had not received the invitation. → If we ... Original practice, not recalled questions; equivalent correct answers are possible.",
+    "passage": "",
+    "audioPath": "",
+    "transcript": "",
+    "items": [],
+    "checklist": [
+      "Keep the tense, time and intended meaning.",
+      "Check passive, duration, too/enough, reported speech and unreal past conditions.",
+      "Number your five responses; review with the model after submission."
+    ],
+    "parts": [],
+    "scope": "TASK_PRACTICE",
+    "curriculum": "HCMUS_PREPARATION",
+    "referenceResponse": {
+      "title": "Possible transformations with explanations",
+      "text": "1. The results will be sent by the office tomorrow.\n2. I have worked here for three years. / I have been working here for three years.\n3. The box is not light enough for me to carry.\n4. Mai said that she was waiting for the bus then.\n5. If we had received the invitation, we would have attended.\n\nNotice that changing the structure must not change the time or the cause. The first answer keeps tomorrow; the fifth describes an unreal past situation, not a future plan.",
+      "notes": [
+        {
+          "vi": "Mẫu giữ nguyên ý và mốc thời gian; câu 2 có hai cách tự nhiên khi công việc vẫn tiếp diễn. Không chấm bằng khớp chuỗi tuyệt đối.",
+          "en": "The models preserve meaning and time; item 2 allows two natural forms for continuing work. Exact string matching is not used."
+        },
+        {
+          "vi": "Câu 4 giả định tường thuật ở thời điểm sau nên lùi thì và đổi now thành then; trong hội thoại ngay cùng thời điểm có thể có cách diễn đạt khác.",
+          "en": "Item 4 assumes later reporting, hence backshift and now→then; immediate same-time reporting may permit a different wording."
+        }
+      ]
+    }
+  },
+  {
+    "id": "hcmus-speaking-routine-v1",
+    "skill": "SPEAKING",
+    "title": "Introduction and follow-up: study routines",
+    "focus": "HCMUS original preparation · Introduction / guided conversation",
+    "minutes": 10,
+    "minimumWords": 0,
+    "prompt": "Introduce yourself using true details about where you live, your work or study and your reason for postgraduate study. Then answer: How do you organise a busy week? Where do you prefer to study, and why? Describe a time you changed a plan. What would you like to improve about your English practice? These are original practice topics, not a forecast or confirmed institution question bank.",
+    "passage": "",
+    "audioPath": "",
+    "transcript": "",
+    "items": [],
+    "checklist": [
+      "Use your own details, not the model speaker's biography.",
+      "Develop a direct answer with a reason and a small example.",
+      "Practise follow-up questions, not a memorised essay."
+    ],
+    "parts": [],
+    "scope": "TASK_PRACTICE",
+    "curriculum": "HCMUS_PREPARATION",
+    "referenceResponse": {
+      "title": "An original introduction and follow-up example",
+      "text": "Introduction: My name is Linh. I live in Ho Chi Minh City and work in a small technical team. I would like to study for a master's degree because I want to understand the ideas behind the systems I use, rather than only following instructions. I am especially interested in learning how to evaluate evidence and explain my decisions clearly.\n\nOrganising a busy week: I check my work commitments first, then choose a few realistic study periods. On busy days I study for twenty minutes rather than cancelling everything. For example, I can review a short grammar exercise after dinner and write down one mistake to revisit.\n\nA place to study: I prefer a quiet desk at home for reading because I can keep my notes together. For a group discussion, a bookable library room is better. The best place depends on the activity, not simply on whether it is always silent.\n\nChanging a plan: Last month I planned to study with a friend on Saturday, but I had to work. I contacted my friend early and suggested a short online meeting on Sunday. We reduced the number of exercises so that we could still discuss them carefully.\n\nImproving English practice: I want to rely less on recognising familiar words. I will listen to a short recording without text first, then use its transcript to check what I missed. After that I can hide the text and listen again. This gives me a useful next step instead of just a score.",
+      "notes": [
+        {
+          "vi": "Mẫu minh hoạ trả lời trực tiếp, có lý do và ví dụ; tên, công việc và mục tiêu là hư cấu. Dùng thông tin thật của bạn.",
+          "en": "The example uses direct answers, reasons and examples; its name, job and goals are fictional. Use your own true details."
+        },
+        {
+          "vi": "Không cần học thuộc một bài dài. Tập nghe câu hỏi, trả lời đúng trọng tâm rồi phát triển thêm khi người hỏi yêu cầu.",
+          "en": "Do not memorise a long script. Listen to the question, answer its point and develop it when asked."
+        }
+      ]
+    }
+  },
+  {
     "id": "hcmus-listening-short-v1",
     "skill": "LISTENING",
     "title": "Ten short conversations",

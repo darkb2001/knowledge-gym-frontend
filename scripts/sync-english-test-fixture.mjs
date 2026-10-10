@@ -6,7 +6,7 @@ const source = path.resolve(process.env.KG_ENGLISH_CATALOG_SNAPSHOT || '../knowl
 const text = fs.readFileSync(source, 'utf8');
 let rows;
 try { rows = JSON.parse(text); } catch { throw new Error('Compiled English catalog fixture is not valid JSON'); }
-if (rows.length !== 39 || new Set(rows.map(e => e.id)).size !== 39) throw new Error('Expected the compiled 39-entry original catalog');
+if (rows.length !== 47 || new Set(rows.map(e => e.id)).size !== 47) throw new Error('Expected the compiled 47-entry original catalog');
 const output = '.fixtures/english/catalog.json';
 fs.mkdirSync(path.dirname(output), { recursive: true });
 fs.writeFileSync(output, JSON.stringify(rows, null, 2) + '\n');

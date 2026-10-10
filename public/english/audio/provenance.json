@@ -10,7 +10,7 @@
   "voicesSha256": "bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d",
   "voices": "bf_emma (British English); dialogue alternates bf_emma / bm_george",
   "scripts": "Compiled versioned EnglishCatalog bank fixture; content/english/topics.json and topic-expansion.json; listening text copies in docs/english/audio-scripts",
-  "catalogSnapshotSha256": "5179ea7ef33aca0a4eced307dedb4ccc9beb6f3ec11f39bbd3ecf65275f255cd",
+  "catalogSnapshotSha256": "9f85bd164634d52e66a12da1b15ba35dbf780906af720464b4af4b3805889f66",
   "textHashFormat": "SHA-256 of json.dumps(voice/text pairs, ensure_ascii=False), using default separators",
   "cache": "Reuse only when text, output bytes, pinned model/voices, engine version, speed and normalisation match; KG_AUDIO_REBUILD=1 forces generation",
   "runtime": "CPUExecutionProvider, four intra-op threads through the public Kokoro.from_session API",

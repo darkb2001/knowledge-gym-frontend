@@ -26,6 +26,9 @@ export function formatPracticeTime(seconds: number): string {
   const safe = Math.max(0, Math.floor(seconds));
   return `${Math.floor(safe / 60).toString().padStart(2, "0")}:${(safe % 60).toString().padStart(2, "0")}`;
 }
+export type EnglishTranscript = { exerciseId: string; partId: string; text: string };
+export const getEnglishTranscript = (exerciseId: string, partId?: string) =>
+  apiRequest<EnglishTranscript>(`/english/exercises/${encodeURIComponent(exerciseId)}/transcript${partId ? `?partId=${encodeURIComponent(partId)}` : ""}`);
 export const listEnglishExercises = () => apiRequest<EnglishExercise[]>("/english/exercises");
 export const listEnglishHistory = (page = 1) => apiRequest<EnglishHistory>(`/english/attempts?page=${page}&size=10`);
 export const startEnglishPractice = (exerciseId: string) => apiRequest<EnglishAttempt>("/english/attempts", { method: "POST", body: { exerciseId } });

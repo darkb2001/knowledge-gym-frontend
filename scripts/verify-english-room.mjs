@@ -14,7 +14,7 @@ const output = path.resolve('.impeccable/review/english');
 fs.mkdirSync(output, { recursive: true });
 const parse = file => { try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch { throw new Error(`Invalid fixture: ${file}`); } };
 const catalog = parse('.fixtures/english/catalog.json');
-assert.equal(catalog.length, 39);
+assert.equal(catalog.length, 47);
 const publicCatalog = catalog.map(e => ({ id: e.id, skill: e.skill, title: e.title, focus: e.focus, minutes: e.minutes, minimumWords: e.minimumWords, prompt: e.prompt, passage: e.passage, audioPath: e.audioPath, checklist: e.checklist, parts: e.parts, scope: e.scope, curriculum: e.curriculum, items: e.items.map(q => ({ id: q.id, stem: q.stem, options: q.options })) }));
 assert.ok(!JSON.stringify(publicCatalog).includes('"referenceResponse"'));
 assert.ok(!JSON.stringify(publicCatalog).includes('"correctIndex"'));
@@ -24,7 +24,7 @@ const vocabulary = parse('content/english/topics.json').map(t => ({ ...t, entrie
 const captureEnabled = process.env.KG_UI_CAPTURE !== '0';
 const captureTargets = new Set((process.env.KG_UI_CAPTURE_TARGETS || '').split(',').filter(Boolean));
 const previousVisual = !captureEnabled && fs.existsSync(path.join(output, 'report.json')) ? parse(path.join(output, 'report.json')) : null;
-const report = { evidence: '39-entry compiled original authored bank; intercepted API fixtures, local MP3 decoding, fake microphone. NOT live backend/production/physical mobile/human pronunciation or pedagogy.', checks: [], screenshots: previousVisual?.screenshots ?? [], captureMode: captureEnabled ? 'Fresh batched screenshots' : 'Functional/axe confirmation; retained screenshots from preceding complete visual pass (no further visual polishing)', accessibility: [], errors: [], unmatched: [] };
+const report = { evidence: '47-entry compiled original authored bank; intercepted API fixtures, local MP3 decoding, fake microphone. NOT live backend/production/physical mobile/human pronunciation or pedagogy.', checks: [], screenshots: previousVisual?.screenshots ?? [], captureMode: captureEnabled ? 'Fresh batched screenshots' : 'Functional/axe confirmation; retained screenshots from preceding complete visual pass (no further visual polishing)', accessibility: [], errors: [], unmatched: [] };
 const browser = await chromium.launch({ headless: true, args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'], ...(process.platform === 'darwin' ? { executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' } : {}) });
 try {
   const anonymous = await browser.newContext();
@@ -41,7 +41,8 @@ try {
     page.on('pageerror', e => report.errors.push({ device, message: e.message }));
     page.on('dialog', dialog => dialog.accept());
     const attempts = new Map(); const writes = [];
-    let next = 1, failSave = false, holdRead = false, releaseRead;
+    const transcriptReads = [];
+    let next = 1, failSave = false, failTranscript = false, holdRead = false, releaseRead, holdTranscript = false, releaseTranscript, transcriptReady;
     const user = { id: '11111111-1111-4111-8111-000000009000', email: 'fixture@example.test', displayName: 'English learner', role: 'USER' };
     const token = `eyJhbGciOiJIUzI1NiJ9.${Buffer.from(JSON.stringify({ sub: user.id, exp: Math.floor(Date.now()/1000) + 3600 })).toString('base64url')}.fixture`;
     const check = (name, value = true) => { assert.ok(value, `${device}: ${name}`); report.checks.push({ device, name, passed: true }); };
@@ -55,6 +56,17 @@ try {
       if (endpoint === '/auth/refresh') data = { accessToken: token, expiresIn: 3600, user };
       else if (endpoint === '/users/me') data = user;
       else if (endpoint === '/english/exercises') data = publicCatalog;
+      else if (/^\/english\/exercises\/[^/]+\/transcript$/.test(endpoint) && method === 'GET') {
+        const id = endpoint.split('/')[3], partId = url.searchParams.get('partId') || id;
+        transcriptReads.push({ id, partId });
+        if (failTranscript) { failTranscript = false; return route.fulfill({ status: 500, headers, json: { detail: 'Synthetic transcript failure' } }); }
+        const exercise = catalog.find(e => e.id === id), section = catalog.find(e => e.id === partId);
+        if (!exercise || !section) return route.fulfill({ status: 404, headers, json: { detail: 'Unknown exercise' } });
+        assert.equal(exercise.skill, 'LISTENING');
+        assert.ok(partId === id || exercise.parts.some(p => p.id === partId));
+        if (holdTranscript) { holdTranscript = false; await new Promise(resolve => { releaseTranscript = resolve; transcriptReady(); }); }
+        data = { exerciseId: id, partId, text: section.transcript };
+      }
       else if (endpoint === '/english/attempts' && method === 'POST') {
         data = [...attempts.values()].find(a => a.exerciseId === body.exerciseId && a.status === 'DRAFT');
         if (!data) { const id = `11111111-1111-4111-8111-${String(next++).padStart(12,'0')}`; data = { id, exerciseId: body.exerciseId, status: 'DRAFT', version: 0, answers: {}, response: '', elapsedSeconds: 0, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), feedback: null }; attempts.set(id, data); }
@@ -92,6 +104,7 @@ try {
     await capture('room');
     const beforeVocabulary = writes.filter(w => w.endpoint.startsWith('/english/')).length;
     await page.getByRole('button', { name: 'Từ vựng theo chủ đề', exact: true }).click();
+    check('Vocabulary does not display the external-reference note', await page.getByRole('link', { name: 'ForumFlash', exact: true }).count() === 0);
     const phraseText = () => page.locator('#vocabulary-desk p[lang="en"]').first().innerText();
     const firstTerm = await phraseText();
     const first = vocabulary[0].entries.find(e => e.term === firstTerm);
@@ -171,7 +184,20 @@ try {
     await page.route('**/english/audio/announcement-v1.mp3', route => { if (failAudio) { failAudio = false; return route.abort(); } return route.continue(); });
     await open('listening-announcement-v1');
     await page.getByRole('button', { name: 'Tải lại audio', exact: true }).click();
-    check('Transcript hidden before submit', await page.getByText('Mở transcript', { exact: true }).count() === 0);
+    check('Transcript hidden and not fetched by default', await page.locator('#english-listening-transcript').count() === 0 && transcriptReads.length === 0);
+    failTranscript = true; await page.getByRole('button', { name: 'Hiện transcript', exact: true }).click();
+    await page.getByText(/Chưa tải được transcript/).waitFor();
+    check('Transcript failure leaves listening answers available', await page.getByRole('radio').count() === 12);
+    await page.getByRole('button', { name: 'Thử tải transcript lại', exact: true }).click();
+    await page.locator('#english-listening-transcript p[lang="en"], #english-listening-transcript div[lang="en"]').waitFor();
+    check('Opt-in transcript before submit has the authored script', (await page.locator('#english-listening-transcript').innerText()).includes(catalog.find(e => e.id === 'listening-announcement-v1').transcript.trim().slice(0, 60)));
+    await capture('listening-transcript');
+    await page.getByRole('button', { name: 'Ẩn transcript', exact: true }).click();
+    check('Hide removes transcript from the DOM without changing answers', await page.locator('#english-listening-transcript').count() === 0);
+    const cachedReads = transcriptReads.length;
+    await page.getByRole('button', { name: 'Hiện transcript', exact: true }).click();
+    check('Repeated show uses only this mounted lesson cache', transcriptReads.length === cachedReads);
+    await page.getByRole('button', { name: 'Ẩn transcript', exact: true }).click();
     await page.getByLabel('Audio bài nghe').evaluate(async el => { await el.play(); el.pause(); });
     check('Explicit audio retry recovers real playback', await page.getByLabel('Audio bài nghe').evaluate(el => el.duration > 0));
     await page.getByLabel('Tốc độ nghe').selectOption('0.75');
@@ -183,7 +209,7 @@ try {
     await submit();
     await page.getByText('3/3 câu đúng · Không phải điểm kỳ thi', { exact: true }).waitFor();
     check('Submitted choices read-only', await page.getByRole('radio').first().isDisabled());
-    await page.getByText('Mở transcript', { exact: true }).click();
+    await page.getByRole('button', { name: 'Hiện transcript', exact: true }).click();
     await capture('listening-feedback');
     await open('writing-email-v1');
     const text = 'Dear Alex, ' + 'practice '.repeat(128);
@@ -245,6 +271,21 @@ try {
     }
     await page.getByLabel('Chọn phần bài luyện').selectOption('0');
     check('HCMUS listening retains short-conversation answers', await page.getByRole('radio', { checked: true }).count() === 10);
+    await page.getByRole('button', { name: 'Hiện transcript', exact: true }).click();
+    await page.locator('#english-listening-transcript div[lang="en"]').waitFor();
+    check('Grouped transcript matches the selected short-conversation section', (await page.locator('#english-listening-transcript').innerText()).includes('Conversation 10.'));
+    await page.getByLabel('Chọn phần bài luyện').selectOption('1');
+    check('Switching section resets transcript to hidden', await page.locator('#english-listening-transcript').count() === 0);
+    holdTranscript = true; const startedTranscript = new Promise(resolve => { transcriptReady = resolve; });
+    await page.getByRole('button', { name: 'Hiện transcript', exact: true }).click();
+    await startedTranscript;
+    await page.getByLabel('Chọn phần bài luyện').selectOption('2');
+    const oldResponse = page.waitForResponse(r => r.url().includes('/transcript?partId=') && r.url().includes(hcmusListening.parts[1].id));
+    releaseTranscript(); await oldResponse;
+    await page.getByRole('button', { name: 'Hiện transcript', exact: true }).click();
+    await page.locator('#english-listening-transcript div[lang="en"]').waitFor();
+    const talkScript = catalog.find(e => e.id === hcmusListening.parts[2].id).transcript.trim().slice(0, 60);
+    check('Late previous-section response cannot replace the current talk transcript', (await page.locator('#english-listening-transcript').innerText()).includes(talkScript));
     await capture('hcmus-listening'); await submit(); await page.getByText('20/20 câu đúng · Không phải điểm kỳ thi', { exact: true }).waitFor();
     await open('hcmus-grammar-v1'); await answerVisible(catalog.find(e => e.id === 'hcmus-grammar-v1')); await submit();
     await page.getByText('15/15 câu đúng · Không phải điểm kỳ thi', { exact: true }).waitFor();
@@ -256,6 +297,11 @@ try {
     await page.getByRole('button', { name: 'Lưu nháp', exact: true }).click(); await page.getByText(/Đã lưu trên máy chủ/).waitFor();
     await page.reload(); await page.locator('#english-workspace-title').filter({ hasText: catalog.find(e => e.id === 'listening-study-space-v1').title }).waitFor();
     check('HCMUS target survives transfer-task reload and owned deep link', await page.getByLabel('Bạn đang ôn bài thi nào?').inputValue() === 'HCMUS_PREPARATION');
+    for (const id of ['hcmus-grammar-study-v1','hcmus-grammar-community-v1','hcmus-cloze-garden-v1','hcmus-cloze-repair-v1','hcmus-vocabulary-context-v1','hcmus-reading-wetland-v1']) {
+      const e = catalog.find(e => e.id === id); await open(id); await answerVisible(e); await submit();
+      await page.getByText(`${e.items.length}/${e.items.length} câu đúng · Không phải điểm kỳ thi`, { exact: true }).waitFor();
+      check(`${id}: current-format original task submits all valid answers`);
+    }
     if (device === 'desktop') {
       for (const e of catalog.filter(e => e.referenceResponse)) {
         await page.getByLabel('Bạn đang ôn bài thi nào?').selectOption(e.curriculum === 'HCMUS_PREPARATION' ? 'HCMUS_PREPARATION' : 'VSTEP');

@@ -11,11 +11,11 @@ import type { EnglishExercise, EnglishReferenceResponse } from "./english";
 const render = (child: ReactNode) => renderToStaticMarkup(createElement(LocaleProvider, null, child));
 const bank = fixture as (EnglishExercise & { referenceResponse: EnglishReferenceResponse | null })[];
 describe("English preparation tracks and reference models", () => {
-  it("keeps the 31 VSTEP tasks separate from eight HCMUS preparatory tasks", () => {
-    expect(bank).toHaveLength(39);
+  it("keeps the 31 VSTEP tasks separate from sixteen HCMUS preparatory tasks", () => {
+    expect(bank).toHaveLength(47);
     expect(bank.filter(e => matchesEnglishTrack(e, "VSTEP"))).toHaveLength(31);
-    expect(bank.filter(e => e.curriculum === "HCMUS_PREPARATION")).toHaveLength(8);
-    expect(bank.filter(e => matchesEnglishTrack(e, "HCMUS_PREPARATION"))).toHaveLength(16);
+    expect(bank.filter(e => e.curriculum === "HCMUS_PREPARATION")).toHaveLength(16);
+    expect(bank.filter(e => matchesEnglishTrack(e, "HCMUS_PREPARATION"))).toHaveLength(24);
     expect(bank.filter(e => matchesEnglishTrack(e, "HCMUS_PREPARATION")).every(e => e.curriculum === "HCMUS_PREPARATION" || HCMUS_TRANSFER_IDS.has(e.id))).toBe(true);
     expect(matchesEnglishTrack({ ...bank[0], curriculum: undefined }, "VSTEP")).toBe(true);
     expect(matchesEnglishTrack(bank.find(e => e.id === "writing-essay-v1")!, "HCMUS_PREPARATION")).toBe(false);

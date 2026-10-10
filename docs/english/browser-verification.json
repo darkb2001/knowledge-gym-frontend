@@ -1,13 +1,13 @@
 {
   "verifiedAt": "2026-10-10",
-  "scope": "39-entry compiled original authored bank; intercepted API fixtures, local MP3 decoding, fake microphone. NOT live backend/production/physical mobile/human pronunciation or pedagogy.",
+  "scope": "47-entry compiled original authored bank; intercepted API fixtures, local MP3 decoding, fake microphone. NOT live backend/production/physical mobile/human pronunciation or pedagogy.",
   "captureMode": "Functional/axe confirmation; retained screenshots from preceding complete visual pass (no further visual polishing)",
   "viewports": [
     "1440x1000",
     "390x844",
     "844x390"
   ],
-  "checks": 222,
+  "checks": 271,
   "screenshots": [
     "desktop-room.png",
     "desktop-vocabulary-learn.png",
@@ -56,17 +56,20 @@
     "landscape-dark-vocabulary.png",
     "desktop-hcmus-listening.png",
     "mobile-hcmus-listening.png",
-    "landscape-hcmus-listening.png"
+    "landscape-hcmus-listening.png",
+    "desktop-listening-transcript.png",
+    "mobile-listening-transcript.png",
+    "landscape-listening-transcript.png"
   ],
   "pageErrors": [],
   "unmatchedApiRequests": [],
   "automatedAccessibilityViolations": [],
-  "authoredCatalogEntries": 39,
-  "referenceResponsesAfterSubmit": 16,
+  "authoredCatalogEntries": 47,
+  "referenceResponsesAfterSubmit": 18,
   "vocabularyCards": 160,
   "distinctVocabularyPhrases": 158,
   "neuralMp3Assets": 171,
-  "backendCatalogSha256": "5179ea7ef33aca0a4eced307dedb4ccc9beb6f3ec11f39bbd3ecf65275f255cd",
+  "backendCatalogSha256": "60d02e7bd824e3e1f6d67cd9782f9ae198d47204cd99fe7f9646c283fd9b767e",
   "humanAndPhysicalDeviceAcceptance": false,
   "authenticatedLiveBackendAcceptance": false,
   "productionAcceptance": false,
