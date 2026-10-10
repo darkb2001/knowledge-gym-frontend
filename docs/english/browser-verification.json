@@ -1,473 +1,74 @@
 {
-  "evidence": "Synthetic intercepted API fixtures; real local MP3 decoding and fake-microphone MediaRecorder. NOT live API, production, Safari or real microphone acceptance.",
-  "checks": [
-    {
-      "name": "Anonymous room redirects to login",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Retry clears unavailable attempt deep link",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "room: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Transcript hidden before submission",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Real MP3 decodes with positive duration",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Submitted choices become read-only",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "listening-feedback: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Failed save retains writing",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Saved writing restored after reload",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "One draft per exercise",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "writing: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Conflict preserves local response",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Cancelling unsaved sidebar navigation retains the room",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Opening another attempt locks old response against data loss",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Reopen same attempt loads newer server version",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Submitted writing read-only",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Cancelled permission request stops a late microphone stream",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Recorder recovers after cancelled permission request",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Browser recorder creates a nonempty downloadable file",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "No audio uploaded to API",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "speaking: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "reading: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "dark-reading: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "English UI translation works",
-      "passed": true
-    },
-    {
-      "device": "desktop",
-      "name": "Mutation body contains no actor or claimed grade",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Retry clears unavailable attempt deep link",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "room: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Transcript hidden before submission",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Real MP3 decodes with positive duration",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Submitted choices become read-only",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "listening-feedback: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Failed save retains writing",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Saved writing restored after reload",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "One draft per exercise",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "writing: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Conflict preserves local response",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Opening another attempt locks old response against data loss",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Reopen same attempt loads newer server version",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Submitted writing read-only",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Cancelled permission request stops a late microphone stream",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Recorder recovers after cancelled permission request",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Browser recorder creates a nonempty downloadable file",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "No audio uploaded to API",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "speaking: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "reading: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "dark-reading: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "English UI translation works",
-      "passed": true
-    },
-    {
-      "device": "mobile",
-      "name": "Mutation body contains no actor or claimed grade",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Retry clears unavailable attempt deep link",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "room: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Transcript hidden before submission",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Real MP3 decodes with positive duration",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Submitted choices become read-only",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "listening-feedback: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Failed save retains writing",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Saved writing restored after reload",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "One draft per exercise",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "writing: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Conflict preserves local response",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Opening another attempt locks old response against data loss",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Reopen same attempt loads newer server version",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Submitted writing read-only",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Cancelled permission request stops a late microphone stream",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Recorder recovers after cancelled permission request",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Browser recorder creates a nonempty downloadable file",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "No audio uploaded to API",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "speaking: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "reading: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "dark-reading: no horizontal overflow",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "English UI translation works",
-      "passed": true
-    },
-    {
-      "device": "landscape",
-      "name": "Mutation body contains no actor or claimed grade",
-      "passed": true
-    }
+  "verifiedAt": "2026-10-10",
+  "scope": "39-entry compiled original authored bank; intercepted API fixtures, local MP3 decoding, fake microphone. NOT live backend/production/physical mobile/human pronunciation or pedagogy.",
+  "captureMode": "Functional/axe confirmation; retained screenshots from preceding complete visual pass (no further visual polishing)",
+  "viewports": [
+    "1440x1000",
+    "390x844",
+    "844x390"
   ],
+  "checks": 222,
   "screenshots": [
     "desktop-room.png",
+    "desktop-vocabulary-learn.png",
+    "desktop-vocabulary-write.png",
+    "desktop-vocabulary-listen.png",
+    "desktop-vocabulary-quiz.png",
+    "desktop-vocabulary-match.png",
     "desktop-listening-feedback.png",
     "desktop-writing.png",
-    "desktop-speaking.png",
+    "desktop-writing-model.png",
+    "desktop-speaking-model.png",
     "desktop-reading.png",
     "desktop-dark-reading.png",
+    "desktop-hcmus-guide.png",
+    "desktop-hcmus-grammar.png",
+    "desktop-dark-vocabulary.png",
     "mobile-room.png",
+    "mobile-vocabulary-learn.png",
+    "mobile-vocabulary-write.png",
+    "mobile-vocabulary-listen.png",
+    "mobile-vocabulary-quiz.png",
+    "mobile-vocabulary-match.png",
     "mobile-listening-feedback.png",
     "mobile-writing.png",
-    "mobile-speaking.png",
+    "mobile-writing-model.png",
+    "mobile-speaking-model.png",
     "mobile-reading.png",
     "mobile-dark-reading.png",
+    "mobile-hcmus-guide.png",
+    "mobile-hcmus-grammar.png",
+    "mobile-dark-vocabulary.png",
     "landscape-room.png",
+    "landscape-vocabulary-learn.png",
+    "landscape-vocabulary-write.png",
+    "landscape-vocabulary-listen.png",
+    "landscape-vocabulary-quiz.png",
+    "landscape-vocabulary-match.png",
     "landscape-listening-feedback.png",
     "landscape-writing.png",
-    "landscape-speaking.png",
+    "landscape-writing-model.png",
+    "landscape-speaking-model.png",
     "landscape-reading.png",
-    "landscape-dark-reading.png"
+    "landscape-dark-reading.png",
+    "landscape-hcmus-guide.png",
+    "landscape-hcmus-grammar.png",
+    "landscape-dark-vocabulary.png",
+    "desktop-hcmus-listening.png",
+    "mobile-hcmus-listening.png",
+    "landscape-hcmus-listening.png"
   ],
-  "accessibility": [
-    {
-      "device": "desktop",
-      "name": "room",
-      "violations": []
-    },
-    {
-      "device": "desktop",
-      "name": "listening-feedback",
-      "violations": []
-    },
-    {
-      "device": "desktop",
-      "name": "writing",
-      "violations": []
-    },
-    {
-      "device": "desktop",
-      "name": "speaking",
-      "violations": []
-    },
-    {
-      "device": "desktop",
-      "name": "reading",
-      "violations": []
-    },
-    {
-      "device": "desktop",
-      "name": "dark-reading",
-      "violations": []
-    },
-    {
-      "device": "mobile",
-      "name": "room",
-      "violations": []
-    },
-    {
-      "device": "mobile",
-      "name": "listening-feedback",
-      "violations": []
-    },
-    {
-      "device": "mobile",
-      "name": "writing",
-      "violations": []
-    },
-    {
-      "device": "mobile",
-      "name": "speaking",
-      "violations": []
-    },
-    {
-      "device": "mobile",
-      "name": "reading",
-      "violations": []
-    },
-    {
-      "device": "mobile",
-      "name": "dark-reading",
-      "violations": []
-    },
-    {
-      "device": "landscape",
-      "name": "room",
-      "violations": []
-    },
-    {
-      "device": "landscape",
-      "name": "listening-feedback",
-      "violations": []
-    },
-    {
-      "device": "landscape",
-      "name": "writing",
-      "violations": []
-    },
-    {
-      "device": "landscape",
-      "name": "speaking",
-      "violations": []
-    },
-    {
-      "device": "landscape",
-      "name": "reading",
-      "violations": []
-    },
-    {
-      "device": "landscape",
-      "name": "dark-reading",
-      "violations": []
-    }
-  ],
-  "errors": [],
-  "unmatched": []
+  "pageErrors": [],
+  "unmatchedApiRequests": [],
+  "automatedAccessibilityViolations": [],
+  "authoredCatalogEntries": 39,
+  "referenceResponsesAfterSubmit": 16,
+  "vocabularyCards": 160,
+  "distinctVocabularyPhrases": 158,
+  "neuralMp3Assets": 171,
+  "backendCatalogSha256": "5179ea7ef33aca0a4eced307dedb4ccc9beb6f3ec11f39bbd3ecf65275f255cd",
+  "humanAndPhysicalDeviceAcceptance": false,
+  "authenticatedLiveBackendAcceptance": false,
+  "productionAcceptance": false,
+  "serverLearnerAudioUploads": false
 }

@@ -1,0 +1,174 @@
+{
+  "source": "https://forumflash.vercel.app/",
+  "appUrl": "https://forumflash.vercel.app/_next/static/immutable/chunks/3xrtwzmbeeyny.js",
+  "appSha256": "b5d0d28f3415fb7de8732f442cc665122eb65f37964d56e115ec703d59819462",
+  "inspectedAt": "2026-10-10T10:52:44.383Z",
+  "topicCount": 20,
+  "rows": 4000,
+  "distinctNormalisedTerms": 488,
+  "repeatedRowsAcrossDecks": 3512,
+  "blankDefinitions": 0,
+  "blankExamples": 0,
+  "uniqueExamples": 490,
+  "termsWithMultipleDefinitionStrings": [
+    {
+      "term": "learn the ropes",
+      "definitionVariants": 2
+    },
+    {
+      "term": "level playing field",
+      "definitionVariants": 2
+    }
+  ],
+  "termsInEveryDeck": 40,
+  "phonetics": {
+    "dictionaryTokens": 596,
+    "blankPhoneticRows": 0,
+    "method": "Reproduced token-dictionary joining; coverage, NOT pronunciation validation"
+  },
+  "exports": [
+    {
+      "topic": "education",
+      "title": "Education & Learning",
+      "filename": "forumflash-education.csv",
+      "rows": 200,
+      "sha256": "330e35903abe4e552e899eaccd3d4bee5d565581849cb1a4ea792d71e3aebd87"
+    },
+    {
+      "topic": "environment",
+      "title": "Environment & Climate",
+      "filename": "forumflash-environment.csv",
+      "rows": 200,
+      "sha256": "0eb7c0069ccfecb4b39b066853d0d6a6d4453e59885e7748e013a1f86733d09d"
+    },
+    {
+      "topic": "technology",
+      "title": "Technology & Digital Life",
+      "filename": "forumflash-technology.csv",
+      "rows": 200,
+      "sha256": "284d8c504c272a46a99f40836303f095ec1cece948084635e23a902d510dc5af"
+    },
+    {
+      "topic": "health",
+      "title": "Health & Well-being",
+      "filename": "forumflash-health.csv",
+      "rows": 200,
+      "sha256": "42545b95ad72b2c1df04696d218189dacab7e435c81b50b6f42a2872b8595b94"
+    },
+    {
+      "topic": "work",
+      "title": "Work & Employment",
+      "filename": "forumflash-work.csv",
+      "rows": 200,
+      "sha256": "315308e3df4d8a9b318269f22f919080f6187ae31227d7779ba8163f2a5ea589"
+    },
+    {
+      "topic": "economy",
+      "title": "Economy & Consumerism",
+      "filename": "forumflash-economy.csv",
+      "rows": 200,
+      "sha256": "83fb4f6350a2fee0c35d1a5b573d7ac4ad49c55268d46cc30fdb6063c5dba37b"
+    },
+    {
+      "topic": "cities",
+      "title": "Cities & Urban Life",
+      "filename": "forumflash-cities.csv",
+      "rows": 200,
+      "sha256": "8035f41e9c45e1b06a4c1487213591d9d204ec09ad02fe1a827788c9b8e7acf8"
+    },
+    {
+      "topic": "transport",
+      "title": "Transport & Mobility",
+      "filename": "forumflash-transport.csv",
+      "rows": 200,
+      "sha256": "0fafbfea34598cda68e8e773693b78544fb988a6679284c8312811e7b04e1db5"
+    },
+    {
+      "topic": "crime",
+      "title": "Crime & Justice",
+      "filename": "forumflash-crime.csv",
+      "rows": 200,
+      "sha256": "7d20009162948cf46d0768f45190d61b10fe7595b80b3edd860573ab99eccccf"
+    },
+    {
+      "topic": "government",
+      "title": "Government & Policy",
+      "filename": "forumflash-government.csv",
+      "rows": 200,
+      "sha256": "cb75c87c2673c356d90f76a400d70087cf321f4c52b22f86531088cd310b0d17"
+    },
+    {
+      "topic": "media",
+      "title": "Media & Advertising",
+      "filename": "forumflash-media.csv",
+      "rows": 200,
+      "sha256": "7c8dcbb7314dc2096e8499466296ba9b5953f32e1dcbb75cf2bb6403a6360bfb"
+    },
+    {
+      "topic": "culture",
+      "title": "Culture & Heritage",
+      "filename": "forumflash-culture.csv",
+      "rows": 200,
+      "sha256": "0c24a018ea409bb1c762f5429c50e340e4818d5f56af89d7a36d03eb4eecc831"
+    },
+    {
+      "topic": "globalisation",
+      "title": "Globalisation & Trade",
+      "filename": "forumflash-globalisation.csv",
+      "rows": 200,
+      "sha256": "0f669185644a06d48b81e850693bd125494a37930d4c08c90c9c583052ffa313"
+    },
+    {
+      "topic": "science",
+      "title": "Science & Research",
+      "filename": "forumflash-science.csv",
+      "rows": 200,
+      "sha256": "3fa8fa1e1ea6028ccbda079b5c4ddc4a0bb4e7af0e1a828a9f82b2c8f747e340"
+    },
+    {
+      "topic": "family",
+      "title": "Family & Children",
+      "filename": "forumflash-family.csv",
+      "rows": 200,
+      "sha256": "2008d6f67b3d496373bc814c035cbc9a6e4f27fae835e010e57ce3ff24a3a31d"
+    },
+    {
+      "topic": "food",
+      "title": "Food & Agriculture",
+      "filename": "forumflash-food.csv",
+      "rows": 200,
+      "sha256": "02487377423329c87909a2b274e60e0f1525698aba1811700e3a6870e9c38042"
+    },
+    {
+      "topic": "tourism",
+      "title": "Tourism & Travel",
+      "filename": "forumflash-tourism.csv",
+      "rows": 200,
+      "sha256": "a3c5678360f05ae12cac70f2f773f6c2eecf8694d9ce812b5f505939e04c14f1"
+    },
+    {
+      "topic": "housing",
+      "title": "Housing & Communities",
+      "filename": "forumflash-housing.csv",
+      "rows": 200,
+      "sha256": "f0ac745982cd0c9802fd73ed65da88557ef23340f3c4539faffdea34a618ed00"
+    },
+    {
+      "topic": "energy",
+      "title": "Energy & Resources",
+      "filename": "forumflash-energy.csv",
+      "rows": 200,
+      "sha256": "09ca3adfa22a97edc6c641253fac8812abd10938e9d15fa414345b7714b66a81"
+    },
+    {
+      "topic": "equality",
+      "title": "Equality & Social Change",
+      "filename": "forumflash-equality.csv",
+      "rows": 200,
+      "sha256": "640cb131780d4bf781b73b4f075bc965ec506356a23341bbd4e9d8749688fa15"
+    }
+  ],
+  "pageErrors": [],
+  "nonGetRequests": [],
+  "boundary": "Complete current public CSV inventory, not licence clearance or teacher validation. Raw definitions/examples/IPA are research artifacts only; no production import."
+}

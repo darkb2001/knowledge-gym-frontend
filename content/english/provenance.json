@@ -1,0 +1,15 @@
+{
+  "contentVersion": "topic-vocabulary-v1",
+  "reference": "https://forumflash.vercel.app/",
+  "referenceType": "Public topic taxonomy and selected conventional phrase facts",
+  "inspectedAtUtc": "2026-10-10",
+  "referenceBundle": "https://forumflash.vercel.app/_next/static/immutable/chunks/3xrtwzmbeeyny.js",
+  "referenceBundleSha256": "b5d0d28f3415fb7de8732f442cc665122eb65f37964d56e115ec703d59819462",
+  "scope": "20 topics, 160 cards, 158 distinct phrases; topics.json plus independently selected/authored topic-expansion.json",
+  "sessionBoundary": "Owner-scoped tab metadata only: location/mode/queues/seen/known/review; persists through reload but not device sync, server learning history, mastery, XP or SRS",
+  "authorship": "Knowledge Gym independently authored Vietnamese meanings, all contextual examples and usage notes",
+  "notImported": ["source example sentences", "source IPA dictionary", "source audio", "source artwork", "complete 4000-entry deck collection"],
+  "rightsBoundary": "No blanket redistribution licence for the complete reference-site bank is asserted. This is a small selection of conventional phrase facts with independently authored learning material, not a wholesale copy.",
+  "qualityBoundary": "No certified CEFR level, exam score or expert-reviewed pronunciation claim; human educational/audio review still needed",
+  "audioProvenance": "public/english/audio/provenance.json"
+}

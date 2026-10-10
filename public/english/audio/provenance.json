@@ -1,8 +1,1093 @@
 {
-  "source": "Original Knowledge Gym practice scripts; not official VSTEP audio",
-  "generator": "@echogarden/espeak-ng-emscripten 0.3.5 (GPL-3.0 engine, build-time only); ffmpeg MP3 96 kbps",
-  "engineSource": "https://github.com/echogarden-project/espeak-ng-emscripten",
-  "voices": "en-us; dialogue alternates en-us+f3 / en-us+m3",
-  "scripts": "Versioned EnglishCatalog.java; plain-text copies in docs/english/audio-scripts",
-  "notice": "Synthetic practice speech, not recorded exam speakers. Speech engine is not bundled."
+  "source": "Original Knowledge Gym practice scripts and curated vocabulary; not official VSTEP or HCMUS audio",
+  "generator": "Kokoro v1.0 neural TTS; kokoro-onnx 0.4.7 (MIT build-time tool); ffmpeg MP3 96 kbps",
+  "engineSource": "https://github.com/thewh1teagle/kokoro-onnx",
+  "modelSource": "https://huggingface.co/hexgrad/Kokoro-82M",
+  "modelLicense": "Apache-2.0",
+  "onnxExport": "https://github.com/thewh1teagle/kokoro-onnx/releases/tag/model-files-v1.0",
+  "authoringSpeed": 0.82,
+  "modelSha256": "7d5df8ecf7d4b1878015a32686053fd0eebe2bc377234608764cc0ef3636a6c5",
+  "voicesSha256": "bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d",
+  "voices": "bf_emma (British English); dialogue alternates bf_emma / bm_george",
+  "scripts": "Compiled versioned EnglishCatalog bank fixture; content/english/topics.json and topic-expansion.json; listening text copies in docs/english/audio-scripts",
+  "catalogSnapshotSha256": "5179ea7ef33aca0a4eced307dedb4ccc9beb6f3ec11f39bbd3ecf65275f255cd",
+  "textHashFormat": "SHA-256 of json.dumps(voice/text pairs, ensure_ascii=False), using default separators",
+  "cache": "Reuse only when text, output bytes, pinned model/voices, engine version, speed and normalisation match; KG_AUDIO_REBUILD=1 forces generation",
+  "runtime": "CPUExecutionProvider, four intra-op threads through the public Kokoro.from_session API",
+  "normalisation": "-18 LUFS target, -2 dB true peak, mono 24 kHz, 0.35-second gaps between dialogue turns",
+  "notice": "Neural synthetic practice speech, not human exam speakers. Speech model and engine are not bundled. No learner text is sent to a speech service.",
+  "assets": [
+    {
+      "path": "/english/audio/announcement-v1.mp3",
+      "seconds": 24.542,
+      "sha256": "3b17529f64ece212cf68bf886f73500cd936780474eeda4f6865d609ffe6ae01",
+      "textSha256": "0842b41ad9147f6d2ff0d316066d1640158b00af7cc67ce24cb53cc91fbd7698"
+    },
+    {
+      "path": "/english/audio/dialogue-v1.mp3",
+      "seconds": 41.733,
+      "sha256": "86b84dbd14f0173506ccc7d2f76e70d6989a781c92a17884c98a34d25940987f",
+      "textSha256": "e5704433826f279bc4671c51c734d37469ccd5e163c0efaa208a1c008590d8f4"
+    },
+    {
+      "path": "/english/audio/talk-v1.mp3",
+      "seconds": 49.865,
+      "sha256": "dbe523cc49acd4c09c04ede38e8681d63dbfe71114a193758cb988709ff698ab",
+      "textSha256": "9da4e12c95e84a336399ebcb9cea914bcf2eabee9acf75a66d27a5a7abb75f79"
+    },
+    {
+      "path": "/english/audio/notices-campus-v1.mp3",
+      "seconds": 146.249,
+      "sha256": "2202069461388953ec50544b1254167c16c8e23348fd88376ccb26108a377f65",
+      "textSha256": "5a31d03d8bc38813e6aa9601121506f4c97adc506c1066d9b656850ccdb7be1d"
+    },
+    {
+      "path": "/english/audio/dialogue-study-space-v1.mp3",
+      "seconds": 115.761,
+      "sha256": "51c2fce5c7405b429b44e64d9152ffd1eacb2adf4531255fd1787e313db81765",
+      "textSha256": "2db9a366a30d296e02ab1a9836f51dba327fcee41a7e5ad3d19b04975988138a"
+    },
+    {
+      "path": "/english/audio/dialogue-volunteer-shifts-v1.mp3",
+      "seconds": 142.799,
+      "sha256": "ec3f1928786fdb631a6d704ec5f691b91c738cc1de8db006c3993107a7b32353",
+      "textSha256": "46f6574ce5bec1d5dd9e42f1b5a398681b3a470e9cc0565d06640bbb64cd3815"
+    },
+    {
+      "path": "/english/audio/talk-urban-shade-v1.mp3",
+      "seconds": 170.739,
+      "sha256": "87e6d8fce230d22a7e4fafc8495159a1c03a1d355bef05bdb9aabf42d518e6d1",
+      "textSha256": "2bb9783d309357f3e3d8c1f8102e1cfb0460e5a54ed41c10ecf57ecdc5d2b9be"
+    },
+    {
+      "path": "/english/audio/talk-retrieval-practice-v1.mp3",
+      "seconds": 172.659,
+      "sha256": "100d170abe230e244529a307546b4b745b965f3091ef6bc5e5052f04bd4aba31",
+      "textSha256": "21dcaba219340bb8ba2589f35bd5edc83f73f6067d88fcf5541f766fad4a5a84"
+    },
+    {
+      "path": "/english/audio/dialogue-hcmus-short-v1.mp3",
+      "seconds": 138.843,
+      "sha256": "12c52bb6bdba869705659e0b57f2c752d0c45b9b490b53928d49fe15a34f61fe",
+      "textSha256": "2c65ddbc6ee49ac268621f6f5d8977845e7c9bf2a5bbd9527301b4417c09dd0f"
+    },
+    {
+      "path": "/english/audio/listening-complete-practice-v1.mp3",
+      "seconds": 839.805,
+      "sha256": "77af18922e544603384e27be7ddce036de0e88cdfb896555353b96fbacd1111e",
+      "textSha256": "4dc7b54a05f457dd6b09271d51401583c5fbd86ae570169ef584e0423b2a1639",
+      "composition": "decoded clips concatenated in catalog order; re-encoded once, no new synthesis",
+      "sources": [
+        {
+          "path": "/english/audio/notices-campus-v1.mp3",
+          "sha256": "2202069461388953ec50544b1254167c16c8e23348fd88376ccb26108a377f65"
+        },
+        {
+          "path": "/english/audio/dialogue-v1.mp3",
+          "sha256": "86b84dbd14f0173506ccc7d2f76e70d6989a781c92a17884c98a34d25940987f"
+        },
+        {
+          "path": "/english/audio/dialogue-study-space-v1.mp3",
+          "sha256": "51c2fce5c7405b429b44e64d9152ffd1eacb2adf4531255fd1787e313db81765"
+        },
+        {
+          "path": "/english/audio/dialogue-volunteer-shifts-v1.mp3",
+          "sha256": "ec3f1928786fdb631a6d704ec5f691b91c738cc1de8db006c3993107a7b32353"
+        },
+        {
+          "path": "/english/audio/talk-v1.mp3",
+          "sha256": "dbe523cc49acd4c09c04ede38e8681d63dbfe71114a193758cb988709ff698ab"
+        },
+        {
+          "path": "/english/audio/talk-urban-shade-v1.mp3",
+          "sha256": "87e6d8fce230d22a7e4fafc8495159a1c03a1d355bef05bdb9aabf42d518e6d1"
+        },
+        {
+          "path": "/english/audio/talk-retrieval-practice-v1.mp3",
+          "sha256": "100d170abe230e244529a307546b4b745b965f3091ef6bc5e5052f04bd4aba31"
+        }
+      ]
+    },
+    {
+      "path": "/english/audio/hcmus-listening-complete-v1.mp3",
+      "seconds": 425.343,
+      "sha256": "0be3eefdb8228ef83ff1893eb4d4138caec803040643c1780a0872c0ced92ed3",
+      "textSha256": "e6882b5443c47aba99af42ff277f358d72eaee76fc92743bd2a37b7d187d96a1",
+      "composition": "decoded clips concatenated in catalog order; re-encoded once, no new synthesis",
+      "sources": [
+        {
+          "path": "/english/audio/dialogue-hcmus-short-v1.mp3",
+          "sha256": "12c52bb6bdba869705659e0b57f2c752d0c45b9b490b53928d49fe15a34f61fe"
+        },
+        {
+          "path": "/english/audio/dialogue-study-space-v1.mp3",
+          "sha256": "51c2fce5c7405b429b44e64d9152ffd1eacb2adf4531255fd1787e313db81765"
+        },
+        {
+          "path": "/english/audio/talk-urban-shade-v1.mp3",
+          "sha256": "87e6d8fce230d22a7e4fafc8495159a1c03a1d355bef05bdb9aabf42d518e6d1"
+        }
+      ]
+    },
+    {
+      "path": "/english/vocabulary/education-1.mp3",
+      "seconds": 1.886,
+      "sha256": "fe7e9df565e9021ee4f8b4ef694d1cb3f6ea8afb1330e80757e719adb1a93b41",
+      "textSha256": "07e325b8cbb586e9bbfa47a06e26319ac8daa82230545a74f8c4f8fdbb12f633"
+    },
+    {
+      "path": "/english/vocabulary/education-2.mp3",
+      "seconds": 2.014,
+      "sha256": "e531a29cb2f9f3fe504fce3598e739782d53b6e36da3023786b557ca6f6a870d",
+      "textSha256": "8d505048d5670d195623555c3d592fb7b41a12bc3eff8bd2e5950e2d707634a6"
+    },
+    {
+      "path": "/english/vocabulary/education-3.mp3",
+      "seconds": 2.035,
+      "sha256": "c0c6dcab08d3fe8fdf79b45fb25ee45e7c63e4bc4a8902ea338261a583c74d2c",
+      "textSha256": "7795e8f88c4bbadcc93bbda8255d68dbabb0c19ac1bff9fad93369026b7a252a"
+    },
+    {
+      "path": "/english/vocabulary/education-4.mp3",
+      "seconds": 2.654,
+      "sha256": "e0194c22d26153dea06382718a9b7a8f0786436b9b9815e0bf12053f22a7e18f",
+      "textSha256": "958a7b4ea582031eb292791c49f4c6f067035ca5a80fd9af6600d18fe47d07a3"
+    },
+    {
+      "path": "/english/vocabulary/education-5.mp3",
+      "seconds": 2.441,
+      "sha256": "c9aa6752754825b500d6551d36025f82311089bf9a16acb861b353ceff8e9a80",
+      "textSha256": "71b6ec04591884ee6fe1261b13fcfd0d372546aeebfe477b43a88667d6abb4f5"
+    },
+    {
+      "path": "/english/vocabulary/education-6.mp3",
+      "seconds": 2.163,
+      "sha256": "4de3b072bf27a1dcd8858bff501fd91848ec3a78d77776758c25f3b585b852c6",
+      "textSha256": "8db9ffd28d4b05f44d5657b2a45f20ec5f0a1207b7aec517566926b537bdfdcc"
+    },
+    {
+      "path": "/english/vocabulary/education-7.mp3",
+      "seconds": 2.163,
+      "sha256": "39aad1b547d977c10bf8280ed3a563aaf8e6652550e743cf3fd9de15a9e61323",
+      "textSha256": "6d85c05a6ede758923910d6f06c3a86034904f394eb5801d6fd89fd27d9ed06f"
+    },
+    {
+      "path": "/english/vocabulary/education-8.mp3",
+      "seconds": 2.057,
+      "sha256": "c0fecdf718f7e86dfd0122682e0f5878f268365c5f6d3e2fca5613a175db37de",
+      "textSha256": "64fb5881b38623441203671f609d8014a2bf26c9043d91b52fb012f1d7b11aef"
+    },
+    {
+      "path": "/english/vocabulary/environment-1.mp3",
+      "seconds": 1.95,
+      "sha256": "bb7fa43a16ee0d949f2d7d0db2d7d5b53bac1e763bc712780b42007c650c5af3",
+      "textSha256": "c36b90d87ab27b27571360fdee5f58e6175d91acea8cd16b313db085c8d1a7cb"
+    },
+    {
+      "path": "/english/vocabulary/environment-2.mp3",
+      "seconds": 2.782,
+      "sha256": "a60ee56c27d6230dc3b0c056f6edd3f6066ce78b332ec0a727333c230c5cedb6",
+      "textSha256": "29e660ffd8cbe6830eee59abdd1f1293cfa16e1f562200e9d058f364abc53a1d"
+    },
+    {
+      "path": "/english/vocabulary/environment-3.mp3",
+      "seconds": 1.822,
+      "sha256": "c19cf891a79a7b41b92410cffd7e13eb5d65976242b4d2df557569413acd6f48",
+      "textSha256": "d09339aad6db6f28b65bb15fb94956c48b0ac1bd0890bfd8af32e50e897b8235"
+    },
+    {
+      "path": "/english/vocabulary/environment-4.mp3",
+      "seconds": 2.099,
+      "sha256": "22e79c02c25e07770005555ba99a313e5712451cdeaba3341193fc6e4cdaf200",
+      "textSha256": "1ba9fd9eea93abb31ae4bb141e050f05f1c1733d689e4feff88c74d5ba372708"
+    },
+    {
+      "path": "/english/vocabulary/environment-5.mp3",
+      "seconds": 1.886,
+      "sha256": "5cce3fb382bf11a3db149b3e9d1843105583b3a400670daedd1809aefd90f161",
+      "textSha256": "8b1e9b9a94e70fc038336fe0fd385eb9f1d09f0b8828f6bedb592d58c99cc832"
+    },
+    {
+      "path": "/english/vocabulary/environment-6.mp3",
+      "seconds": 2.547,
+      "sha256": "b64cd59fe8e39ac71880c5d0f6c9881145d0ad84442a17539f0b1b65808161b6",
+      "textSha256": "8062a6039974a9f3872809458561bada479fbddb673ebae5f474d4e676bbb671"
+    },
+    {
+      "path": "/english/vocabulary/environment-7.mp3",
+      "seconds": 2.035,
+      "sha256": "31f5df8518a7179631554922b2a05bc0fa260b329dfe6f310c4ebef53099307b",
+      "textSha256": "c22afa639e3d3b4e73e097585201cbd4574984c5370ddbe9d46572934e1aea24"
+    },
+    {
+      "path": "/english/vocabulary/environment-8.mp3",
+      "seconds": 1.865,
+      "sha256": "65df639c19066681bbf5d3fd19cb8a6ed1d935241c969bbb004084e5bf2b9215",
+      "textSha256": "592a169cd716683cbded685b064eb34d76185e79286d1c8fe05e168353a8ae3f"
+    },
+    {
+      "path": "/english/vocabulary/technology-1.mp3",
+      "seconds": 1.971,
+      "sha256": "6cc2ecc0e3100872e60bc12514157ea9749be6e2753550bb8b31bd1c47ef6733",
+      "textSha256": "fd38ea28a891f073b4e94557682518a95caf821ac0a347d7b60fa90bae9b09df"
+    },
+    {
+      "path": "/english/vocabulary/technology-2.mp3",
+      "seconds": 1.822,
+      "sha256": "4b9ed73938b850e91308ccc281228d63908c11dd46aa57c728e6f3e194aebd0e",
+      "textSha256": "eda67cfe82bdfee4e8f959e8fec844d90091891de4fac0473c2dafadec37b3b6"
+    },
+    {
+      "path": "/english/vocabulary/technology-3.mp3",
+      "seconds": 1.907,
+      "sha256": "4e3325328a698182a3ee4486544bafcd1129e59d5204247826b5495f9e6887fd",
+      "textSha256": "b7671e5b9d2102ebb01e087863fb783106f28994ff87cb41e819c72bf49cfd11"
+    },
+    {
+      "path": "/english/vocabulary/technology-4.mp3",
+      "seconds": 1.802,
+      "sha256": "edff0441ae4b0aeda9dfa285c40bc18efb2208db8b97193a6ff949bbdd3ee75a",
+      "textSha256": "9d73a094badf5d482faa8775b1508b544cd914f533d6b5cb89cd6a18c757a400"
+    },
+    {
+      "path": "/english/vocabulary/technology-5.mp3",
+      "seconds": 1.971,
+      "sha256": "28c99d1c7654b0a789de00702b1ce7af126f0f6029383dd24e38476056d532ce",
+      "textSha256": "909a7e47f3961723c32b9c31a90782daeeaafa85809e8850f3987c25079fffb2"
+    },
+    {
+      "path": "/english/vocabulary/technology-6.mp3",
+      "seconds": 1.694,
+      "sha256": "6e6f72c9b25a89c0f4fb0282f8f1a889864c167c445a364c604a360bb463d004",
+      "textSha256": "1af7d73359c12845bb0f34488ad0e92aee03e6258ed29508d53acc5d28f0babc"
+    },
+    {
+      "path": "/english/vocabulary/technology-7.mp3",
+      "seconds": 2.078,
+      "sha256": "b7d19f4c46c4ffeaff5de202a173dff7a46e5fed1e64fcf0082ae77d8a7cd94a",
+      "textSha256": "4db41797ebaec4401ed9031544c79b1e3881bc4fad360459fc7d9babfe1bfdb7"
+    },
+    {
+      "path": "/english/vocabulary/technology-8.mp3",
+      "seconds": 2.313,
+      "sha256": "432210ad9b89b8fdc4d1e7268382fe9032a921733c2f178389f720b06e40595c",
+      "textSha256": "2497f2f144b8f1e62f40a58661abd9c72dfd65ee25c058758ccaa43a918a665a"
+    },
+    {
+      "path": "/english/vocabulary/health-1.mp3",
+      "seconds": 1.802,
+      "sha256": "5cd96663453d8d2b18cc480d5141a6b0e28b3959ced8a956222bd5977d24c2e5",
+      "textSha256": "a2e11dd62bf7d8040c12ced2da1a6fefae650e43d03018555dfc80b8f3e28c1c"
+    },
+    {
+      "path": "/english/vocabulary/health-2.mp3",
+      "seconds": 1.651,
+      "sha256": "c9625dae1fb980ca81364221cfecc72b26e138011df38b809ba160bfbbac1da6",
+      "textSha256": "e519c30b8fa54cf675f9ec3354b9af3da34d73291e81a61bd1164e295a7cf997"
+    },
+    {
+      "path": "/english/vocabulary/health-3.mp3",
+      "seconds": 2.078,
+      "sha256": "1c461b42dd8da98ae0855258a2173165352c067303d84a98700a8c472e6fa936",
+      "textSha256": "41f1dce39a95d668b9533e288cc58db483d65177ccb02a4b1c209b710400f7e4"
+    },
+    {
+      "path": "/english/vocabulary/health-4.mp3",
+      "seconds": 1.802,
+      "sha256": "8617533a6c719939703bae1a54b76897825a045ec05ffca09bf1b3d6501c9e6e",
+      "textSha256": "d3d68211c69c9d7be379540080a50aad58bd272d9e74ee3b9fa1559b94be132f"
+    },
+    {
+      "path": "/english/vocabulary/health-5.mp3",
+      "seconds": 2.313,
+      "sha256": "542653e2c55c91c1376521435c0da129a7a1c6370264b01e965c2e85e978e690",
+      "textSha256": "68bebddf9c579c5e6a2ad4c26bb3ce64c98e484ef0960fbd18af3da6a3281eee"
+    },
+    {
+      "path": "/english/vocabulary/health-6.mp3",
+      "seconds": 1.929,
+      "sha256": "5bbcb31da8e867271e509437d601c1f409a13b72921ea06ca9cc79b28c00437d",
+      "textSha256": "07a2f45d3eb5ff7103417cd6c4603d62024ca13b3c8ce2b305fcb1e71c665537"
+    },
+    {
+      "path": "/english/vocabulary/health-7.mp3",
+      "seconds": 2.227,
+      "sha256": "84f0473804de62c6223077c45ee07d203fbbfd6d6619521adce76b1a5ae0de02",
+      "textSha256": "429e488b0d197903557c723f27f3ff0c0ae4d2a77a01776c1d1566d1d7140846"
+    },
+    {
+      "path": "/english/vocabulary/health-8.mp3",
+      "seconds": 1.694,
+      "sha256": "72c4c54331a4d8e0afc008b3997f81e9294bad013ef200e200bd1fbbccc9718a",
+      "textSha256": "29e6bd7ffb991741aa93536209b04fa16a8b2a27273eeaae4b49730e961cd69e"
+    },
+    {
+      "path": "/english/vocabulary/work-1.mp3",
+      "seconds": 2.035,
+      "sha256": "def31c9925aeef06e0badd2b5aabf3c8f9d912849d71e372f5b58def8b330c65",
+      "textSha256": "4ccf4c67baa54671fe20012ee2c6343a993c346e7a6b1097c1adaad17c33344d"
+    },
+    {
+      "path": "/english/vocabulary/work-2.mp3",
+      "seconds": 1.907,
+      "sha256": "94885dcbcd8f6795914df4a243206a7325fe507180c2703033fa647e04e6ede8",
+      "textSha256": "dca9b96aac9d1342716d794607f55e2ff4eb97a25fc999b3f10ff3663425c830"
+    },
+    {
+      "path": "/english/vocabulary/work-3.mp3",
+      "seconds": 1.865,
+      "sha256": "45d2236d32623a9aeaab6ee7144612eff6c5fef4e52c2456f3c83b1f76175517",
+      "textSha256": "eae0cdd1dc0417a907ac35e4ce6dbbbe3787294daef84d49601d538200bd1730"
+    },
+    {
+      "path": "/english/vocabulary/work-4.mp3",
+      "seconds": 1.95,
+      "sha256": "1f45f9707c0a7fd37ce1009a0031b64a85566189836c0b17595ffe25a13c89fd",
+      "textSha256": "7dfe364457db5856a7859f2471ca5df54281c280ac035e04cffae0bbe2c50df9"
+    },
+    {
+      "path": "/english/vocabulary/work-5.mp3",
+      "seconds": 1.566,
+      "sha256": "b30d3ddca51bbd5cbe84d5b35512c115e0464d25525fda9b732dfab553413a62",
+      "textSha256": "a4d6401f127ba8628da505851a8f84615941664a0eba2d64498f5ada98aac9b5"
+    },
+    {
+      "path": "/english/vocabulary/work-6.mp3",
+      "seconds": 1.822,
+      "sha256": "402eaae8616e2e9bdfeb679feffec5e1dd46ea48b33340b4ba7e4712bdfbb18c",
+      "textSha256": "46f754d80c6959ed6feff20dc5c50b269d572a5a251d03c16b9a998ec79ec148"
+    },
+    {
+      "path": "/english/vocabulary/work-7.mp3",
+      "seconds": 1.694,
+      "sha256": "398503016a1f1b76c3080e653de83fb60a4090e61486b1a9e7b96f7628a45dc3",
+      "textSha256": "e2365bb58b83c57501c760891517660c295275e4f4616936b779276d3ba25fe2"
+    },
+    {
+      "path": "/english/vocabulary/work-8.mp3",
+      "seconds": 2.014,
+      "sha256": "26beb63f22f4d1c3c816627a0514e48cf27c7998e2e6034d5eb00ea4260b9522",
+      "textSha256": "a2dac91363291880726c13c945ec7bb4908d8a350d75a3843eb935cd30c0f026"
+    },
+    {
+      "path": "/english/vocabulary/economy-1.mp3",
+      "seconds": 1.929,
+      "sha256": "0efa8c540468509f27eb32dfc456598090c16b89f983444a447dccb5764de59c",
+      "textSha256": "8cebf98a7c8cc20609bddb7733c6e3a3f89695e385e152f14a1fc528c9f68099"
+    },
+    {
+      "path": "/english/vocabulary/economy-2.mp3",
+      "seconds": 2.099,
+      "sha256": "1cd78ea217e9314138e03bd279aec93905b58e826d624c376719dbe1b4c05952",
+      "textSha256": "a97220257aa82c075dac8dd277de37b49c4a79d34038071c58cca66d6d8a968c"
+    },
+    {
+      "path": "/english/vocabulary/economy-3.mp3",
+      "seconds": 2.099,
+      "sha256": "13b526141f0796b5f431f2d8139f51a63a5be9d6f3b20d91ac4fbd53a31592a1",
+      "textSha256": "a220366c8d9f84466c1549643f74f676c36a4290ee93e0a7319fb7500407006a"
+    },
+    {
+      "path": "/english/vocabulary/economy-4.mp3",
+      "seconds": 2.057,
+      "sha256": "852feec4f74c815352a040bd7a7eb0358cd30d1defb187b8e2a91a8b16204b4a",
+      "textSha256": "fc5f4f98d8d414c41a1a240fa97f45b00c0a7240e3f9282b3f6847b17458ff7c"
+    },
+    {
+      "path": "/english/vocabulary/economy-5.mp3",
+      "seconds": 1.971,
+      "sha256": "8121ee489a052c877cf8ad6f2360e17f97b77b48faa380c9706ed1c53cd08686",
+      "textSha256": "ed35c35a7a072af6c11721e5ac330fc561a8b93f982c5a5cfacdc4f98e47f01d"
+    },
+    {
+      "path": "/english/vocabulary/economy-6.mp3",
+      "seconds": 2.121,
+      "sha256": "41624d721bb1c8c8472806e4102481102fdee97b88f2279efd17a1e545ecc7ff",
+      "textSha256": "4eb3720f1c677704b15db16c3584ffbe5a9f5817d2a80a576ff42af10bb9ec94"
+    },
+    {
+      "path": "/english/vocabulary/economy-7.mp3",
+      "seconds": 2.035,
+      "sha256": "05d170d69a7264e96ee1f5feaa1952c9a8d9edf23e71fe20c65fc79d2dad3b09",
+      "textSha256": "2f60203bca533d10187192f83909ab6703813924eb1ff736b55abe5213b7f3c2"
+    },
+    {
+      "path": "/english/vocabulary/economy-8.mp3",
+      "seconds": 1.802,
+      "sha256": "f13fae43d4ae6532da1bedbbd63626e8fac8ebfc86ac0079c3900d158911cefb",
+      "textSha256": "96b8086dfe3058be390cdf6c08a5dcf39095402a0c37fcf82e97defd95a5d9db"
+    },
+    {
+      "path": "/english/vocabulary/cities-1.mp3",
+      "seconds": 2.014,
+      "sha256": "1dcf787163964885aaed452b3d8aaecff59b87387bf1ab639ba9a3f182564962",
+      "textSha256": "947e8bfec1c2e70ae21f95b7239441e94889ed755e624db0e27da42c45649735"
+    },
+    {
+      "path": "/english/vocabulary/cities-2.mp3",
+      "seconds": 1.459,
+      "sha256": "d52b6fef3595ac7fcfc8baa2aac8b6777160ada715e30c28440a9e867ff1a6b3",
+      "textSha256": "43cf02a309a5cfea31beb03c502c96863d26cded2baa7c7596d674b8d3e6672f"
+    },
+    {
+      "path": "/english/vocabulary/cities-3.mp3",
+      "seconds": 1.715,
+      "sha256": "460cb711d8973781214127f5303628cec2afeeb9d224931f560b528c925d0e3a",
+      "textSha256": "6a32453f3226908d32bb03cf6c48fab09c17323787a5df15dd728ba57538f3ac"
+    },
+    {
+      "path": "/english/vocabulary/cities-4.mp3",
+      "seconds": 1.737,
+      "sha256": "8d7dd850dbcbef4a4ee086b8223dc9c93c49801efe0a2230e98f989b7c298ee4",
+      "textSha256": "90a39b0abdabaac01826c2f4f3544569084deae618cfe5cc9071dde576a69c5f"
+    },
+    {
+      "path": "/english/vocabulary/cities-5.mp3",
+      "seconds": 2.057,
+      "sha256": "44c573c721be4158134424e7889896c373adc153cf0554fbd1e50ff7f9dd8990",
+      "textSha256": "52a4464e39991549d95245f5c5549fde625d1ccb017ebfe0e9e56a63d97e85e6"
+    },
+    {
+      "path": "/english/vocabulary/cities-6.mp3",
+      "seconds": 2.057,
+      "sha256": "26d1dff3abb5116580d7d77b6c96d81d4838208a737a8a451d16a27c02e57855",
+      "textSha256": "f489c7f1169f7f8010bd80d4f9128dfc4caadcca6d28f2c5b3ce492029191338"
+    },
+    {
+      "path": "/english/vocabulary/cities-7.mp3",
+      "seconds": 1.929,
+      "sha256": "1e455d8fe20f18b3b2f1923e044011c7b8998bd09760bce9a634c65457582a3a",
+      "textSha256": "5b389f3fdd314bb018f645f4b37095e391046c702ae8ac35bf25561a1be3d438"
+    },
+    {
+      "path": "/english/vocabulary/cities-8.mp3",
+      "seconds": 1.694,
+      "sha256": "7628ef7180101890286adf05df1ae27a515bff93d4571130af7e50f283321f8b",
+      "textSha256": "2600c89bff95b95b5a5b66066cd525ac78615035fc0ba43f31e4736e716acfcb"
+    },
+    {
+      "path": "/english/vocabulary/transport-1.mp3",
+      "seconds": 2.419,
+      "sha256": "16702c45417daa7b675dbacc26783d9c5a6568b89cfc6bce3b160b76975c2a46",
+      "textSha256": "eb00d1c114d629fe0a46eb92e2c80266db120ed9ed97d46c444bdda65b98470a"
+    },
+    {
+      "path": "/english/vocabulary/transport-2.mp3",
+      "seconds": 2.249,
+      "sha256": "6f7aa1d37afa625358e62ce84cbd2fe4cba102f796ceaf87dc389a808aef5b7e",
+      "textSha256": "75fff604fea60555e2a93420dd61341947a1cc292f0d198a8b2cd5dbca02cd56"
+    },
+    {
+      "path": "/english/vocabulary/transport-3.mp3",
+      "seconds": 2.014,
+      "sha256": "b4f4a299a25c81e7f1eabfbee60b65a6e1ce81f31539fa464b93b92e3c209b50",
+      "textSha256": "73cc458caa34481797b879b1c002294fbb8fac2b8fc11cfc2435137b18155aa6"
+    },
+    {
+      "path": "/english/vocabulary/transport-4.mp3",
+      "seconds": 1.673,
+      "sha256": "c24f8cbfaf02d71204cd83d07c7cd61bedd8eafe4e5ce6755e33d87a856f8d31",
+      "textSha256": "ece426bf7bb1ef92956569c4314e12a873a174af6f5480874646744ce280e04a"
+    },
+    {
+      "path": "/english/vocabulary/transport-5.mp3",
+      "seconds": 1.929,
+      "sha256": "7bd049dcebca7c532c60ede745e3261a8bbe87b014cbdf5313775b85a230662b",
+      "textSha256": "e23639512d40333b2ff7066ef1fd0406a8a36bd76398019ffd2d08a29dca217a"
+    },
+    {
+      "path": "/english/vocabulary/transport-6.mp3",
+      "seconds": 1.929,
+      "sha256": "2c1c5c7e4028aa502e358a4455b3ae354fe4ee058e7f4b8dfb418d73f43e87d0",
+      "textSha256": "e0ccf4eb96598986ff649713f5fbed0aa5447b4ab09d80f3ac7b07d8c261ccdd"
+    },
+    {
+      "path": "/english/vocabulary/transport-7.mp3",
+      "seconds": 1.843,
+      "sha256": "a03c89a92ff8088022b9fe0b8ffcfa2fa097ae7620d95ba33a16bf58cb5c2346",
+      "textSha256": "d7a4b803044fcec065261a79902b92058c69a9d8ab7d2069738d57ea01537aa8"
+    },
+    {
+      "path": "/english/vocabulary/transport-8.mp3",
+      "seconds": 2.186,
+      "sha256": "e7cf9daecd6dbc401838602c155f2946101c40943b1218dc3e703204e5d28463",
+      "textSha256": "d0540523ecae7f897e6302588cc48dba2b35a20a2240a5b0f0ca775af90f9ce0"
+    },
+    {
+      "path": "/english/vocabulary/crime-1.mp3",
+      "seconds": 1.843,
+      "sha256": "59faf4c30f1ad46c5824db6cbe9b210f15b848672f960c38865345475572bfdf",
+      "textSha256": "c47b382e4a90450479ef0e1bc429cc9f49010030ce5b53ebf9b18828479eac7a"
+    },
+    {
+      "path": "/english/vocabulary/crime-2.mp3",
+      "seconds": 2.014,
+      "sha256": "44299c45dda5d75fea890b3f4f0cbf088e6155f61838349d69bf7b3fe1e5d25d",
+      "textSha256": "82d8575b512c12e89cb69e352422fd55281e89fc56616bb72204c4828cd4e6fd"
+    },
+    {
+      "path": "/english/vocabulary/crime-3.mp3",
+      "seconds": 1.865,
+      "sha256": "e9dd4ff3c97fc806541322d2509d3149ab8e45ed84b2aa4bf2aae754321fbeaf",
+      "textSha256": "ba2e167a2140bf5d98983f62d6a90b408d16b1550488fc3c4527715e3b4cafb7"
+    },
+    {
+      "path": "/english/vocabulary/crime-4.mp3",
+      "seconds": 1.523,
+      "sha256": "37c00d1987bbbb9073a851e4522eed74c25c9dd110b6cf657bf35297963541c6",
+      "textSha256": "3abead0986dcc05851ec2beee6126ca30bd518b631b18f46c97e6d218d10c626"
+    },
+    {
+      "path": "/english/vocabulary/crime-5.mp3",
+      "seconds": 2.313,
+      "sha256": "fd885d6ec9f80f81c24dc039bb98d12a15656f7d7ddc85f5b722ad91d5e044e9",
+      "textSha256": "0250d4fd37eb6ba219eba49ffbdf0968c3c0d18b711f69a0bfcdd0aa589ca3c7"
+    },
+    {
+      "path": "/english/vocabulary/crime-6.mp3",
+      "seconds": 1.587,
+      "sha256": "57443bb1649e55f39549ebd45df3e544f5a849e2aa82d2276a9113578208f01b",
+      "textSha256": "18846d9235879dfde7cf4792ca19aaff13b8b1d4854fdeabcede70a828506443"
+    },
+    {
+      "path": "/english/vocabulary/crime-7.mp3",
+      "seconds": 1.758,
+      "sha256": "22e9efab772d11d4f5e283788265f2e68a1abdb6c2017935f996577bddcc962c",
+      "textSha256": "e6dd504270c4816b294aa7ce44a540d47f74f0611a8b99629368f0cbc174d741"
+    },
+    {
+      "path": "/english/vocabulary/crime-8.mp3",
+      "seconds": 2.526,
+      "sha256": "d4412d828a1fd0191090944ffbcddc0f26c15f53c1ec58760e3240d36e95b529",
+      "textSha256": "eb3c47237f5e2038b8fdc5fdddc453d2c6c856b76ff910fcc01e4532ada2a92c"
+    },
+    {
+      "path": "/english/vocabulary/government-1.mp3",
+      "seconds": 2.078,
+      "sha256": "915b0d423125f2faa97f6c0b901ec1236ba69f24e5eb54d0827c96f17bf20b7c",
+      "textSha256": "ae00d9beabee3e789a41dd75561f32e081faedeb283a0079fae8ba175bd319be"
+    },
+    {
+      "path": "/english/vocabulary/government-2.mp3",
+      "seconds": 2.206,
+      "sha256": "a0219b0c57542c9fadf92c2e73a40f14115faa21210f1f667a694277a3c89770",
+      "textSha256": "1076bd9c77fc80fcba4e53a24709a55ac3e5db5af3e3bd2f60648adf51970764"
+    },
+    {
+      "path": "/english/vocabulary/government-3.mp3",
+      "seconds": 2.163,
+      "sha256": "4178a27eb2cb2d978f79d5b160478b593ad61ebc55195fbe255a48a097dbadcf",
+      "textSha256": "7fca204859df04c90117e1343c9b32ef5a1ef5fe332aef6a31dbb4bf5c574c07"
+    },
+    {
+      "path": "/english/vocabulary/government-4.mp3",
+      "seconds": 2.078,
+      "sha256": "e63e4703fa7029c5123616a3b6bec77f3f3dbc4cd7411d1428c653d3d8351a90",
+      "textSha256": "0e01c43dc03df89a312cac623b45a715f30b2d6bd99e5bc843016d85cfd73144"
+    },
+    {
+      "path": "/english/vocabulary/government-5.mp3",
+      "seconds": 2.27,
+      "sha256": "16ab505e82dbb64c831ba3f0b685cf28d70af31f88f520f8ca588fdc41badb4a",
+      "textSha256": "4d03aa37488404659f3737d221cc1213ff0f9765dde0201d0322cf18c2e32ec9"
+    },
+    {
+      "path": "/english/vocabulary/government-6.mp3",
+      "seconds": 1.802,
+      "sha256": "2ba3229394c990efc734719a9dde07e66af09017e03027207846bb8c518851ca",
+      "textSha256": "dd012ad4dd79551a8ace691ba94528f57b910cff61e6c08dd56529215b3bfbd4"
+    },
+    {
+      "path": "/english/vocabulary/government-7.mp3",
+      "seconds": 2.186,
+      "sha256": "397d1fb519893a9fb533f0bb32fbccd059f62ac453345abd522b0e2677b067d0",
+      "textSha256": "4b0add5c653b75fb49b277dcb1f00b6b594148880433a33f2dec3db3405d0c0f"
+    },
+    {
+      "path": "/english/vocabulary/government-8.mp3",
+      "seconds": 2.313,
+      "sha256": "a5c110abd97da617a1c8093cee3cebbe09b63a5792492905e330f9706845d203",
+      "textSha256": "7e41078eadd8e3903abb623815772a002c9c695908a166ab9dcb238da1d1caf7"
+    },
+    {
+      "path": "/english/vocabulary/media-1.mp3",
+      "seconds": 1.95,
+      "sha256": "8ebc876f6f39ff95c01c2c323485995c65639e1f2a32d61834a5cd4624ab85eb",
+      "textSha256": "eba4b3e5c4f7e081914f1863c9a7bbc8214cb055fb7185816971888c76b29edc"
+    },
+    {
+      "path": "/english/vocabulary/media-2.mp3",
+      "seconds": 1.566,
+      "sha256": "78e4aa5b3f4eed4513464ac60caf4ad14e1784e96c151009382cccfe42e57bf6",
+      "textSha256": "56683723d0cf8b698fb106e81dac6811c2e437fc44299a2f70930fa394be3442"
+    },
+    {
+      "path": "/english/vocabulary/media-3.mp3",
+      "seconds": 2.121,
+      "sha256": "fb2cbf464c69aef641ed069608471dc02ef5e2536ae03dc9cb5e89a3f85ad7ba",
+      "textSha256": "d8252cba99ce991371f2b9acd26f1794bfa8e7bc57b2be19e54ab3a4d31064c0"
+    },
+    {
+      "path": "/english/vocabulary/media-4.mp3",
+      "seconds": 2.398,
+      "sha256": "f16a450f9474ef4c8a41d981a3b7cccd79a8a75856e871938390d6295a967c51",
+      "textSha256": "d924be5c6248cf7c107d1ae7da1eeab1b0ad1db3be22b6b09d48d86198d49e0f"
+    },
+    {
+      "path": "/english/vocabulary/media-5.mp3",
+      "seconds": 2.419,
+      "sha256": "f6268ada923735c57ae745e0abb36d106f3fcf8f52aba4f482f9abe26afa0ba5",
+      "textSha256": "aaca3b66b8aa458e79bd93d1bafee16638ad57addd5b9c8764abe332669d6f9f"
+    },
+    {
+      "path": "/english/vocabulary/media-6.mp3",
+      "seconds": 1.994,
+      "sha256": "391bcae92f13fe6aba0aa8af0411a67616022a73587561a0f29a609e812b5d68",
+      "textSha256": "0aaca96b4c57fd73e760a36af2e4a6c01e57fc5e6b122c68393c91d58cc23c56"
+    },
+    {
+      "path": "/english/vocabulary/media-7.mp3",
+      "seconds": 1.95,
+      "sha256": "c636d280e30c95fa54e4679122312cf387ff9110bde9b6e691bbc428553389ed",
+      "textSha256": "1e4cfe37148ff7ceafb1eb0c0f7b8677feceee28d5e2a85bb6022f1de0b3897d"
+    },
+    {
+      "path": "/english/vocabulary/media-8.mp3",
+      "seconds": 2.291,
+      "sha256": "0ce48a7e403e634dff8c4b1bf0f0b5e9ccadc73f50a10113da88b707d5b30ea0",
+      "textSha256": "84e25b4a53adb6cbf7ec4e71b5ba4a3a22388442bd7825388184ece87e8bd26a"
+    },
+    {
+      "path": "/english/vocabulary/culture-1.mp3",
+      "seconds": 1.971,
+      "sha256": "334edfdb5e6272303bf0a088a2ac09a31c18ad0afe87a4987fd5e9e0900296e2",
+      "textSha256": "2d05cd5b372271e1ea2fcef967fad52d89a5894380ae5086e256ecac802dd6c7"
+    },
+    {
+      "path": "/english/vocabulary/culture-2.mp3",
+      "seconds": 2.035,
+      "sha256": "522e43c36297c0894c081a0a2c1d0c2f5e59e0fa560e458881d222d0753753eb",
+      "textSha256": "507e3262b00d35418df3ee4a8050fecda02a70c9e41b926cb5d0340f145d9f3d"
+    },
+    {
+      "path": "/english/vocabulary/culture-3.mp3",
+      "seconds": 2.142,
+      "sha256": "b0530e6db6a990b9a752e21be80559e107f7903fae9a4d4d93010c479fcb9961",
+      "textSha256": "1914b2d7633e4d08e161faf59e5e655cf96066a909bb7bc498c3681a5d79281c"
+    },
+    {
+      "path": "/english/vocabulary/culture-4.mp3",
+      "seconds": 1.737,
+      "sha256": "f8a3c2cc94a8757f4133d9d8cdc8fb61c111e1093859c56dc300e7faa60bacdf",
+      "textSha256": "1b9f4147e0ca5d5e84cc612e210e757f2ab33add433e206224c10e3fa6f48033"
+    },
+    {
+      "path": "/english/vocabulary/culture-5.mp3",
+      "seconds": 1.95,
+      "sha256": "55b35e0b8938a46efbe19869ced0a5bbd6c5a7034bdcea21c920eab12baab718",
+      "textSha256": "570dc7b94dd790338eb9d9b2ad5787c15dc42346f11f7d9639fecbb4a9458970"
+    },
+    {
+      "path": "/english/vocabulary/culture-6.mp3",
+      "seconds": 2.227,
+      "sha256": "aeeb805395edb9cc23a60a2f2203cdd1adbf6a5880ec1d3a4f0c2d847711944c",
+      "textSha256": "201616f6ffe90a7408e44155990bbad3e91507e595f15de193b265b8e757f9ab"
+    },
+    {
+      "path": "/english/vocabulary/culture-7.mp3",
+      "seconds": 2.163,
+      "sha256": "8c8ab1432f254fad43cb8eaaaeed2c966d39f8709f7ea65d3b547d7374009e93",
+      "textSha256": "7c525a344ab141b0dadccea3b8c180368bb2647d837d937877b7e287586378d4"
+    },
+    {
+      "path": "/english/vocabulary/culture-8.mp3",
+      "seconds": 2.099,
+      "sha256": "65e8819413c0d9cb76a44dc0b1b09f80453aa7023090ed88dfc43538b0665e4f",
+      "textSha256": "2a7841f3adca056a9502032b27a11fbc7f40e6fb40f85c8deebc382d94444dc8"
+    },
+    {
+      "path": "/english/vocabulary/globalisation-1.mp3",
+      "seconds": 1.587,
+      "sha256": "386aac8021dff319400ec2e96a00c867b2815d530bfd7686af091ae06eef9876",
+      "textSha256": "730c71d1ab3317429e9b6e595fdb599805fc99bece5e7d23052658d61112c446"
+    },
+    {
+      "path": "/english/vocabulary/globalisation-2.mp3",
+      "seconds": 2.334,
+      "sha256": "b0bd9336f7dd26178e6aa270b7d0ae616a0d20c31e5ae79bb69a7da1117ad92a",
+      "textSha256": "2f092c9e3038f46ca5eb4190d70a04b20ec6109a59f04d1c0a1704f30125d073"
+    },
+    {
+      "path": "/english/vocabulary/globalisation-3.mp3",
+      "seconds": 2.078,
+      "sha256": "c5ade6bc6ff5675f06766998876b7cdfb5a5269b8eb83b3f6f0be80e54f29cb7",
+      "textSha256": "dae3958cce4f605ed9b945b119e71fee4541aac2c1620168f07483106670e53e"
+    },
+    {
+      "path": "/english/vocabulary/globalisation-4.mp3",
+      "seconds": 2.355,
+      "sha256": "0dfd710b18ee7d1a966d2f1f54d4b4b3827ea602476f43f5f6a4c209a1836b8d",
+      "textSha256": "d1b7f8e5f3e16e166438bdb500f557432b2ee1cbf2200110ec1b966fb1c447fb"
+    },
+    {
+      "path": "/english/vocabulary/globalisation-5.mp3",
+      "seconds": 1.843,
+      "sha256": "e0205b42fc91c09c61f78ed4d7970b3d8e6157ef7427f458f14ba9db5c22b0da",
+      "textSha256": "c65c360ac39077d57c23719c9182f41f836a5efab67bf3dd84469ad3656360bc"
+    },
+    {
+      "path": "/english/vocabulary/globalisation-6.mp3",
+      "seconds": 2.57,
+      "sha256": "839007d078e1c7d7d9c268fd7bc5e43e66154c95c4840335436d4604972e6c68",
+      "textSha256": "7870f5fe6763e1e843572ad35ec1a551ff05ce313633d621765f6f5d27054b39"
+    },
+    {
+      "path": "/english/vocabulary/globalisation-7.mp3",
+      "seconds": 2.291,
+      "sha256": "cd948a65202ab2c9b59bc9ab912a1729f38e5c38f3a1eada142be35fbffc5b40",
+      "textSha256": "102dee31e8956aa957f56ec5876d39a2f4ef18e2bbf826045809d6fb671fc340"
+    },
+    {
+      "path": "/english/vocabulary/globalisation-8.mp3",
+      "seconds": 2.099,
+      "sha256": "b147a6757fef168e03fbbaf33c1d2772a647a74cee273e839d8865836394e8e1",
+      "textSha256": "94acf6aba2b86c96c4d7bf2946fbc1e03085addedf3b9b7572bffaa006718ef1"
+    },
+    {
+      "path": "/english/vocabulary/science-1.mp3",
+      "seconds": 2.163,
+      "sha256": "b495eb2d617c7c7a5b780526327616a56025bf0139a95f3ef08242a317860e4e",
+      "textSha256": "f2ff38d3f13a94d34e58901fdd3ae78d40cec3b0c3dd0ad50f38c230fd402f9a"
+    },
+    {
+      "path": "/english/vocabulary/science-2.mp3",
+      "seconds": 1.843,
+      "sha256": "c7e6812f83804942dcb20a79f209a2f5b6130c4a0646fc036bb75fd3cf784991",
+      "textSha256": "4e1947732797af628b732aeffce8fe191d4b29cc189b96cf961acdd8d83a2359"
+    },
+    {
+      "path": "/english/vocabulary/science-3.mp3",
+      "seconds": 1.459,
+      "sha256": "728bac6b347f1d8cb74718ab2264e140978d804340f0ed73d95e35394a7624cb",
+      "textSha256": "b3ad1664fd38cf19d0f4bcddf8071a331f4f3a40003888f9ece50455b66e0ad6"
+    },
+    {
+      "path": "/english/vocabulary/science-4.mp3",
+      "seconds": 1.886,
+      "sha256": "6323ec35136c43706bc0a9fb64e0d9eb0f9117b935ba9ac11e12c60a142d511f",
+      "textSha256": "7ef1568d1fc9559049bf2e5a1988239b673c0a59626e50f3ae6c00dd3829a2ac"
+    },
+    {
+      "path": "/english/vocabulary/science-5.mp3",
+      "seconds": 1.994,
+      "sha256": "dbb8b1a721cc44770dbcfa23f699be506bfe20e9d72e8251edb7c866253d7c6a",
+      "textSha256": "c82034e5931e256cbde75bf904e47655b10158143fe67d4df637a2f0a09864a7"
+    },
+    {
+      "path": "/english/vocabulary/science-6.mp3",
+      "seconds": 1.779,
+      "sha256": "486aab584c8621d706855033c0648400a11f0c5c654e5186fa578cbb75a1ca64",
+      "textSha256": "37ad3b13ec7dedebfd62b76b3e6b841c82677026c2eee627c30820c5886b27f6"
+    },
+    {
+      "path": "/english/vocabulary/science-7.mp3",
+      "seconds": 2.378,
+      "sha256": "2bb1bd1932d39c63bf5acc162ebaa26688c445f16efa88b72b857991223e5202",
+      "textSha256": "12d969f6fb8cd76a9f79381c8947080480d857308ccdf1bfb297a3597cffc842"
+    },
+    {
+      "path": "/english/vocabulary/science-8.mp3",
+      "seconds": 2.291,
+      "sha256": "70163c0838835c26dd37ae217817b0a9699afec9e2787dd237196278778fee38",
+      "textSha256": "3eac0001e56103aa3a3b0eaca51aa3963b0f3888675de0d2bb6d3bdaf5eb421e"
+    },
+    {
+      "path": "/english/vocabulary/family-1.mp3",
+      "seconds": 1.802,
+      "sha256": "38f1bd2ecc0d1b83b8508a05e993f97ee93a3c282753809093fc098cbbbb0234",
+      "textSha256": "6f6d2ff0e55eab2242973e3f27d8aa72aec4621546b1e01e53f992c921b8f5fb"
+    },
+    {
+      "path": "/english/vocabulary/family-2.mp3",
+      "seconds": 2.186,
+      "sha256": "2e63988288a17650a86b92e566170662788c428e8fe58c75eac183c959cf2b30",
+      "textSha256": "6773e076080c31ff21a48df2a5171fd0c3eec93ce987bf0b6b6fa84283ff73e0"
+    },
+    {
+      "path": "/english/vocabulary/family-3.mp3",
+      "seconds": 1.651,
+      "sha256": "fdd7821af65cfc3739b56cf22a8316136a53f9f31dcfa53eaf39a1559ecdecde",
+      "textSha256": "510dad2bd10ac769545e90dbaa4a02cfcdea65edad3a9e9499723b60db54342a"
+    },
+    {
+      "path": "/english/vocabulary/family-4.mp3",
+      "seconds": 1.95,
+      "sha256": "d3b7cf2012e41f8dcb5a12df298e3c283380dab8a74d3adee620b6e7e64d9474",
+      "textSha256": "817861ae56d8578b75d193ce58ada8aac6bb5ac1b3c90a32ba1bbc858374846d"
+    },
+    {
+      "path": "/english/vocabulary/family-5.mp3",
+      "seconds": 1.886,
+      "sha256": "58d59c3c02dfc2ee0ecf096dbbd81f70cf50b82dc173d76031b5ce47275e07d7",
+      "textSha256": "5b67fc6f2f28a9cca45f28f5d021264035e2dcbf37605a281f1931059369db22"
+    },
+    {
+      "path": "/english/vocabulary/family-6.mp3",
+      "seconds": 2.014,
+      "sha256": "88e5bf83a06fb9f4ff39eb4a9ef2d7394eef56eacfc32d51c903ca52c1cf53d5",
+      "textSha256": "ca02448cd47b156a7a700ff39d50437ccbc92acd14afe8a2ad4d3e8bf1ac75b6"
+    },
+    {
+      "path": "/english/vocabulary/family-7.mp3",
+      "seconds": 1.994,
+      "sha256": "fb8894ee46dd13083c3d7ab2b1de7bbacd599732d28b87206592a91d9334ada9",
+      "textSha256": "c5dc33a8d00b5e644389dd55be29823275044072dbf13d56b51b03429c5dd20d"
+    },
+    {
+      "path": "/english/vocabulary/family-8.mp3",
+      "seconds": 1.545,
+      "sha256": "cab5912f30a04e3d50ac1418ea98861373df5f231f9f0dc76959ba10fc9401d1",
+      "textSha256": "b5ae8e0dac26e882f8456777bdeacf0ecbb2c73e4344f85e0d40187960134335"
+    },
+    {
+      "path": "/english/vocabulary/food-1.mp3",
+      "seconds": 2.441,
+      "sha256": "f52eb1ae764f4d5f10da440406ce8d28a872e08d30d69acd8e70d44551e2c584",
+      "textSha256": "01fa889a7c5a93e25edc1b079f23a1152253bb15ccd66341d47e49adb51db633"
+    },
+    {
+      "path": "/english/vocabulary/food-2.mp3",
+      "seconds": 2.078,
+      "sha256": "c172732f0f0eefac7aeed2c449b9ad47d83cec53daad989b5458e3e80860642a",
+      "textSha256": "a8d0045a0aecfe7dc9ffb2671bf1fccd273ad73ececa4fa24ba2a9150d6a8881"
+    },
+    {
+      "path": "/english/vocabulary/food-3.mp3",
+      "seconds": 2.186,
+      "sha256": "c6961c773a33c274b8f6f50114603f30113a393bc0c1197b92ea277630028a8b",
+      "textSha256": "0946044ab6e399fd687f2b5237f506ac7fa3b52e4923891542725c840a2fe700"
+    },
+    {
+      "path": "/english/vocabulary/food-4.mp3",
+      "seconds": 2.014,
+      "sha256": "d401ef7404c4b2954fda7892c3fb4636f9d6c5224a3b398f84109dc4b85123c3",
+      "textSha256": "8bc94f3687e87126715b421c6505d34d7cbc6c10f41a840e2f95af5f250c4f7c"
+    },
+    {
+      "path": "/english/vocabulary/food-5.mp3",
+      "seconds": 1.545,
+      "sha256": "d6ec43e69c0be6f24254bdce37946ef817a7bf32055fc462319e8f20673b90f2",
+      "textSha256": "7b34dfee37b3d93ac1e347fbf92970b80579ac1a04fd066ccfa05b17c9fba86c"
+    },
+    {
+      "path": "/english/vocabulary/food-6.mp3",
+      "seconds": 2.121,
+      "sha256": "5834c5c70bf735f50d13dcd96acf807d8b51685328be2d7a4ec2e7d063e3fa1a",
+      "textSha256": "243f9c5a96e74693d22acb7bc257df4396307f6262c26ff79c8997d88a61c370"
+    },
+    {
+      "path": "/english/vocabulary/food-7.mp3",
+      "seconds": 2.057,
+      "sha256": "7fe66e19deaf7e5d0c1fb0352aba8f4cc0a02d95355764ec5c95d7c3a4feac0b",
+      "textSha256": "fffc9c58e75c4b6def4b88e3b1b79f5427b33dc18466043c412a64852a40ac4a"
+    },
+    {
+      "path": "/english/vocabulary/food-8.mp3",
+      "seconds": 2.121,
+      "sha256": "74d76197d20aafa6280031ce30307224b81f49d5ea17a5e7d4b78f922dbc983c",
+      "textSha256": "c72aa295b4743eea3a0bec515453ef6527dffc16cd75a7bdd0dbbd224f266e7f"
+    },
+    {
+      "path": "/english/vocabulary/tourism-1.mp3",
+      "seconds": 2.142,
+      "sha256": "65f0c804817c426ae5718773fb31a8281090b448b9d0778fa646ddc8e7e185bf",
+      "textSha256": "7b18471006f46c5fe4b014278a7da7e3e63b4a64b60253820b6c92200d6ff944"
+    },
+    {
+      "path": "/english/vocabulary/tourism-2.mp3",
+      "seconds": 1.929,
+      "sha256": "58f65f5943463e2bf90016e56d685f9d0b2788ba1e6cea7b8b7778a467fa542f",
+      "textSha256": "f72b570430d4cc88c650bf52dfb454524cf548285e72bfe8a2b2c48d8539f126"
+    },
+    {
+      "path": "/english/vocabulary/tourism-3.mp3",
+      "seconds": 1.63,
+      "sha256": "e7ea4b74d43b9c069a641f46595234b3530eaf652db62686cfe9d9773cd709db",
+      "textSha256": "42de21cd4bd257dd4946043e2d93c092ff36da771497536d37981a4fd2765dc1"
+    },
+    {
+      "path": "/english/vocabulary/tourism-4.mp3",
+      "seconds": 1.994,
+      "sha256": "6214d1cf24390b9c0f9f7a6f068f952a82a416ec318b9ad0d28bb7d50ce81d09",
+      "textSha256": "a1dcb59d96a6532c92782b3c561152119f002e493f92396875d2817e4d022f02"
+    },
+    {
+      "path": "/english/vocabulary/tourism-5.mp3",
+      "seconds": 2.227,
+      "sha256": "5bdf54c4973da006178ab0cf8a6acef356972ba9b75d89465b3ec7ebb4e9a636",
+      "textSha256": "016306860573c0e53c17a2b5e12f530993a5839665702e2cabb66bf1d4642a43"
+    },
+    {
+      "path": "/english/vocabulary/tourism-6.mp3",
+      "seconds": 2.355,
+      "sha256": "eb1a4eccd8d5eeba2d45e0b6507360a2bc9409111bae226c0ac36ace486c0934",
+      "textSha256": "73fd40ee7fa9112b82232579ab30c7ee1d16092b09d2d5fd28ac2501e22a4d05"
+    },
+    {
+      "path": "/english/vocabulary/tourism-7.mp3",
+      "seconds": 2.419,
+      "sha256": "18b1451a6e42e2dbf9918f82a0618ea6242b90c98873f76f2abf3215825f3498",
+      "textSha256": "b1cb3ff2c8a0170617fa02bdd0dc94f7f3dcf4025a2b40e055bbb115d5271a4b"
+    },
+    {
+      "path": "/english/vocabulary/tourism-8.mp3",
+      "seconds": 2.633,
+      "sha256": "6af14bae57aa5deec65c472c293d03251a06dab08f4023e47165a071a92c83fd",
+      "textSha256": "43441c45b03645fa92b903207e375ed06b581df0eed63a55f675838683ede830"
+    },
+    {
+      "path": "/english/vocabulary/housing-1.mp3",
+      "seconds": 2.014,
+      "sha256": "1dcf787163964885aaed452b3d8aaecff59b87387bf1ab639ba9a3f182564962",
+      "textSha256": "947e8bfec1c2e70ae21f95b7239441e94889ed755e624db0e27da42c45649735"
+    },
+    {
+      "path": "/english/vocabulary/housing-2.mp3",
+      "seconds": 1.929,
+      "sha256": "556307bfee9c231fd79275f4954f398da21c325a84601f6bed7037f365e4e252",
+      "textSha256": "1be1090ffe178a01a4ce9d1125da7370cbec428aa42cc75176ce29477387bf13"
+    },
+    {
+      "path": "/english/vocabulary/housing-3.mp3",
+      "seconds": 1.907,
+      "sha256": "881bdf7ae9676cf21b4c3549dad36fea929b68dda706584d397a257db1d805a7",
+      "textSha256": "9db8229fd33bf797fe237d83da327cdc064bff54f4ce8d544d2b6411e83df41b"
+    },
+    {
+      "path": "/english/vocabulary/housing-4.mp3",
+      "seconds": 2.227,
+      "sha256": "aa9217c8504c6053d69f57f1bb89197a296b772a999a7109825c0cee4b3f67dd",
+      "textSha256": "0c3e049fcf52706bb25c0ac8b67855cb9a6a182f39caa135308a63b443c42253"
+    },
+    {
+      "path": "/english/vocabulary/housing-5.mp3",
+      "seconds": 1.865,
+      "sha256": "60f74c5e1e2049871934112715629506662c695b33bcdda4cd1a09445523f366",
+      "textSha256": "d5a42e98a5c8e7676faab328835984a5c972d22a53abe381a09a1bd517a9b929"
+    },
+    {
+      "path": "/english/vocabulary/housing-6.mp3",
+      "seconds": 2.099,
+      "sha256": "5a42312334fa1e9f10d00f4aeeda41ffa29f5f4c8c79c63ec32fc6382f9dadff",
+      "textSha256": "40abda5d2a8e690188ff13ed634eb993821382700c804b1441864bd98adbce8e"
+    },
+    {
+      "path": "/english/vocabulary/housing-7.mp3",
+      "seconds": 2.035,
+      "sha256": "ca189abb82c56ccaa8a0df91eda79113504dc4065a7070b55630309b1440dc91",
+      "textSha256": "b591e8c6d3ab812a5c0c5559b16b552b4939dff39ad40dc0e754319e6d3077bd"
+    },
+    {
+      "path": "/english/vocabulary/housing-8.mp3",
+      "seconds": 2.057,
+      "sha256": "ad536c1e13a3ba6820f485ab823a32cc38e9d11d8c3944501d67bb04531a73d5",
+      "textSha256": "78429cb943920f6efbc32c0af2e5aa17c9d85a1a3f8cabebb58387eebd958544"
+    },
+    {
+      "path": "/english/vocabulary/energy-1.mp3",
+      "seconds": 1.95,
+      "sha256": "bb7fa43a16ee0d949f2d7d0db2d7d5b53bac1e763bc712780b42007c650c5af3",
+      "textSha256": "c36b90d87ab27b27571360fdee5f58e6175d91acea8cd16b313db085c8d1a7cb"
+    },
+    {
+      "path": "/english/vocabulary/energy-2.mp3",
+      "seconds": 1.63,
+      "sha256": "7076ff8fbd05b5f248e9e49abe976587380e6112f0f088b3a77a6d622885d8ae",
+      "textSha256": "03f5e956c537fa2503659449a83c34707939a914d0984536ce67f924ee9e8f6b"
+    },
+    {
+      "path": "/english/vocabulary/energy-3.mp3",
+      "seconds": 1.61,
+      "sha256": "3c40af159b2e5213f41ae2528c37b1bd3be26b3607ac426aba7416ace26ed2dd",
+      "textSha256": "7ed4520a92eb82cd80a974081777de006b587e36f76a31b75725090c5ffaf767"
+    },
+    {
+      "path": "/english/vocabulary/energy-4.mp3",
+      "seconds": 1.843,
+      "sha256": "baf3138fb3d8b7e8dd53ebead30871020d9abfc3072642541536299eb40a562c",
+      "textSha256": "824e1e0c32cc2201bca71c40df7c492908ffa3e7d52056483b7466dd269ff3ba"
+    },
+    {
+      "path": "/english/vocabulary/energy-5.mp3",
+      "seconds": 2.142,
+      "sha256": "f401ff3bc06298d2c31bce02af27b6ece38c11216533f3fff417ca997bc2ee36",
+      "textSha256": "44f0ae1f295bf29e330c8f1a2414cdd6e2741392b2db035d7642b9f78e403948"
+    },
+    {
+      "path": "/english/vocabulary/energy-6.mp3",
+      "seconds": 2.142,
+      "sha256": "9c62625112b7a28a774904242f83855ca00537fa8b2abe2381698deb71079406",
+      "textSha256": "0de39bfd783ac00ca93a73d12be9c607a7d383b375bcb32f725a8dd15019b33f"
+    },
+    {
+      "path": "/english/vocabulary/energy-7.mp3",
+      "seconds": 1.651,
+      "sha256": "ea4d7abfbefeac2c2a0e38c83d5f4ad933d9e29c810eacef46fae1c98d1f9892",
+      "textSha256": "5527d61ea8b8f0e46ce561b4e08e0d853dfa24054beeba30ad1ea9453c7fffce"
+    },
+    {
+      "path": "/english/vocabulary/energy-8.mp3",
+      "seconds": 2.186,
+      "sha256": "52f32a7f2290247ee53eb66ccc66f240ac9c028a1c3471d953ab9185dd6ba7cf",
+      "textSha256": "fb4cc25748ebc70eeb647fcd70830a6dcca06930db47981b72284e9256b74575"
+    },
+    {
+      "path": "/english/vocabulary/equality-1.mp3",
+      "seconds": 2.142,
+      "sha256": "3ea999aa82318b507a2cf5911ba3f8e0bc960c83f3e4e0d638548c36ee2bf731",
+      "textSha256": "339150f3434c19944c4b52ba4ae7eb5b57b90cc34821f1063a6f0164718a7a8d"
+    },
+    {
+      "path": "/english/vocabulary/equality-2.mp3",
+      "seconds": 2.334,
+      "sha256": "e1b439a8add71077d5e908b4c2963270b8c2726b3270fbac1de953e6dcaf0631",
+      "textSha256": "6edb302115b61a0aa1681b3a3bc2d87c6bfe71cbac8136a12de9209f6323d865"
+    },
+    {
+      "path": "/english/vocabulary/equality-3.mp3",
+      "seconds": 2.035,
+      "sha256": "0879457688b33de179661bfc57a44b86e26c9e309486e9ffa43a2572e83b56da",
+      "textSha256": "655b8c1703b34ae8feba2952b119c7d8258e7ab9008958163aae4b13efee9536"
+    },
+    {
+      "path": "/english/vocabulary/equality-4.mp3",
+      "seconds": 2.057,
+      "sha256": "ccd13ca413702ab32d478e0e95189f213f5593314504710822286a77023a3f5b",
+      "textSha256": "0271a43b7be054fa709011eb87568b54f191268d7d2f70b618ebf231b13f554c"
+    },
+    {
+      "path": "/english/vocabulary/equality-5.mp3",
+      "seconds": 2.483,
+      "sha256": "4dc63214b44e86b58a0c95aa594d99ec8bab89788e2726681433df69196192e3",
+      "textSha256": "21bf85d0782278bfa5dafe4ac7d305cdb33b11965193389b4d008da73b0b2349"
+    },
+    {
+      "path": "/english/vocabulary/equality-6.mp3",
+      "seconds": 2.27,
+      "sha256": "ca6ccc18f0b1ac2cd19d67c12307623191b06d90d0260096804d14699ee9d0d6",
+      "textSha256": "176b7877d2b72ecdd5fe102e4a0effea4a07954e0b13001cb8f3ab52b989e2b5"
+    },
+    {
+      "path": "/english/vocabulary/equality-7.mp3",
+      "seconds": 2.099,
+      "sha256": "fa9146f8c19277989862cd1d274291a3813da32235b211c111a1df972d991c8f",
+      "textSha256": "c6c34f5f0eac8beb8a1acb2258c6ceb68905e66b834b2f566f924b48c1c20855"
+    },
+    {
+      "path": "/english/vocabulary/equality-8.mp3",
+      "seconds": 2.505,
+      "sha256": "0c41954ec5119f0c0ddd399255647ff2161e1c6f931ec54b42eff835de02072d",
+      "textSha256": "f90367b9c8b26a2e92e0155b906b5093d7298e8b2afe65d5b350b1e70f4306c5"
+    }
+  ]
 }

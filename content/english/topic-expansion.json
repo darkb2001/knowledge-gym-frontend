@@ -1,0 +1,122 @@
+{
+  "education": [
+    {"term":"early childhood education","meaning":"Giáo dục dành cho trẻ trong những năm đầu đời","example":"Play is an important part of early childhood education.","usage":"Thường nói về giai đoạn trước tiểu học; không dùng thay cho mọi cấp học."},
+    {"term":"primary education","meaning":"Bậc giáo dục tiểu học","example":"Every village needs reliable access to primary education.","usage":"Dùng receive hoặc complete primary education; education là danh từ không đếm được."},
+    {"term":"secondary education","meaning":"Bậc giáo dục trung học","example":"She completed her secondary education before taking a vocational course.","usage":"Phân biệt secondary education với higher education: trung học và giáo dục đại học."},
+    {"term":"academic achievement","meaning":"Kết quả đạt được trong việc học","example":"Regular feedback can support academic achievement.","usage":"Có thể nói improve academic achievement; không đồng nhất thành tích với điểm của một bài thi."}
+  ],
+  "environment": [
+    {"term":"public transport","meaning":"Phương tiện đi lại phục vụ công chúng, như xe buýt và tàu","example":"Better public transport could reduce the number of cars in the city centre.","usage":"Anh-Anh thường dùng public transport; Anh-Mỹ thường dùng public transportation."},
+    {"term":"environmental education","meaning":"Việc dạy và học về môi trường và cách bảo vệ môi trường","example":"The school includes environmental education in its outdoor activities.","usage":"Dùng provide environmental education hoặc an environmental education programme."},
+    {"term":"climate resilience","meaning":"Khả năng ứng phó và phục hồi trước tác động của khí hậu","example":"Restoring wetlands can strengthen climate resilience.","usage":"Cụm build climate resilience nói về khả năng thích ứng, không phải ngăn mọi biến đổi khí hậu."},
+    {"term":"carbon reduction","meaning":"Việc làm giảm lượng khí thải carbon","example":"The company published a carbon reduction plan for its delivery fleet.","usage":"Dùng carbon reduction targets hoặc a carbon reduction plan; nêu rõ đối tượng cắt giảm."}
+  ],
+  "technology": [
+    {"term":"internet access","meaning":"Khả năng kết nối và sử dụng internet","example":"Students without internet access can borrow materials from the library.","usage":"Thường dùng have access to the internet hoặc provide internet access; không dùng an access."},
+    {"term":"remote learning","meaning":"Việc học khi người học và người dạy không ở cùng một nơi","example":"Remote learning allows her to attend classes from home.","usage":"Có thể dùng support remote learning; không đồng nghĩa với học một mình."},
+    {"term":"digital inclusion","meaning":"Việc tạo cơ hội để mọi người tiếp cận và sử dụng công nghệ số","example":"Affordable devices are only one part of digital inclusion.","usage":"Dùng promote digital inclusion; khái niệm còn bao gồm kỹ năng và khả năng tiếp cận."},
+    {"term":"artificial intelligence","meaning":"Công nghệ giúp máy tính thực hiện những nhiệm vụ thường cần trí thông minh của con người","example":"The team uses artificial intelligence to organise large collections of documents.","usage":"Có thể viết AI sau khi giới thiệu artificial intelligence; không mặc định mọi phần mềm đều là AI."}
+  ],
+  "health": [
+    {"term":"vaccination programmes","meaning":"Các chương trình tổ chức việc tiêm chủng","example":"Local vaccination programmes offer appointments at community clinics.","usage":"Anh-Anh dùng programmes, Anh-Mỹ dùng programs; cụm này nói về chương trình, không phải một liều vaccine."},
+    {"term":"balanced nutrition","meaning":"Việc cung cấp các chất dinh dưỡng theo cách cân đối","example":"The workshop explains balanced nutrition using familiar meals.","usage":"Balanced nutrition là khái niệm dinh dưỡng; a balanced diet nói cụ thể hơn về chế độ ăn."},
+    {"term":"regular exercise","meaning":"Hoạt động vận động được duy trì đều đặn","example":"A short daily walk helps him make time for regular exercise.","usage":"Exercise ở đây không đếm được; an exercise có thể là một động tác hoặc bài tập."},
+    {"term":"sleep quality","meaning":"Mức độ tốt hoặc kém của giấc ngủ","example":"She keeps a diary to see how late meetings affect her sleep quality.","usage":"Dùng improve sleep quality hoặc poor sleep quality; không chỉ nói về số giờ ngủ."}
+  ],
+  "work": [
+    {"term":"remote work","meaning":"Việc làm mà không cần có mặt tại văn phòng hoặc địa điểm làm việc chung","example":"Remote work lets the team hire people from different regions.","usage":"Work ở đây không đếm được; dùng a remote job khi nói về một vị trí cụ thể."},
+    {"term":"career guidance","meaning":"Sự tư vấn giúp lựa chọn và phát triển hướng nghề nghiệp","example":"The college offers career guidance before students choose an internship.","usage":"Dùng receive hoặc offer career guidance; guidance không đếm được."},
+    {"term":"fair wages","meaning":"Tiền công được xem là hợp lý và công bằng cho công việc","example":"The agreement calls for fair wages and safer working conditions.","usage":"Wages thường dùng cho tiền công; fair là đánh giá về sự công bằng, không phải một mức tiền cố định."},
+    {"term":"job security","meaning":"Mức độ chắc chắn rằng một người có thể tiếp tục giữ việc làm","example":"Short contracts can make employees worry about job security.","usage":"Dùng greater job security hoặc a lack of job security; không phải an ninh tại nơi làm việc."}
+  ],
+  "economy": [
+    {"term":"affordable credit","meaning":"Nguồn vốn vay có chi phí mà người vay có thể đáp ứng","example":"Small businesses may struggle to find affordable credit.","usage":"Credit ở đây là tín dụng, không phải lời khen hay tín chỉ học tập."},
+    {"term":"responsible spending","meaning":"Việc chi tiêu có cân nhắc khả năng tài chính và hậu quả","example":"A monthly budget can encourage responsible spending.","usage":"Dùng encourage responsible spending; không có nghĩa là ngừng mọi khoản chi."},
+    {"term":"household savings","meaning":"Phần tiền mà một hộ gia đình để dành","example":"Unexpected repairs used up most of their household savings.","usage":"Savings thường ở dạng số nhiều khi nói về tiền để dành; household chỉ đơn vị hộ gia đình."},
+    {"term":"job creation","meaning":"Quá trình tạo thêm cơ hội việc làm","example":"The council hopes the new market will support job creation.","usage":"Dùng stimulate hoặc support job creation; phân biệt với job security, tức khả năng giữ việc."}
+  ],
+  "cities": [
+    {"term":"community centres","meaning":"Các địa điểm chung để người dân tham gia hoạt động và sử dụng dịch vụ cộng đồng","example":"Community centres host language classes and neighbourhood meetings.","usage":"Anh-Anh viết centres; Anh-Mỹ viết centers. Một trung tâm có thể cung cấp nhiều loại hoạt động."},
+    {"term":"pedestrian safety","meaning":"Sự an toàn của người đi bộ","example":"Wider pavements can improve pedestrian safety near schools.","usage":"Pedestrian là người đi bộ; không dùng cụm này cho riêng người lái xe."},
+    {"term":"public libraries","meaning":"Các thư viện phục vụ cộng đồng","example":"Public libraries give residents a quiet place to read and study.","usage":"Library là thư viện, không phải cửa hàng sách; số ít là a public library."},
+    {"term":"local markets","meaning":"Các chợ hoặc thị trường phục vụ một khu vực địa phương","example":"Local markets allow small producers to sell directly to residents.","usage":"Trong ví dụ này markets là nơi buôn bán; trong kinh tế học có thể chỉ thị trường địa phương."}
+  ],
+  "transport": [
+    {"term":"traffic management","meaning":"Việc tổ chức và điều phối luồng giao thông","example":"Temporary traffic management is needed while the bridge is repaired.","usage":"Dùng a traffic management plan; traffic không đếm được."},
+    {"term":"electric vehicles","meaning":"Các phương tiện sử dụng động cơ điện","example":"The delivery company is testing electric vehicles on short routes.","usage":"Có thể viết EVs sau khi giới thiệu electric vehicles; cụm này không chỉ giới hạn ở ô tô."},
+    {"term":"rail investment","meaning":"Nguồn lực đầu tư vào hệ thống đường sắt","example":"Long-term rail investment could connect more regional towns.","usage":"Rail investment nói về lĩnh vực nhận đầu tư; có thể diễn đạt investment in rail infrastructure."},
+    {"term":"accessible stations","meaning":"Các nhà ga được thiết kế để nhiều nhóm hành khách có thể sử dụng","example":"Accessible stations need clear signs as well as step-free entrances.","usage":"Accessible ở đây nói về khả năng sử dụng, không chỉ vị trí gần hoặc giá vé thấp."}
+  ],
+  "crime": [
+    {"term":"offender rehabilitation","meaning":"Việc hỗ trợ người đã phạm tội thay đổi hành vi và tái hòa nhập","example":"Education can be part of offender rehabilitation.","usage":"Dùng rehabilitation programmes; không đồng nghĩa với bỏ qua trách nhiệm pháp lý."},
+    {"term":"youth intervention","meaning":"Hoạt động can thiệp nhằm hỗ trợ người trẻ đang gặp rủi ro hoặc khó khăn","example":"The charity combines youth intervention with family support.","usage":"Nên nêu mục đích hoặc đối tượng can thiệp; không mặc định mọi người trẻ đều có nguy cơ phạm tội."},
+    {"term":"public safety","meaning":"Sự an toàn của người dân trong cộng đồng","example":"Clear emergency signs are an important part of public safety.","usage":"Public safety bao gồm nhiều loại rủi ro, không chỉ tội phạm."},
+    {"term":"domestic violence services","meaning":"Các dịch vụ hỗ trợ người chịu bạo lực trong gia đình hoặc quan hệ thân mật","example":"Domestic violence services can help people find confidential support.","usage":"Dùng provide hoặc access domestic violence services; giữ cách diễn đạt tôn trọng người cần hỗ trợ."}
+  ],
+  "government": [
+    {"term":"evidence-based policy","meaning":"Chính sách được xây dựng có xét đến bằng chứng và kết quả nghiên cứu","example":"Reliable local data can contribute to evidence-based policy.","usage":"Evidence-based có dấu gạch nối khi đứng trước danh từ; không có nghĩa là bằng chứng luôn hoàn hảo."},
+    {"term":"local government","meaning":"Bộ máy chính quyền phụ trách một địa phương","example":"Local government is responsible for several neighbourhood services.","usage":"Tùy quốc gia, trách nhiệm của local government khác nhau; không nhầm với central government."},
+    {"term":"public participation","meaning":"Sự tham gia của người dân vào hoạt động hoặc quyết định chung","example":"Evening meetings may make public participation easier for working residents.","usage":"Dùng encourage public participation hoặc participation in planning."},
+    {"term":"regulatory oversight","meaning":"Hoạt động giám sát nhằm bảo đảm việc tuân thủ các quy định","example":"The report recommends stronger regulatory oversight of the industry.","usage":"Oversight ở đây là sự giám sát; trong ngữ cảnh khác an oversight có thể là một sự bỏ sót."}
+  ],
+  "media": [
+    {"term":"responsible advertising","meaning":"Hoạt động quảng cáo có cân nhắc tính trung thực và ảnh hưởng đến người xem","example":"Responsible advertising should make important conditions easy to understand.","usage":"Responsible là đặc tính của cách quảng cáo; không mặc định quảng cáo nào cũng đáp ứng tiêu chí đó."},
+    {"term":"consumer awareness","meaning":"Sự hiểu biết của người tiêu dùng về sản phẩm, quyền lợi hoặc rủi ro","example":"Clear labels can improve consumer awareness of hidden charges.","usage":"Dùng raise consumer awareness of hoặc about một vấn đề cụ thể."},
+    {"term":"digital wellbeing","meaning":"Trạng thái sống và làm việc lành mạnh trong môi trường công nghệ số","example":"The team discusses digital wellbeing when planning after-hours messages.","usage":"Wellbeing cũng có thể viết well-being; nên nêu rõ thói quen hoặc trải nghiệm đang được bàn đến."},
+    {"term":"child protection online","meaning":"Việc bảo vệ trẻ em khi sử dụng môi trường trực tuyến","example":"Schools and families share responsibility for child protection online.","usage":"Online chỉ môi trường áp dụng; không đồng nghĩa với việc cấm mọi hoạt động trên internet."}
+  ],
+  "culture": [
+    {"term":"public museums","meaning":"Các bảo tàng phục vụ công chúng","example":"Public museums often organise activities for visiting school groups.","usage":"Public không nhất thiết có nghĩa là miễn phí; kiểm tra ngữ cảnh khi nói về vé vào cửa."},
+    {"term":"historical archives","meaning":"Các kho tư liệu và hồ sơ có giá trị lịch sử","example":"Historical archives helped the students trace changes in their neighbourhood.","usage":"Archives có thể chỉ kho lưu trữ hoặc tập hợp tài liệu; không phải mọi tài liệu cũ đều đã được kiểm chứng."},
+    {"term":"cultural education","meaning":"Việc học về văn hóa, nghệ thuật và cách sống của các cộng đồng","example":"Local storytelling can support cultural education.","usage":"Dùng promote cultural education; tránh trình bày một cộng đồng như chỉ có một đặc điểm văn hóa."},
+    {"term":"indigenous knowledge","meaning":"Tri thức được hình thành và lưu truyền trong các cộng đồng bản địa","example":"The project consults local communities before using indigenous knowledge.","usage":"Knowledge không đếm được; tôn trọng nguồn gốc và quyền của cộng đồng sở hữu tri thức."}
+  ],
+  "globalisation": [
+    {"term":"labour standards","meaning":"Các tiêu chuẩn về điều kiện và quyền lợi trong lao động","example":"Suppliers are asked to explain how they meet labour standards.","usage":"Anh-Anh viết labour; Anh-Mỹ viết labor. Standards là các yêu cầu, không chỉ mức năng suất."},
+    {"term":"supply-chain transparency","meaning":"Mức độ rõ ràng về nguồn gốc và các hoạt động trong chuỗi cung ứng","example":"Supply-chain transparency helps buyers ask informed questions about production.","usage":"Supply-chain có thể có gạch nối khi bổ nghĩa cho danh từ; phân biệt transparency với hiệu quả vận hành."},
+    {"term":"responsible investment","meaning":"Việc đầu tư có xem xét trách nhiệm xã hội và tác động dài hạn","example":"The fund explains its approach to responsible investment in an annual report.","usage":"Cụm này mô tả cách tiếp cận; không bảo đảm lợi nhuận hay chứng nhận cho một sản phẩm tài chính."},
+    {"term":"regional partnerships","meaning":"Các mối quan hệ hợp tác trong hoặc giữa những khu vực","example":"Regional partnerships can help universities share research facilities.","usage":"Dùng build hoặc strengthen regional partnerships; nêu rõ lĩnh vực hợp tác."}
+  ],
+  "science": [
+    {"term":"laboratory safety","meaning":"Các điều kiện và cách làm việc an toàn trong phòng thí nghiệm","example":"New students complete laboratory safety training before using the equipment.","usage":"Laboratory có thể viết ngắn là lab trong ngữ cảnh thông thường; safety không đếm được."},
+    {"term":"research ethics","meaning":"Các nguyên tắc đạo đức trong quá trình nghiên cứu","example":"Research ethics require careful treatment of participants' personal information.","usage":"Ethics thường đi với động từ số nhiều khi nói về các nguyên tắc; nghiên cứu còn phải tuân thủ quy định cụ thể."},
+    {"term":"public science education","meaning":"Hoạt động giúp công chúng tìm hiểu kiến thức và phương pháp khoa học","example":"The observatory supports public science education through open evenings.","usage":"Public ở đây chỉ đối tượng công chúng; không giới hạn ở môn khoa học trong trường phổ thông."},
+    {"term":"evidence-based medicine","meaning":"Cách thực hành y học có xét bằng chứng nghiên cứu cùng chuyên môn và hoàn cảnh người bệnh","example":"The course introduces the principles of evidence-based medicine.","usage":"Đây là thuật ngữ về phương pháp thực hành, không phải lời khuyên điều trị cho từng người."}
+  ],
+  "family": [
+    {"term":"child protection","meaning":"Việc ngăn ngừa và ứng phó với nguy cơ gây hại cho trẻ em","example":"The club has a written child protection policy.","usage":"Dùng child protection policy hoặc services; không chỉ nói về an toàn thể chất."},
+    {"term":"positive parenting","meaning":"Cách nuôi dạy con chú trọng sự hỗ trợ, hướng dẫn và giao tiếp tôn trọng","example":"Positive parenting encourages adults to explain rules clearly.","usage":"Parenting là hoạt động nuôi dạy con; positive không có nghĩa là bỏ mọi giới hạn."},
+    {"term":"work-family balance","meaning":"Sự cân đối giữa trách nhiệm công việc và gia đình","example":"Flexible shifts may help employees improve work-family balance.","usage":"Work-family balance tập trung vào gia đình; work-life balance có phạm vi rộng hơn."},
+    {"term":"elder care","meaning":"Việc chăm sóc và hỗ trợ người cao tuổi","example":"The family shares elder care responsibilities with a local support service.","usage":"Cũng gặp elderly care; care ở đây không đếm được."}
+  ],
+  "food": [
+    {"term":"food safety","meaning":"Việc bảo đảm thực phẩm không gây hại khi được chuẩn bị và sử dụng đúng cách","example":"The kitchen keeps temperature records as part of its food safety procedures.","usage":"Phân biệt food safety với food security: an toàn thực phẩm và khả năng có đủ thực phẩm."},
+    {"term":"local food systems","meaning":"Các mạng lưới sản xuất, phân phối và tiêu dùng thực phẩm trong một khu vực","example":"Local food systems connect growers, markets and community kitchens.","usage":"Systems nói về cả mạng lưới, không chỉ một cửa hàng bán thực phẩm địa phương."},
+    {"term":"smallholder support","meaning":"Sự hỗ trợ dành cho các hộ sản xuất nông nghiệp quy mô nhỏ","example":"Smallholder support can include training and shared storage facilities.","usage":"Smallholder là người điều hành một nông hộ nhỏ; nên nêu loại hỗ trợ cụ thể."},
+    {"term":"agricultural training","meaning":"Việc đào tạo kiến thức và kỹ năng trong lĩnh vực nông nghiệp","example":"Agricultural training helps new growers plan their first planting season.","usage":"Dùng receive hoặc provide agricultural training; training thường không đếm được."}
+  ],
+  "tourism": [
+    {"term":"heritage conservation","meaning":"Việc gìn giữ và bảo vệ các giá trị di sản","example":"Visitor fees help pay for heritage conservation at the historic site.","usage":"Dùng support heritage conservation; conservation nhấn mạnh gìn giữ lâu dài."},
+    {"term":"community-based tourism","meaning":"Du lịch có sự tham gia và vai trò tổ chức của cộng đồng địa phương","example":"Community-based tourism gives residents a role in planning visitor activities.","usage":"Community-based có gạch nối khi bổ nghĩa cho tourism; cần xét vai trò thực tế của cộng đồng."},
+    {"term":"eco-friendly accommodation","meaning":"Nơi lưu trú được thiết kế hoặc vận hành để giảm tác động đến môi trường","example":"Travellers ask how eco-friendly accommodation manages water and waste.","usage":"Eco-friendly là mô tả cần có bằng chứng; accommodation ở đây không đếm được."},
+    {"term":"public transport for visitors","meaning":"Dịch vụ giao thông công cộng được sử dụng hoặc tổ chức cho khách tham quan","example":"Clear route maps make public transport for visitors easier to use.","usage":"For visitors nêu nhóm sử dụng; không có nghĩa là người dân địa phương không được dùng."}
+  ],
+  "housing": [
+    {"term":"safe construction","meaning":"Việc xây dựng có đáp ứng các yêu cầu về an toàn","example":"Safe construction depends on suitable materials and careful inspections.","usage":"Cụm này nói về cách xây dựng; không phải tên một chứng nhận cụ thể."},
+    {"term":"neighbourhood services","meaning":"Các dịch vụ phục vụ người dân trong một khu dân cư","example":"Residents want neighbourhood services within walking distance.","usage":"Anh-Anh viết neighbourhood; Anh-Mỹ viết neighborhood. Nên nêu dịch vụ nào đang được nói tới."},
+    {"term":"housing maintenance","meaning":"Việc bảo dưỡng và sửa chữa nhà ở để giữ tình trạng sử dụng tốt","example":"Regular housing maintenance can prevent small leaks from becoming serious damage.","usage":"Dùng maintenance costs hoặc a housing maintenance plan; maintenance không đếm được."},
+    {"term":"homelessness support","meaning":"Sự hỗ trợ dành cho người không có nơi ở ổn định","example":"Homelessness support may include temporary accommodation and housing advice.","usage":"Dùng provide homelessness support; không đồng nhất hỗ trợ với chỉ một chỗ ngủ qua đêm."}
+  ],
+  "energy": [
+    {"term":"grid reliability","meaning":"Khả năng lưới điện cung cấp điện một cách ổn định","example":"The utility checks ageing equipment to improve grid reliability.","usage":"Grid ở đây là lưới điện; reliability nhấn mạnh độ tin cậy, không phải công suất tối đa."},
+    {"term":"energy efficiency","meaning":"Khả năng đạt cùng công dụng với ít năng lượng hơn","example":"Better insulation can improve a building's energy efficiency.","usage":"Phân biệt energy efficiency với energy conservation: hiệu suất sử dụng và việc tiết kiệm năng lượng."},
+    {"term":"clean cooking","meaning":"Việc nấu ăn bằng nhiên liệu và công nghệ hạn chế ô nhiễm có hại","example":"The project helps families compare clean cooking options.","usage":"Clean ở đây liên quan đến nhiên liệu và khí thải, không chỉ việc giữ bếp sạch."},
+    {"term":"rural electrification","meaning":"Việc đưa khả năng sử dụng điện đến các vùng nông thôn","example":"Rural electrification allows more village clinics to store medicines safely.","usage":"Electrification nói về quá trình cung cấp hoặc chuyển sang điện; không dùng thay cho electricity."}
+  ],
+  "equality": [
+    {"term":"anti-discrimination laws","meaning":"Các quy định pháp luật nhằm chống đối xử bất công dựa trên đặc điểm cá nhân hoặc nhóm","example":"Anti-discrimination laws can help protect applicants during recruitment.","usage":"Anti-discrimination có gạch nối; phạm vi bảo vệ phụ thuộc vào pháp luật của từng nơi."},
+    {"term":"accessible education","meaning":"Giáo dục mà nhiều nhóm người có thể tiếp cận và tham gia","example":"Accessible education may require captions, flexible schedules and suitable materials.","usage":"Accessible không chỉ nói về học phí; còn có rào cản về thiết kế, thời gian và hỗ trợ."},
+    {"term":"inclusive employment","meaning":"Việc làm mở cơ hội tham gia cho nhiều nhóm người và giảm rào cản loại trừ","example":"Inclusive employment policies should consider how interviews are conducted.","usage":"Dùng promote inclusive employment; không chỉ là tuyển thêm người mà còn là điều kiện tham gia."},
+    {"term":"minority representation","meaning":"Sự hiện diện và tiếng nói của các nhóm thiểu số trong một tổ chức hoặc quá trình quyết định","example":"The committee discusses how to improve minority representation.","usage":"Representation có thể nói về số lượng lẫn vai trò và tiếng nói; nên nêu rõ bối cảnh."}
+  ]
+}

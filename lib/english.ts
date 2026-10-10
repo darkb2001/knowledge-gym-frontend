@@ -1,17 +1,21 @@
 import { apiRequest } from "./api-client";
 
 export type EnglishSkill = "LISTENING" | "SPEAKING" | "READING" | "WRITING";
+export type EnglishExercisePart = { id: string; title: string; passage: string; audioPath: string; itemIds: string[] };
 export type EnglishExercise = {
   id: string; skill: EnglishSkill; title: string; focus: string; minutes: number;
   minimumWords: number; prompt: string; passage: string; audioPath: string;
-  items: { id: string; stem: string; options: string[] }[]; checklist: string[];
+  items: { id: string; stem: string; options: string[] }[]; checklist: string[]; parts?: EnglishExercisePart[];
+  scope?: "SHORT_PRACTICE" | "TASK_PRACTICE" | "COMPLETE_SKILL";
+  curriculum?: "VSTEP" | "HCMUS_PREPARATION";
 };
+export type EnglishReferenceResponse = { title: string; text: string; notes: { vi: string; en: string }[] };
 export type EnglishAttempt = {
   id: string; exerciseId: string; status: "DRAFT" | "SUBMITTED"; version: number;
   answers: Record<string, number>; response: string; elapsedSeconds: number;
   createdAt: string; updatedAt: string;
   feedback: null | { correct: number | null; total: number; transcript: string;
-    items: { id: string; correctIndex: number; explanation: string }[] };
+    items: { id: string; correctIndex: number; explanation: string }[]; referenceResponse?: EnglishReferenceResponse | null };
 };
 export type EnglishHistory = { items: EnglishAttempt[]; totalElements: number; page: number; size: number };
 export const ENGLISH_SKILLS: EnglishSkill[] = ["LISTENING", "SPEAKING", "READING", "WRITING"];

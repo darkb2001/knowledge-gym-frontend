@@ -1,0 +1,122 @@
+[
+  {"id":"education","title":"Education & Learning","vi":"Học tập","entries":[
+    {"term":"lifelong learning","meaning":"học hỏi trong suốt cuộc đời","example":"Free evening classes make lifelong learning possible for busy adults.","tip":"Dùng với encourage, support hoặc opportunities for."},
+    {"term":"higher education","meaning":"giáo dục ở bậc đại học và sau đại học","example":"Scholarships can help more students enter higher education.","tip":"Thường dùng access to higher education, không dùng a higher education khi nói chung."},
+    {"term":"vocational training","meaning":"đào tạo kỹ năng để làm một nghề cụ thể","example":"Vocational training helped Mai qualify as an electrician.","tip":"Có thể nói provide vocational training hoặc receive vocational training."},
+    {"term":"equal access to education","meaning":"cơ hội tiếp cận giáo dục bình đẳng","example":"Reliable transport helps rural children gain equal access to education.","tip":"Giữ giới từ to sau access. Có thể dùng ensure equal access to education."}
+  ]},
+  {"id":"environment","title":"Environment & Climate","vi":"Môi trường","entries":[
+    {"term":"renewable energy","meaning":"năng lượng từ nguồn có thể tái tạo","example":"The island uses renewable energy to reduce its dependence on imported fuel.","tip":"Dùng generate renewable energy hoặc invest in renewable energy."},
+    {"term":"biodiversity conservation","meaning":"bảo vệ sự đa dạng của các loài và hệ sinh thái","example":"Protecting wetlands is an important part of biodiversity conservation.","tip":"Dùng support biodiversity conservation khi nêu một giải pháp."},
+    {"term":"waste management","meaning":"việc thu gom và xử lý chất thải","example":"Better waste management keeps rubbish out of the river.","tip":"Dùng improve waste management hoặc a waste management system."},
+    {"term":"recycling programmes","meaning":"các chương trình thu hồi và tái chế vật liệu","example":"Schools can run recycling programmes for paper and plastic bottles.","tip":"Programmes là cách viết Anh-Anh; programs là cách viết Anh-Mỹ."}
+  ]},
+  {"id":"technology","title":"Technology & Digital Life","vi":"Công nghệ","entries":[
+    {"term":"digital literacy","meaning":"khả năng sử dụng và hiểu công nghệ số","example":"Digital literacy includes recognising misleading information online.","tip":"Dùng develop digital literacy hoặc digital literacy skills."},
+    {"term":"data privacy","meaning":"quyền kiểm soát cách dữ liệu cá nhân được sử dụng","example":"The app protects data privacy by collecting only essential information.","tip":"Dùng protect data privacy; phân biệt privacy với security."},
+    {"term":"online safety","meaning":"sự an toàn khi sử dụng internet","example":"Parents and teachers can discuss online safety without frightening children.","tip":"Dùng promote online safety hoặc teach children about online safety."},
+    {"term":"cybersecurity","meaning":"việc bảo vệ hệ thống và dữ liệu trước tấn công số","example":"Small companies need cybersecurity training as well as reliable software.","tip":"Danh từ không đếm được khi nói chung; dùng cybersecurity measures."}
+  ]},
+  {"id":"health","title":"Health & Well-being","vi":"Sức khỏe","entries":[
+    {"term":"preventive care","meaning":"chăm sóc để phòng bệnh trước khi bệnh xuất hiện","example":"Regular check-ups are one form of preventive care.","tip":"Có thể dùng access to preventive care hoặc invest in preventive care."},
+    {"term":"primary care","meaning":"dịch vụ y tế ban đầu cho nhu cầu sức khỏe thường gặp","example":"A local clinic provides primary care for families in the village.","tip":"Dùng primary care services hoặc a primary care provider."},
+    {"term":"mental health support","meaning":"sự hỗ trợ dành cho sức khỏe tinh thần","example":"Students should know where to find mental health support on campus.","tip":"Dùng seek mental health support hoặc offer mental health support."},
+    {"term":"health literacy","meaning":"khả năng hiểu thông tin để đưa ra quyết định về sức khỏe","example":"Clear medicine labels can improve health literacy.","tip":"Dùng improve health literacy; không đồng nghĩa với kiến thức y khoa chuyên sâu."}
+  ]},
+  {"id":"work","title":"Work & Employment","vi":"Công việc","entries":[
+    {"term":"vocational skills","meaning":"các kỹ năng thực hành cần cho một nghề","example":"The course combines vocational skills with communication practice.","tip":"Dùng acquire vocational skills hoặc develop vocational skills."},
+    {"term":"employee training","meaning":"hoạt động đào tạo người lao động","example":"Regular employee training helps staff adapt to new equipment.","tip":"Dùng invest in employee training hoặc an employee training programme."},
+    {"term":"workplace safety","meaning":"sự an toàn tại nơi làm việc","example":"Reporting damaged equipment is part of workplace safety.","tip":"Dùng improve workplace safety hoặc workplace safety standards."},
+    {"term":"flexible working","meaning":"cách làm việc linh hoạt về thời gian hoặc địa điểm","example":"Flexible working allows some parents to collect their children after school.","tip":"Cụm này phổ biến trong Anh-Anh; có thể nói flexible working arrangements."}
+  ]},
+  {"id":"economy","title":"Economy & Consumerism","vi":"Kinh tế","entries":[
+    {"term":"small businesses","meaning":"các doanh nghiệp có quy mô nhỏ","example":"Small businesses often depend on regular customers in their neighbourhood.","tip":"Dùng support small businesses hoặc help small businesses grow."},
+    {"term":"local enterprise","meaning":"hoạt động kinh doanh hoặc doanh nghiệp tại địa phương","example":"The market creates opportunities for local enterprise.","tip":"Enterprise có thể chỉ hoạt động kinh doanh nói chung hoặc một doanh nghiệp."},
+    {"term":"financial literacy","meaning":"khả năng hiểu và sử dụng kiến thức tài chính","example":"Financial literacy helps young adults compare loans before borrowing.","tip":"Dùng improve financial literacy hoặc financial literacy education."},
+    {"term":"consumer protection","meaning":"các biện pháp bảo vệ quyền lợi người tiêu dùng","example":"Clear refund rules are an important part of consumer protection.","tip":"Dùng consumer protection laws hoặc strengthen consumer protection."}
+  ]},
+  {"id":"cities","title":"Cities & Urban Life","vi":"Đô thị","entries":[
+    {"term":"affordable housing","meaning":"nhà ở có mức chi phí người dân có thể chi trả","example":"Affordable housing near train stations can shorten daily commutes.","tip":"Housing thường không đếm được; dùng provide affordable housing."},
+    {"term":"public parks","meaning":"các công viên dành cho cộng đồng","example":"Public parks give children space to play away from busy roads.","tip":"Dùng maintain public parks hoặc access to public parks."},
+    {"term":"waste collection","meaning":"dịch vụ thu gom rác","example":"Regular waste collection helps keep shared streets clean.","tip":"Dùng a waste collection service hoặc organise waste collection."},
+    {"term":"urban planning","meaning":"việc quy hoạch không gian và hạ tầng đô thị","example":"Good urban planning places homes near schools and public transport.","tip":"Dùng urban planning policies hoặc sustainable urban planning."}
+  ]},
+  {"id":"transport","title":"Transport & Mobility","vi":"Giao thông","entries":[
+    {"term":"reliable public transport","meaning":"giao thông công cộng hoạt động ổn định và đáng tin cậy","example":"Reliable public transport makes it easier to live without a car.","tip":"Reliable diễn tả tính ổn định, không chỉ tốc độ hoặc sự tiện nghi."},
+    {"term":"cycling infrastructure","meaning":"hạ tầng phục vụ việc đi xe đạp","example":"Cycling infrastructure should include safe junctions as well as bike lanes.","tip":"Infrastructure không đếm được; dùng invest in cycling infrastructure."},
+    {"term":"pedestrian networks","meaning":"các hệ thống đường kết nối dành cho người đi bộ","example":"Connected pedestrian networks help residents reach shops on foot.","tip":"Pedestrian có thể là danh từ người đi bộ hoặc từ bổ nghĩa trong cụm này."},
+    {"term":"road safety","meaning":"sự an toàn khi tham gia giao thông đường bộ","example":"Lower speed limits near schools can improve road safety.","tip":"Dùng road safety measures hoặc promote road safety."}
+  ]},
+  {"id":"crime","title":"Crime & Justice","vi":"Pháp luật","entries":[
+    {"term":"crime prevention","meaning":"các biện pháp ngăn tội phạm xảy ra","example":"Street lighting can be one part of a wider crime prevention plan.","tip":"Dùng crime prevention measures; không đồng nhất prevention với punishment."},
+    {"term":"community policing","meaning":"cách làm cảnh sát phối hợp với cộng đồng","example":"Community policing encourages residents to discuss local safety concerns.","tip":"Dùng community policing initiatives hoặc an approach to community policing."},
+    {"term":"victim support","meaning":"sự hỗ trợ người bị hại","example":"Victim support services can help people understand their legal options.","tip":"Dùng victim support services hoặc provide victim support."},
+    {"term":"legal aid","meaning":"sự trợ giúp pháp lý, thường cho người khó chi trả","example":"Legal aid can make advice available to families on low incomes.","tip":"Aid không đếm được trong cụm này; dùng access to legal aid."}
+  ]},
+  {"id":"government","title":"Government & Policy","vi":"Chính sách","entries":[
+    {"term":"public consultation","meaning":"việc lấy ý kiến người dân trước một quyết định công","example":"Public consultation gave residents a chance to comment on the new bus route.","tip":"Dùng hold a public consultation hoặc a public consultation process."},
+    {"term":"transparent budgeting","meaning":"việc lập ngân sách với thông tin công khai, rõ ràng","example":"Transparent budgeting helps residents see how public money is allocated.","tip":"Dùng promote transparent budgeting; transparent nói về khả năng kiểm tra thông tin."},
+    {"term":"public accountability","meaning":"trách nhiệm giải trình với người dân","example":"Publishing spending reports can strengthen public accountability.","tip":"Dùng ensure public accountability hoặc mechanisms for public accountability."},
+    {"term":"civil service training","meaning":"đào tạo người làm việc trong bộ máy hành chính công","example":"Civil service training can improve the way staff handle citizens' requests.","tip":"Civil service chỉ bộ máy công chức, không phải dịch vụ cho dân nói chung."}
+  ]},
+  {"id":"media","title":"Media & Advertising","vi":"Truyền thông","entries":[
+    {"term":"media literacy","meaning":"khả năng hiểu và đánh giá thông tin truyền thông","example":"Media literacy helps readers distinguish advertising from independent reporting.","tip":"Dùng develop media literacy hoặc media literacy education."},
+    {"term":"fact checking","meaning":"việc kiểm tra tính đúng sai của thông tin","example":"Fact checking should happen before a surprising claim is shared widely.","tip":"Fact-checking thường có dấu gạch nối khi dùng làm từ bổ nghĩa."},
+    {"term":"editorial standards","meaning":"các tiêu chuẩn về biên tập và xuất bản","example":"Editorial standards require journalists to correct significant mistakes.","tip":"Dùng uphold editorial standards hoặc clear editorial standards."},
+    {"term":"public-interest journalism","meaning":"báo chí phục vụ lợi ích chung của xã hội","example":"Public-interest journalism can explain how a local policy affects families.","tip":"Giữ dấu gạch nối trong public-interest khi cụm này bổ nghĩa cho journalism."}
+  ]},
+  {"id":"culture","title":"Culture & Heritage","vi":"Văn hóa","entries":[
+    {"term":"cultural heritage","meaning":"di sản văn hóa được truyền qua các thế hệ","example":"Restoring an old theatre can help preserve cultural heritage.","tip":"Dùng preserve cultural heritage hoặc protect cultural heritage."},
+    {"term":"local traditions","meaning":"các tập quán của một cộng đồng hoặc địa phương","example":"Visitors can learn about local traditions by joining a community festival.","tip":"Dùng maintain local traditions hoặc respect local traditions."},
+    {"term":"language preservation","meaning":"việc gìn giữ một ngôn ngữ để tiếp tục sử dụng","example":"Recording stories from older speakers can support language preservation.","tip":"Dùng language preservation efforts hoặc support language preservation."},
+    {"term":"community arts","meaning":"các hoạt động nghệ thuật có sự tham gia của cộng đồng","example":"Community arts projects bring neighbours together to make something new.","tip":"Dùng community arts projects hoặc funding for community arts."}
+  ]},
+  {"id":"globalisation","title":"Globalisation & Trade","vi":"Toàn cầu hóa","entries":[
+    {"term":"fair trade","meaning":"thương mại hướng tới điều kiện công bằng cho người sản xuất","example":"Fair trade aims to improve trading conditions for small producers.","tip":"Dùng fair trade principles; không khẳng định mọi sản phẩm đều được chứng nhận."},
+    {"term":"cross-border cooperation","meaning":"sự hợp tác giữa các bên thuộc các quốc gia khác nhau","example":"Cross-border cooperation helps neighbouring countries protect a shared river.","tip":"Giữ dấu gạch nối trong cross-border; dùng strengthen cross-border cooperation."},
+    {"term":"cultural exchange","meaning":"việc chia sẻ và học hỏi văn hóa giữa các cộng đồng","example":"A student visit can create opportunities for cultural exchange.","tip":"Dùng cultural exchange programmes hoặc promote cultural exchange."},
+    {"term":"international education","meaning":"giáo dục có yếu tố học tập hoặc hợp tác quốc tế","example":"International education can help students understand different perspectives.","tip":"Dùng opportunities for international education; không chỉ giới hạn ở du học."}
+  ]},
+  {"id":"science","title":"Science & Research","vi":"Khoa học","entries":[
+    {"term":"scientific literacy","meaning":"khả năng hiểu thông tin và cách lập luận khoa học","example":"Scientific literacy helps people ask useful questions about a new treatment.","tip":"Dùng improve scientific literacy hoặc scientific literacy skills."},
+    {"term":"research funding","meaning":"nguồn tiền dành cho hoạt động nghiên cứu","example":"Stable research funding allows a team to follow a project for several years.","tip":"Funding không đếm được; dùng secure research funding."},
+    {"term":"peer review","meaning":"sự đánh giá chuyên môn bởi những người cùng lĩnh vực","example":"Peer review can identify weaknesses before a study is published.","tip":"Dùng undergo peer review hoặc a peer-reviewed study."},
+    {"term":"open data","meaning":"dữ liệu được công khai để người khác có thể sử dụng","example":"Open data lets researchers compare results from different cities.","tip":"Quyền sử dụng còn tùy giấy phép; open không đồng nghĩa với dữ liệu cá nhân công khai."}
+  ]},
+  {"id":"family","title":"Family & Children","vi":"Gia đình","entries":[
+    {"term":"parental leave","meaning":"thời gian nghỉ việc dành cho cha mẹ chăm con","example":"Parental leave gives families time to care for a new baby.","tip":"Dùng take parental leave hoặc paid parental leave."},
+    {"term":"affordable childcare","meaning":"dịch vụ chăm sóc trẻ có chi phí có thể chi trả","example":"Affordable childcare can help parents return to work.","tip":"Childcare thường không đếm được; dùng access to affordable childcare."},
+    {"term":"early learning","meaning":"việc học và phát triển kỹ năng ở những năm đầu đời","example":"Songs and simple games can support early learning at home.","tip":"Dùng early learning activities; không chỉ nói về việc học chữ."},
+    {"term":"family counselling","meaning":"tư vấn giúp các thành viên gia đình giải quyết khó khăn","example":"Family counselling can help relatives communicate more clearly.","tip":"Counselling là Anh-Anh; counseling là Anh-Mỹ."}
+  ]},
+  {"id":"food","title":"Food & Agriculture","vi":"Thực phẩm","entries":[
+    {"term":"sustainable agriculture","meaning":"nông nghiệp hướng tới duy trì tài nguyên lâu dài","example":"Sustainable agriculture considers the needs of both farmers and ecosystems.","tip":"Dùng sustainable agriculture practices hoặc promote sustainable agriculture."},
+    {"term":"soil conservation","meaning":"việc bảo vệ chất lượng đất và hạn chế xói mòn","example":"Planting cover crops can support soil conservation.","tip":"Dùng soil conservation methods hoặc invest in soil conservation."},
+    {"term":"water-efficient farming","meaning":"canh tác sử dụng nước một cách tiết kiệm","example":"Water-efficient farming is especially useful during long dry periods.","tip":"Giữ dấu gạch nối trong water-efficient khi bổ nghĩa cho farming."},
+    {"term":"crop diversity","meaning":"sự đa dạng về cây trồng","example":"Crop diversity can reduce a farm's dependence on a single harvest.","tip":"Dùng increase crop diversity hoặc maintain crop diversity."}
+  ]},
+  {"id":"tourism","title":"Tourism & Travel","vi":"Du lịch","entries":[
+    {"term":"sustainable tourism","meaning":"du lịch có tính đến tác động lâu dài tới nơi đến","example":"Sustainable tourism should benefit local people as well as visitors.","tip":"Dùng promote sustainable tourism hoặc sustainable tourism practices."},
+    {"term":"visitor management","meaning":"việc tổ chức và điều tiết hoạt động của du khách","example":"Visitor management can protect a fragile site without closing it entirely.","tip":"Dùng a visitor management plan hoặc improve visitor management."},
+    {"term":"local guides","meaning":"những người hướng dẫn du khách am hiểu địa phương","example":"Local guides can explain customs that visitors might otherwise miss.","tip":"Dùng hire local guides hoặc learn from local guides."},
+    {"term":"cultural awareness","meaning":"sự hiểu biết và chú ý tới khác biệt văn hóa","example":"Cultural awareness helps travellers behave respectfully in unfamiliar places.","tip":"Dùng develop cultural awareness hoặc cultural awareness training."}
+  ]},
+  {"id":"housing","title":"Housing & Communities","vi":"Nhà ở","entries":[
+    {"term":"affordable housing","meaning":"nhà ở có mức chi phí người dân có thể chi trả","example":"The housing plan includes affordable housing for young families.","tip":"Dùng a shortage of affordable housing hoặc build affordable housing."},
+    {"term":"rental protection","meaning":"các biện pháp bảo vệ quyền lợi người thuê nhà","example":"Rental protection can help tenants challenge unfair fees.","tip":"Dùng rental protection policies; phạm vi quyền lợi phụ thuộc pháp luật từng nơi."},
+    {"term":"social housing","meaning":"nhà ở được hỗ trợ cho người có nhu cầu","example":"Social housing provides an option for families priced out of the private market.","tip":"Housing không đếm được; dùng access to social housing."},
+    {"term":"energy-efficient homes","meaning":"nhà ở sử dụng năng lượng hiệu quả","example":"Energy-efficient homes can reduce heating costs in winter.","tip":"Giữ dấu gạch nối trong energy-efficient khi đứng trước homes."}
+  ]},
+  {"id":"energy","title":"Energy & Resources","vi":"Năng lượng","entries":[
+    {"term":"renewable energy","meaning":"năng lượng từ nguồn có thể tái tạo","example":"The council plans to power its offices with renewable energy.","tip":"Dùng a transition to renewable energy hoặc renewable energy sources."},
+    {"term":"solar power","meaning":"điện hoặc năng lượng khai thác từ mặt trời","example":"Solar power can help remote buildings operate without a mains connection.","tip":"Dùng generate solar power hoặc install solar power systems."},
+    {"term":"wind power","meaning":"điện hoặc năng lượng khai thác từ gió","example":"Wind power supplies electricity when conditions are suitable.","tip":"Dùng wind power generation; tránh khẳng định nguồn điện hoạt động mọi lúc."},
+    {"term":"energy storage","meaning":"việc tích trữ năng lượng để sử dụng sau","example":"Energy storage helps balance supply when electricity demand changes.","tip":"Dùng energy storage systems hoặc invest in energy storage."}
+  ]},
+  {"id":"equality","title":"Equality & Social Change","vi":"Bình đẳng","entries":[
+    {"term":"equal opportunities","meaning":"cơ hội tham gia và phát triển bình đẳng","example":"Equal opportunities require fair recruitment as well as access to training.","tip":"Dùng promote equal opportunities hoặc an equal opportunities policy."},
+    {"term":"disability inclusion","meaning":"sự tham gia bình đẳng của người khuyết tật","example":"Accessible websites are one part of disability inclusion.","tip":"Dùng promote disability inclusion; tập trung vào việc loại bỏ rào cản."},
+    {"term":"gender equality","meaning":"sự bình đẳng về quyền và cơ hội giữa các giới","example":"Shared caring responsibilities can support gender equality at work.","tip":"Dùng advance gender equality hoặc work towards gender equality."},
+    {"term":"social mobility","meaning":"khả năng thay đổi vị thế kinh tế và xã hội","example":"Affordable education can create opportunities for social mobility.","tip":"Dùng upward social mobility khi muốn nói rõ hướng phát triển."}
+  ]}
+]
