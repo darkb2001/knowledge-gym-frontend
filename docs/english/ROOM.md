@@ -20,7 +20,7 @@
 
 ## Audio
 
-**171 static neural MP3s:** eleven Listening files (including two composites) plus 160 phrase clips. Kokoro v1.0 / kokoro-onnx 0.4.7, pinned hashes, British voices, build-time only. No model runtime or learner text sent to a service. Original nine exercise prompts/IDs/keys are preserved. See [AUDIO.md](AUDIO.md).
+**172 static neural MP3s:** eleven unchanged Listening files (including two composites), one separate paced-practice variant and 160 phrase clips. HCMUS short conversations default to six-second gaps at1×; “Nhịp nghe” retains the original option, pauses/restarts on switching without clearing answers, and explicitly does not claim official timing. The standalone and grouped short-conversation tasks use the same local playback aid; long conversations/talks are unchanged. Kokoro v1.0 / kokoro-onnx 0.4.7, pinned hashes, British voices, build-time only. No model runtime or learner text sent to a service. Original nine exercise prompts/IDs/keys are preserved. See [AUDIO.md](AUDIO.md).
 
 ## Reproduce verification
 
@@ -40,18 +40,20 @@ NODE_PATH=/tmp/kg-english-browser/node_modules KG_UI_URL=http://127.0.0.1:3226 \
 
 The versionable `.fixtures/english/` test artifact contains **original authored** keys/models for tests. It must never be imported into app code, placed under public assets or exposed as the exercise API. The browser harness explicitly whitelists catalog fields and reveals keys/explanations/models only after submit; a separate script-only fixture simulates the intentional opt-in transcript endpoint. `sync-english-test-fixture.mjs` binds it to the compiled backend bank; frontend CI can run without the adjacent backend.
 
-## Latest local evidence (2026-10-10)
+## Latest local evidence (2026-10-11 · pacing pre-commit checkpoint)
 
-- Frontend lint/typecheck/build pass; **708 tests / 38 files** pass. Production dependency audit: `found 0 vulnerabilities`.
-- **271 browser checks / 51 screenshots** across 1440×1000, 390×844 and 844×390, VI/EN and light/dark. Zero JS errors, unmatched API requests, horizontal overflow or automated WCAG A/AA findings in captured states.
+- Frontend lint/typecheck/build pass; **720 tests / 39 files** pass. Production dependency audit: `found 0 vulnerabilities`.
+- **301 browser checks / 54 screenshots** across 1440×1000, 390×844 and 844×390, VI/EN and light/dark. Zero JS errors, unmatched API requests, horizontal overflow or automated WCAG A/AA findings in captured states.
 - All 18 reference-response tasks exercised on desktop; representative Writing/Speaking and HCMUS grammar across all viewport classes. Models absent before submit and complete after submit. Reading section switching retains all 40 answers.
-- Native MP3 decode/rate/rewind/error recovery, fake-microphone recording/download and cancelled-late-permission cleanup. No learner audio uploads.
+- Native MP3 decode/rate/rewind/error recovery; paced-variant failure/retry, original selection, preserved speed/answers, no pace-change attempt writes and no autoplay; plus fake-microphone recording/download and cancelled-late-permission cleanup. No learner audio uploads.
 - All five vocabulary modes, wrong/assisted-answer semantics, final short review queue, no-repeat matching batches, persisted mode/queue after reload, accent-insensitive and empty search, discard cancellation/confirmed reset, local fixture user-change isolation, simulated progress-storage denial and cross-tab logout-intent metadata cleanup.
-- **171 MP3s decoded with ffmpeg**, all output/source hashes verified. Six Python authoring-helper tests cover cache input/byte validation, atomic JSON, safe composition, failure preserving existing output and bounded log recovery.
+- **172 MP3s decoded with ffmpeg**, all output/source hashes verified; all171 previously released asset hashes unchanged. Eight Python authoring-helper tests cover cache input/byte validation, atomic JSON, safe composition, failure preserving existing output and bounded log recovery.
 - Final Impeccable detector returned `[]` using the absolute workspace skill path (an initial relative path failed exit127 and was corrected). Current active LSP: five changed UI/API paths checked; two clean, two existing beforeunload `returnValue` deprecation hints deferred for compatibility, and the client-to-client callback serialization warning marked false-positive without inline suppression. Nineteen auxiliary English-checker suggestions on Vietnamese text were informational, not build errors. Earlier authoring LSP: 4/8 paths confirmed clean, 3 inconclusive, one Python authoring path with five unresolved imports (numpy, onnxruntime, soundfile, kokoro_onnx, local english_audio_build) because the editor workspace does not resolve the external authoring venv/scripts. Findings deferred, not suppressed. Actual pinned-venv synthesis and cached rerun passed; no blanket LSP-clean claim.
 - Expected test-time warnings: Node experimental localStorage; existing Gradle wrapper/deprecation warnings. No suppression of production dependency advisories.
 
-Summary: [browser-verification.json](browser-verification.json). Ignored screenshots and fake-device recordings: `.impeccable/review/english/`. Final functional/axe confirmation refreshed HCMUS guide/listening/grammar, standalone transcript/feedback and all five vocabulary-mode captures and retained the earlier complete visual batch for unchanged screens; no open-ended visual-polish loop. See captureMode in the detailed report. A verifier race was corrected to await the actual workspace before answering; it does not silently skip unmatched question IDs.
+Summary: [browser-verification.json](browser-verification.json). Ignored screenshots and fake-device recordings: `.impeccable/review/english/`. The pacing confirmation refreshed HCMUS short-conversation pacing, HCMUS listening and standalone transcript/feedback captures and retained the earlier complete visual batch for unchanged screens; no open-ended visual-polish loop. See captureMode in the detailed report. A verifier race was corrected to await the actual workspace before answering; it does not silently skip unmatched question IDs.
+
+Current pacing-specific LSP: four paths checked; no primary compiler errors/warnings, only18 informational English spelling suggestions on Vietnamese copy. The pre-existing external Python authoring interpreter/import-resolution gaps still apply; pinned-venv synthesis and cache rerun passed. Impeccable detector for the completed player returned `[]`.
 
 ## Remaining acceptance boundaries
 

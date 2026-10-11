@@ -130,6 +130,30 @@
       ]
     },
     {
+      "path": "/english/audio/dialogue-hcmus-short-paced-v2.mp3",
+      "seconds": 189.693,
+      "sha256": "af62cacc3f1bd12cb2f710398983002f010fb3bb887faeea5a6fdfb2604fc9c4",
+      "textSha256": "2c65ddbc6ee49ac268621f6f5d8977845e7c9bf2a5bbd9527301b4417c09dd0f",
+      "practicePacing": {
+        "originalPath": "/english/audio/dialogue-hcmus-short-v1.mp3",
+        "originalSha256": "12c52bb6bdba869705659e0b57f2c752d0c45b9b490b53928d49fe15a34f61fe",
+        "secondsBetweenConversationsAt1x": 6,
+        "conversationCount": 10,
+        "afterSpeechPartIndexes": [
+          3,
+          7,
+          11,
+          15,
+          19,
+          23,
+          27,
+          31,
+          35
+        ],
+        "notice": "Optional practice pacing, not official examination timing; same original script and voices"
+      }
+    },
+    {
       "path": "/english/vocabulary/education-1.mp3",
       "seconds": 1.886,
       "sha256": "fe7e9df565e9021ee4f8b4ef694d1cb3f6ea8afb1330e80757e719adb1a93b41",

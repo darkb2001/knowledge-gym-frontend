@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { VOCABULARY_TOPICS } from "./english-vocabulary";
+import { HCMUS_SHORT_PACING } from "./english-listening-pacing";
 
 describe("English listening assets", () => {
   it.each(["announcement-v1", "dialogue-v1", "talk-v1", "notices-campus-v1", "dialogue-study-space-v1", "dialogue-volunteer-shifts-v1", "talk-urban-shade-v1", "talk-retrieval-practice-v1", "listening-complete-practice-v1", "dialogue-hcmus-short-v1", "hcmus-listening-complete-v1"])("ships a real MP3 and authored source for %s", name => {
@@ -19,8 +20,8 @@ describe("English listening assets", () => {
     expect(provenance.generator).toContain("Kokoro");
     expect(provenance.generator).toContain("0.4.7");
     expect(provenance.modelLicense).toBe("Apache-2.0");
-    expect(provenance.assets).toHaveLength(171);
-    expect(new Set(provenance.assets.map((r: { path: string }) => r.path)).size).toBe(171);
+    expect(provenance.assets).toHaveLength(172);
+    expect(new Set(provenance.assets.map((r: { path: string }) => r.path)).size).toBe(172);
     const hcmus = provenance.assets.find((r: { path: string }) => r.path.endsWith("hcmus-listening-complete-v1.mp3"));
     expect(hcmus.sources.map((r: { path: string }) => r.path)).toEqual(["/english/audio/dialogue-hcmus-short-v1.mp3", "/english/audio/dialogue-study-space-v1.mp3", "/english/audio/talk-urban-shade-v1.mp3"]);
     expect(hcmus.composition).toContain("no new synthesis");
@@ -37,6 +38,23 @@ describe("English listening assets", () => {
       expect(record.seconds).toBeGreaterThan(0.5);
       expect(record.textSha256).toMatch(/^[0-9a-f]{64}$/);
     }
+  });
+  it("binds nine practice-only six-second pauses to the unchanged original script", () => {
+    const { assets } = JSON.parse(fs.readFileSync("public/english/audio/provenance.json", "utf8"));
+    const original = assets.find((a: { path: string }) => a.path === HCMUS_SHORT_PACING.originalPath);
+    const paced = assets.find((a: { path: string }) => a.path === HCMUS_SHORT_PACING.pacedPath);
+    expect(paced.textSha256).toBe(original.textSha256);
+    expect(paced.practicePacing.originalPath).toBe(original.path);
+    expect(paced.practicePacing.originalSha256).toBe(original.sha256);
+    expect(paced.practicePacing.secondsBetweenConversationsAt1x).toBe(HCMUS_SHORT_PACING.secondsBetweenConversationsAt1x);
+    expect(paced.practicePacing.conversationCount).toBe(10);
+    expect(paced.practicePacing.afterSpeechPartIndexes).toEqual([3, 7, 11, 15, 19, 23, 27, 31, 35]);
+    expect(paced.practicePacing.notice).toContain("not official examination timing");
+    expect(paced.seconds - original.seconds).toBeCloseTo(9 * (6 - 0.35), 1);
+    const file = fs.readFileSync(path.join("public", paced.path));
+    expect(file.subarray(0, 3).toString()).toBe("ID3");
+    expect(file.length).toBeGreaterThan(10000);
+    expect(file.length).toBeLessThan(3_000_000);
   });
   it.each(VOCABULARY_TOPICS.flatMap(t => t.entries))("ships neural pronunciation for $id", entry => {
     const file = fs.readFileSync(path.join(process.cwd(), "public", entry.audioPath));

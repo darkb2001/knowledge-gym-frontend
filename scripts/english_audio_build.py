@@ -15,6 +15,14 @@ def text_sha(parts):
     return hashlib.sha256(json.dumps(parts, ensure_ascii=False).encode()).hexdigest()
 
 
+def short_conversation_gaps(part_count):
+    """Ten headers + three turns each; six seconds only BETWEEN conversations."""
+    if part_count != 40:
+        raise ValueError("Paced practice requires ten numbered three-turn conversations")
+    return [6.0 if index % 4 == 3 and index < part_count - 1 else 0.35
+            for index in range(part_count)]
+
+
 def atomic_json(file, value):
     file = Path(file)
     file.parent.mkdir(parents=True, exist_ok=True)

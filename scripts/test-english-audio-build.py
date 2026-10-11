@@ -12,6 +12,7 @@ from english_audio_build import (
     probe,
     read_recovery_log,
     sha,
+    short_conversation_gaps,
     text_sha,
 )
 
@@ -27,6 +28,19 @@ class AudioBuildTest(unittest.TestCase):
 
     def tearDown(self):
         self.temp.cleanup()
+
+    def test_pacing_has_nine_between_conversation_pauses_only(self):
+        gaps = short_conversation_gaps(40)
+        self.assertEqual(len(gaps), 40)
+        self.assertEqual([i for i, seconds in enumerate(gaps) if seconds == 6], list(range(3, 36, 4)))
+        self.assertTrue(all(seconds == 0.35 for i, seconds in enumerate(gaps) if i not in range(3, 36, 4)))
+        self.assertAlmostEqual(sum(gaps) - 40 * 0.35, 50.85)
+        self.assertEqual(gaps[-1], 0.35)  # No extra six-second tail after conversation 10.
+
+    def test_pacing_rejects_unverified_conversation_shapes(self):
+        for count in (-1, 0, 4, 36, 39, 41):
+            with self.subTest(count=count), self.assertRaises(ValueError):
+                short_conversation_gaps(count)
 
     def test_atomic_checkpoint_replaces_valid_json(self):
         file = self.root / "checkpoint.json"

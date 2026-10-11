@@ -262,10 +262,31 @@ try {
     await page.getByLabel('Bạn đang ôn bài thi nào?').selectOption('HCMUS_PREPARATION');
     await page.getByText('Cấu trúc, nguồn chính thức và cách dùng phòng học', { exact: true }).click();
     await capture('hcmus-guide');
+    let failPaced = true;
+    await page.route('**/english/audio/dialogue-hcmus-short-paced-v2.mp3', route => { if (failPaced) { failPaced = false; return route.abort(); } return route.continue(); });
     await open('hcmus-listening-complete-v1');
+    check('HCMUS short conversations default to optional paced practice', await page.getByLabel('Nhịp nghe', { exact: true }).inputValue() === 'paced');
+    await page.getByRole('button', { name: 'Tải lại audio', exact: true }).click();
+    await page.getByLabel('Audio bài nghe').evaluate(async el => { await el.play(); el.pause(); });
+    const pacedAsset = parse('public/english/audio/provenance.json').assets.find(a => a.path.endsWith('dialogue-hcmus-short-paced-v2.mp3'));
+    check('Paced audio retry decodes the actual longer recording', Math.abs((await page.getByLabel('Audio bài nghe').evaluate(el => el.duration)) - pacedAsset.seconds) < 0.1);
+    await page.getByRole('radio').first().check();
+    const pacingWrites = writes.length;
+    await page.getByLabel('Tốc độ nghe').selectOption('1.25');
+    await page.getByLabel('Audio bài nghe').evaluate(el => { el.currentTime = 12; });
+    await page.getByLabel('Nhịp nghe', { exact: true }).selectOption('original');
+    check('Changing pace pauses and restarts instead of autoplay', await page.getByLabel('Audio bài nghe').evaluate(el => el.paused && el.currentTime === 0));
+    await page.getByLabel('Audio bài nghe').evaluate(async el => { await el.play(); el.pause(); });
+    check('Original recording remains selectable with the chosen speed', await page.getByLabel('Audio bài nghe').evaluate(el => el.getAttribute('src').endsWith('dialogue-hcmus-short-v1.mp3') && el.playbackRate === 1.25));
+    check('Changing pace retains answers and makes no attempt writes', await page.getByRole('radio', { checked: true }).count() === 1 && writes.length === pacingWrites);
+    await page.getByLabel('Nhịp nghe', { exact: true }).selectOption('paced');
+    await page.getByLabel('Audio bài nghe').evaluate(async el => { await el.play(); el.pause(); });
+    check('Practice pacing is labelled as not official exam timing', await page.getByText(/Đây là nhịp luyện tập, không phải timing chính thức/).count() === 1);
+    await capture('hcmus-paced-listening');
     const hcmusListening = catalog.find(e => e.id === 'hcmus-listening-complete-v1');
     for (let i = 0; i < 3; i++) {
       await page.getByLabel('Chọn phần bài luyện').selectOption(String(i));
+      check(`HCMUS listening section ${i + 1}: pacing is only available for short conversations`, await page.getByLabel('Nhịp nghe', { exact: true }).count() === (i === 0 ? 1 : 0));
       check(`HCMUS listening section ${i + 1}: correct question count`, await page.locator('fieldset').count() === [10, 5, 5][i]);
       await answerVisible({ items: hcmusListening.items.filter(q => hcmusListening.parts[i].itemIds.includes(q.id)) });
     }

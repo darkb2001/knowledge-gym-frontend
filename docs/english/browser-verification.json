@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-10-10",
+  "verifiedAt": "2026-10-11",
   "scope": "47-entry compiled original authored bank; intercepted API fixtures, local MP3 decoding, fake microphone. NOT live backend/production/physical mobile/human pronunciation or pedagogy.",
   "captureMode": "Functional/axe confirmation; retained screenshots from preceding complete visual pass (no further visual polishing)",
   "viewports": [
@@ -7,7 +7,7 @@
     "390x844",
     "844x390"
   ],
-  "checks": 271,
+  "checks": 301,
   "screenshots": [
     "desktop-room.png",
     "desktop-vocabulary-learn.png",
@@ -59,7 +59,10 @@
     "landscape-hcmus-listening.png",
     "desktop-listening-transcript.png",
     "mobile-listening-transcript.png",
-    "landscape-listening-transcript.png"
+    "landscape-listening-transcript.png",
+    "desktop-hcmus-paced-listening.png",
+    "mobile-hcmus-paced-listening.png",
+    "landscape-hcmus-paced-listening.png"
   ],
   "pageErrors": [],
   "unmatchedApiRequests": [],
@@ -68,7 +71,7 @@
   "referenceResponsesAfterSubmit": 18,
   "vocabularyCards": 160,
   "distinctVocabularyPhrases": 158,
-  "neuralMp3Assets": 171,
+  "neuralMp3Assets": 172,
   "backendCatalogSha256": "60d02e7bd824e3e1f6d67cd9782f9ae198d47204cd99fe7f9646c283fd9b767e",
   "humanAndPhysicalDeviceAcceptance": false,
   "authenticatedLiveBackendAcceptance": false,

@@ -19,6 +19,7 @@ from english_audio_build import (
     concatenate,
     probe,
     read_recovery_log,
+    short_conversation_gaps,
     text_sha,
 )
 from kokoro_onnx import Kokoro
@@ -67,22 +68,27 @@ def remember(record):
 def sha(file):
     return hashlib.sha256(file.read_bytes()).hexdigest()
 
-def render(file, parts):
+def render(file, parts, practice_pacing=None):
     asset_path = "/" + str(file.relative_to(ROOT / "public"))
     global engine
     cached = cached_record(file, asset_path, parts, previous)
+    if previous.get(asset_path, {}).get("practicePacing") != practice_pacing:
+        cached = None
     if cached:
+        if practice_pacing:
+            cached["practicePacing"] = practice_pacing
         remember(cached)
         return
     if engine is None:
         engine = Kokoro.from_session(rt.InferenceSession(str(MODEL), sess_options=options, providers=["CPUExecutionProvider"]), str(VOICES))
     chunks = []
     rate = 24000
-    for voice, text in parts:
+    gaps = short_conversation_gaps(len(parts)) if practice_pacing else [0.35] * len(parts)
+    for (voice, text), gap in zip(parts, gaps, strict=True):
         samples, rate = engine.create(text, voice=voice, speed=0.82, lang="en-gb")
         if not len(samples) or not np.isfinite(samples).all():
             raise RuntimeError(f"Empty or non-finite audio: {file.name}")
-        chunks.extend([samples, np.zeros(int(rate * 0.35), dtype=np.float32)])
+        chunks.extend([samples, np.zeros(int(rate * gap), dtype=np.float32)])
     file.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(dir=file.parent, prefix=".kg-neural-audio-") as temp:
         wav = Path(temp) / "source.wav"
@@ -92,6 +98,8 @@ def render(file, parts):
         duration = probe(output)
         os.replace(output, file)
     record = {"path": "/" + str(file.relative_to(ROOT / "public")), "seconds": round(duration, 3), "sha256": sha(file), "textSha256": hashlib.sha256(json.dumps(parts, ensure_ascii=False).encode()).hexdigest()}
+    if practice_pacing:
+        record["practicePacing"] = practice_pacing
     remember(record)
 
 snapshot = Path(os.environ.get("KG_ENGLISH_CATALOG_SNAPSHOT", str(ROOT.parent / "knowledge-gym/kg-presentation/build/reports/english/catalog-fixture.json")))
@@ -150,6 +158,16 @@ for entry in listening.values():
               "composition": "decoded clips concatenated in catalog order; re-encoded once, no new synthesis",
               "sources": [{"path": section["audioPath"], "sha256": sha(source)} for section, source in zip(entry["parts"], sources, strict=True)]})
 
+# A separate playback aid: never overwrite released clips or change exercise/attempt IDs.
+short = listening["hcmus-listening-short-v1"]
+original = ROOT / "public" / short["audioPath"].lstrip("/")
+render(ROOT / "public/english/audio/dialogue-hcmus-short-paced-v2.mp3", speech_parts(short), {
+    "originalPath": short["audioPath"], "originalSha256": sha(original),
+    "secondsBetweenConversationsAt1x": 6, "conversationCount": 10,
+    "afterSpeechPartIndexes": [3 + 4 * i for i in range(9)],
+    "notice": "Optional practice pacing, not official examination timing; same original script and voices",
+})
+
 expansion = json.loads((ROOT / "content/english/topic-expansion.json").read_text())
 for topic in json.loads((ROOT / "content/english/topics.json").read_text()):
     for index, entry in enumerate(topic["entries"] + expansion[topic["id"]], 1):
@@ -175,6 +193,6 @@ provenance = {
     "notice": "Neural synthetic practice speech, not human exam speakers. Speech model and engine are not bundled. No learner text is sent to a speech service.",
     "assets": records,
 }
-if len(records) != 171 or len({r["path"] for r in records}) != 171:
+if len(records) != 172 or len({r["path"] for r in records}) != 172:
     raise RuntimeError("Incomplete or duplicate asset manifest; previous final manifest remains intact")
 atomic_json(ROOT / "public/english/audio/provenance.json", provenance)
