@@ -74,8 +74,10 @@
 .answer-html figure { @apply my-7; }
 .answer-html figure img { @apply mx-auto rounded-xl border border-line shadow-sm; }
 .answer-html figcaption { @apply mt-2 text-center text-sm text-subtle; }
-.answer-html .kg-diagram { @apply overflow-x-auto rounded-2xl border border-line bg-muted/40 p-5; }
+.answer-html .kg-diagram { @apply overflow-x-auto rounded-2xl border border-line bg-muted/40 p-5; overscroll-behavior-inline: contain; -webkit-overflow-scrolling: touch; }
 .answer-html .diagram-flow { @apply flex min-w-max items-center justify-center gap-3; }
+.answer-html .diagram-flow, .answer-html .flow-diagram, .answer-html .arch-diagram, .answer-html .aws-architecture, .answer-html .icon-flow { scrollbar-color: rgb(var(--kg-control)) rgb(var(--kg-muted)); }
+.answer-html .flow-diagram, .answer-html .arch-diagram, .answer-html .aws-architecture, .answer-html .icon-flow { overflow-x: auto; overscroll-behavior-inline: contain; -webkit-overflow-scrolling: touch; }
 .answer-html .diagram-node { @apply max-w-[15rem] rounded-xl border border-accent/30 bg-surface px-4 py-3 text-center text-sm font-medium text-strong shadow-sm; }
 .answer-html .diagram-arrow { @apply text-xl font-bold text-accent; }
 /* Identifiers, URLs and diagram nodes may break anywhere; prose must not. */
@@ -133,7 +135,7 @@
 .answer-html .tok-function { color: #7a4e22; }
 .answer-html .tok-annotation { color: #395d83; }
 .answer-html .flow-diagram { @apply my-5 space-y-3 rounded-xl border border-line bg-muted/40 p-5; }
-.answer-html .flow-row { @apply flex flex-wrap items-stretch gap-3; }
+.answer-html .flow-row { @apply flex min-w-max flex-nowrap items-stretch gap-3; }
 .answer-html .flow-node { @apply min-w-[8rem] flex-1 rounded-lg border border-line bg-surface px-4 py-3 text-sm text-strong; }
 .answer-html .flow-node.primary { @apply border-accent/40 text-accent; }
 .answer-html .flow-node.secondary { @apply text-body; }
@@ -176,7 +178,7 @@
 
 /* arch-diagram: sơ đồ kiến trúc dọc (box có phụ đề, mũi tên có nhãn) */
 .answer-html .arch-diagram { @apply my-5 space-y-2 rounded-xl border border-line bg-muted/40 p-5; }
-.answer-html .arch-row { @apply flex flex-wrap items-stretch gap-3; }
+.answer-html .arch-row { @apply flex min-w-max flex-nowrap items-stretch gap-3; }
 .answer-html .arch-box { @apply flex min-w-[9rem] flex-1 flex-col gap-1 rounded-lg border border-line bg-surface px-4 py-3 text-sm text-strong; }
 .answer-html .arch-box.host { @apply border-line/80 bg-muted/50; }
 .answer-html .arch-box.server { @apply border-accent/30; }
@@ -223,11 +225,16 @@
   .answer-html .flow-node,
   .answer-html .flow-arrow,
   .answer-html .icon-node { max-width: 100%; }
-  .answer-html .flow-arrow { flex: 0 1 auto; min-width: 0; white-space: normal; }
+  .answer-html .flow-diagram, .answer-html .arch-diagram, .answer-html .icon-flow { padding: .75rem; }
+  .answer-html .flow-row, .answer-html .arch-row { width: max-content; min-width: max-content; max-width: none; }
+  .answer-html .flow-arrow { flex: 0 0 auto; min-width: 0; white-space: nowrap; }
   .answer-html .icon-node { overflow-wrap: anywhere; }
   /* flex-basis 0 của desktop chia đều 1 hàng -> 6-7 node bị bóp còn ~45px, chữ dọc.
      Cho node tối thiểu 8rem để hàng tự xuống dòng thay vì bóp. */
-  .answer-html .flow-row > .flow-node { flex: 1 1 8rem; }
+  .answer-html .flow-row > .flow-node { flex: 0 0 8rem; }
+  .diagram-frame-scroll { scrollbar-color: rgb(var(--kg-control)) rgb(var(--kg-surface)); }
+  .diagram-frame-scroll::-webkit-scrollbar { height: 10px; }
+  .diagram-frame-scroll::-webkit-scrollbar-thumb { background: rgb(var(--kg-control)); border: 2px solid rgb(var(--kg-surface)); border-radius: 6px; }
   /* Khối mã: dòng dài ~60 ký tự (≈516px) trong khi vùng đọc chỉ ~272px ⇒ cuộn ngang che
      mất nửa dòng, người đọc tưởng code bị cắt cụt. Cho bọc dòng ở khoảng trắng (chỉ bẻ
      token khi chính token dài hơn khung), thu chữ và padding để đỡ phải bọc. */
@@ -428,7 +435,7 @@
 .answer-html .aws-architecture {
   display: grid; gap: 1rem; margin: 1.5rem 0; padding: 1.25rem;
   border: 1px solid #b8c6d1; border-radius: 16px; background: #f7fafc;
-  overflow: hidden;
+  overflow-x: auto; overflow-y: hidden; overscroll-behavior-inline: contain; -webkit-overflow-scrolling: touch;
 }
 .answer-html .aws-architecture .aws-lane {
   display: grid; grid-template-columns: minmax(8rem, 1fr) auto minmax(8rem, 1fr) auto minmax(8rem, 1fr);
@@ -464,16 +471,13 @@
 .answer-html .aws-architecture .aws-legend .topic-dot { background: #d946ef; }
 .answer-html .aws-architecture .aws-legend .bus-dot { background: #8b5cf6; }
 @media (max-width: 640px) {
+  /* Preserve the authored topology. A horizontal scroll surface is more readable than
+     compressing three services into tiny columns or stacking arrows into a tall maze. */
   .answer-html .aws-architecture { padding: .8rem .65rem; gap: .7rem; }
-  .answer-html .aws-architecture .aws-lane { grid-template-columns: 1fr; gap: .35rem; }
-  .answer-html .aws-architecture .aws-node { min-height: 4.3rem; flex-direction: row; justify-content: flex-start; text-align: left; }
+  .answer-html .aws-architecture .aws-lane,
+  .answer-html .aws-architecture .aws-branch { min-width: 42rem; }
+  .answer-html .aws-architecture .aws-node { min-height: 4.3rem; }
   .answer-html .aws-architecture .aws-node .aws-ico { width: 34px; height: 34px; }
-  .answer-html .aws-architecture .aws-connector { min-height: 1.5rem; flex-direction: row; font-size: 0; }
-  .answer-html .aws-architecture .aws-connector::after { transform: rotate(90deg); }
-  .answer-html .aws-architecture .aws-branch { grid-template-columns: 1fr; gap: .35rem; }
-  .answer-html .aws-architecture .aws-branch-line { width: 1.5px; height: 1.2rem; justify-self: center; }
-  .answer-html .aws-architecture .aws-branch-line::after { right: auto; left: 50%; top: auto; bottom: -.1rem; transform: translateX(-50%) rotate(90deg); }
-  .answer-html .aws-architecture .aws-branch-label { order: -1; }
 }
 
 @media (max-width: 640px) {

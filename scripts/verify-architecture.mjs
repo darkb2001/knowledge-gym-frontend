@@ -22,7 +22,9 @@ async function fixtures(context, role) {
   });
   await context.route("**/api/v1/**", async route => {
     const request = route.request();
-    const pathname = new URL(request.url()).pathname;
+    let pathname;
+    try { pathname = new URL(request.url()).pathname; }
+    catch { throw new Error(`Documentation fixture received an invalid URL: ${request.url()}`); }
     const headers = { "access-control-allow-origin": base, "access-control-allow-credentials": "true", "access-control-allow-headers": "Authorization,Content-Type", "access-control-allow-methods": "GET,POST,OPTIONS" };
     if (request.method() === "OPTIONS") return route.fulfill({ status: 204, headers });
     if (pathname.endsWith("/auth/refresh")) return route.fulfill({ headers, json: { accessToken: "synthetic-access-only", expiresIn: 900 } });
@@ -58,6 +60,11 @@ try {
       await page.screenshot({ path: `${output}/${device}-${name}.png`, fullPage: false });
     };
     await page.locator("iframe").scrollIntoViewIfNeeded();
+    check(`${device}: diagram frame is keyboard-focusable`, await page.locator(".diagram-frame-scroll").getAttribute("tabindex") === "0");
+    if (device === "mobile") {
+      check("mobile: diagram keeps an internal horizontal scroll surface", await page.locator(".diagram-frame-scroll").evaluate(node => node.scrollWidth >= 1080 && node.scrollWidth > node.clientWidth));
+      check("mobile: diagram frame does not widen the page", await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+    }
     for (const slug of slugs) {
       await select.selectOption(slug);
       const frame = await page.locator("iframe").elementHandle();
@@ -71,6 +78,10 @@ try {
     await page.locator("iframe").scrollIntoViewIfNeeded();
     await page.waitForTimeout(500); // Bounded layout settle, not a polling loop.
     await capture("diagram");
+    if (device === "mobile") {
+      await page.locator(".diagram-frame-scroll").evaluate(node => { node.scrollLeft = node.scrollWidth; });
+      check("mobile: diagram horizontal scroll can move", await page.locator(".diagram-frame-scroll").evaluate(node => node.scrollLeft > 0));
+    }
     await page.locator("#session-lifetime").scrollIntoViewIfNeeded();
     const scenarios = page.getByLabel("Thử hai tình huống minh họa");
     await scenarios.selectOption("idle");

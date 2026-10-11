@@ -31,6 +31,14 @@ describe("scenic theme preference", () => {
     expect(css).toContain("::-webkit-scrollbar-thumb:hover { background: rgb(var(--kg-accent))");
     expect(css).not.toContain("#b7bcad");
   });
+  it("keeps article diagrams readable and independently scrollable on narrow screens", () => {
+    const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+    expect(css).toContain(".answer-html .aws-architecture .aws-lane,");
+    expect(css).toContain("min-width: 42rem");
+    expect(css).toContain(".answer-html .flow-diagram, .answer-html .arch-diagram, .answer-html .icon-flow");
+    expect(css).toContain(".diagram-frame-scroll");
+    expect(css).toContain("overflow-x-auto");
+  });
   it("preserves login fields, validation, credential submission and redirect behavior", () => {
     const login = readFileSync(new URL("../app/(auth)/login/page.tsx", import.meta.url), "utf8");
     expect(login).toContain('type="email"');

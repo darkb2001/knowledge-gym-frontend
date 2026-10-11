@@ -34,8 +34,13 @@ function DiagramExplorer() {
       <a href={diagramUrl(diagram.id)} target="_blank" rel="noopener noreferrer" className="kg-secondary gap-2">{c("Mở diagram rộng", "Open full diagram")}<ArrowSquareOutIcon size={18} aria-hidden /></a>
     </div>
     <p className="my-4 max-w-[75ch] text-sm leading-7 text-body" aria-live="polite">{copy(diagram.description)}</p>
-    <div className="overflow-hidden rounded-xl border border-line bg-surface">
-      <iframe key={diagram.id} title={copy(diagram.title)} src={diagramUrl(diagram.id)} loading="lazy" allowFullScreen sandbox="allow-scripts allow-downloads allow-popups" className="block h-[760px] w-full border-0 sm:h-[850px]" />
+    <div
+      tabIndex={0}
+      role="region"
+      aria-label={c("Vùng cuộn diagram", "Scrollable diagram viewer")}
+      className="diagram-frame-scroll overflow-x-auto overflow-y-hidden overscroll-x-contain rounded-xl border border-line bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+    >
+      <iframe key={diagram.id} title={copy(diagram.title)} src={diagramUrl(diagram.id)} loading="lazy" allowFullScreen sandbox="allow-scripts allow-downloads allow-popups" className="diagram-frame block h-[620px] min-w-[1080px] w-full border-0 sm:h-[850px] sm:min-w-0" />
     </div>
     <p className="mt-3 text-xs leading-6 text-subtle">{c("Diagram do Archify dựng từ source đã ghim revision. Nhãn kỹ thuật giữ nguyên; viewer dùng control tiếng Anh, có zoom/theme/export. Chỉ tải một diagram mỗi lần. Nếu khung không tải, dùng “Mở diagram rộng”.", "Archify diagrams use revision-pinned source. Diagram annotations are Vietnamese; viewer controls are English, with zoom/theme/export. Only one diagram loads at a time. If the frame fails, use “Open full diagram”.")}</p>
   </div>;
