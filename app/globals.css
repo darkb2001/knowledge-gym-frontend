@@ -74,8 +74,8 @@
 .answer-html figure { @apply my-7; }
 .answer-html figure img { @apply mx-auto rounded-xl border border-line shadow-sm; }
 .answer-html figcaption { @apply mt-2 text-center text-sm text-subtle; }
-.answer-html .kg-diagram { @apply overflow-x-auto rounded-2xl border border-line bg-muted/40 p-5; overscroll-behavior-inline: contain; -webkit-overflow-scrolling: touch; }
 .answer-html .diagram-flow { @apply flex min-w-max items-center justify-center gap-3; }
+/* .kg-diagram container + SVG styling lives in app/archify-diagram.css (generated). */
 .answer-html .diagram-flow, .answer-html .flow-diagram, .answer-html .arch-diagram, .answer-html .aws-architecture, .answer-html .icon-flow { scrollbar-color: rgb(var(--kg-control)) rgb(var(--kg-muted)); }
 .answer-html .flow-diagram, .answer-html .arch-diagram, .answer-html .aws-architecture, .answer-html .icon-flow { overflow-x: auto; overscroll-behavior-inline: contain; -webkit-overflow-scrolling: touch; }
 .answer-html .diagram-node { @apply max-w-[15rem] rounded-xl border border-accent/30 bg-surface px-4 py-3 text-center text-sm font-medium text-strong shadow-sm; }

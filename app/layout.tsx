@@ -8,6 +8,7 @@ import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import { MOTION_INIT_SCRIPT } from "@/lib/motion";
 import "./globals.css";
 import "./scenic.css";
+import "./archify-diagram.css";
 
 // Geist chính thức (variable, đầy đủ tiếng Việt: 90/90 ký tự U+1EA0–U+1EF9). Bản nhúng
 // trước đây là subset 645 glyph chỉ có 6/90 ký tự vùng dấu tiếng Việt, nên chữ có dấu rơi
