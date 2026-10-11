@@ -73,6 +73,7 @@ try {
       await content.waitForFunction(() => document.fonts.status === "loaded");
       check(`${device}: ${slug} diagram renders`, await content.locator("svg").count() > 0);
       check(`${device}: ${slug} viewer has no horizontal overflow`, await content.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+      if (device === "desktop") check(`${device}: ${slug} viewer fits vertically without clipping`, await content.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1));
     }
     await select.selectOption("deployment");
     await page.locator("iframe").scrollIntoViewIfNeeded();
