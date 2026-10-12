@@ -1,0 +1,506 @@
+{
+  "generatedAt": "2026-10-12T12:54:47.258Z",
+  "base": "http://127.0.0.1:3230",
+  "evidenceBoundary": "Local production build, public API fixtures. Not live backend, OAuth or deployed-production acceptance.",
+  "checks": [
+    {
+      "name": "desktop: anonymous landing 200",
+      "ok": true
+    },
+    {
+      "name": "desktop: articles are public-only requests",
+      "ok": true,
+      "details": [
+        {
+          "url": "http://localhost:8080/api/v1/blog/posts?page=0&size=3",
+          "headers": {
+            "accept": "*/*",
+            "origin": "http://127.0.0.1:3230",
+            "referer": "http://127.0.0.1:3230/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+            "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"macOS\""
+          }
+        }
+      ]
+    },
+    {
+      "name": "desktop: no eager iframe",
+      "ok": true
+    },
+    {
+      "name": "desktop: idle study utility does not obscure public content",
+      "ok": true
+    },
+    {
+      "name": "desktop: no horizontal overflow",
+      "ok": true,
+      "details": {
+        "scroll": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "name": "desktop: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "desktop: cache hit avoids database",
+      "ok": true
+    },
+    {
+      "name": "desktop: cache miss explains TTL",
+      "ok": true
+    },
+    {
+      "name": "playback pauses without changing steps",
+      "ok": true
+    },
+    {
+      "name": "pause also freezes the visual trace",
+      "ok": true
+    },
+    {
+      "name": "finite playback stops after returning the response",
+      "ok": true
+    },
+    {
+      "name": "English UI preserves original article language",
+      "ok": true
+    },
+    {
+      "name": "Archify loads only on disclosure",
+      "ok": true
+    },
+    {
+      "name": "closing disclosure unloads the heavy reader",
+      "ok": true
+    },
+    {
+      "name": "laptop: anonymous landing 200",
+      "ok": true
+    },
+    {
+      "name": "laptop: articles are public-only requests",
+      "ok": true,
+      "details": [
+        {
+          "url": "http://localhost:8080/api/v1/blog/posts?page=0&size=3",
+          "headers": {
+            "accept": "*/*",
+            "origin": "http://127.0.0.1:3230",
+            "referer": "http://127.0.0.1:3230/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+            "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"macOS\""
+          }
+        }
+      ]
+    },
+    {
+      "name": "laptop: no eager iframe",
+      "ok": true
+    },
+    {
+      "name": "laptop: idle study utility does not obscure public content",
+      "ok": true
+    },
+    {
+      "name": "laptop: no horizontal overflow",
+      "ok": true,
+      "details": {
+        "scroll": 1280,
+        "viewport": 1280
+      }
+    },
+    {
+      "name": "laptop: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "laptop: primary CTA visible in initial viewport",
+      "ok": true,
+      "details": {
+        "x": 64,
+        "y": 552.5,
+        "width": 148.390625,
+        "height": 52
+      }
+    },
+    {
+      "name": "laptop: cache hit avoids database",
+      "ok": true
+    },
+    {
+      "name": "laptop: cache miss explains TTL",
+      "ok": true
+    },
+    {
+      "name": "mobile: anonymous landing 200",
+      "ok": true
+    },
+    {
+      "name": "mobile: articles are public-only requests",
+      "ok": true,
+      "details": [
+        {
+          "url": "http://localhost:8080/api/v1/blog/posts?page=0&size=3",
+          "headers": {
+            "accept": "*/*",
+            "origin": "http://127.0.0.1:3230",
+            "referer": "http://127.0.0.1:3230/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+            "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"macOS\""
+          }
+        },
+        {
+          "url": "http://localhost:8080/api/v1/auth/refresh",
+          "headers": {
+            "accept": "*/*",
+            "origin": "http://localhost:3230",
+            "referer": "http://localhost:3230/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+            "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"macOS\""
+          }
+        },
+        {
+          "url": "http://localhost:8080/api/v1/auth/refresh",
+          "headers": {
+            "accept": "*/*",
+            "origin": "http://localhost:3230",
+            "referer": "http://localhost:3230/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+            "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"macOS\""
+          }
+        }
+      ]
+    },
+    {
+      "name": "mobile: no eager iframe",
+      "ok": true
+    },
+    {
+      "name": "mobile: idle study utility does not obscure public content",
+      "ok": true
+    },
+    {
+      "name": "mobile: no horizontal overflow",
+      "ok": true,
+      "details": {
+        "scroll": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "name": "mobile: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "mobile: primary CTA visible in initial viewport",
+      "ok": true,
+      "details": {
+        "x": 20,
+        "y": 411.046875,
+        "width": 148.390625,
+        "height": 52
+      }
+    },
+    {
+      "name": "mobile: cache hit avoids database",
+      "ok": true
+    },
+    {
+      "name": "mobile: cache miss explains TTL",
+      "ok": true
+    },
+    {
+      "name": "mobile English: no horizontal overflow",
+      "ok": true,
+      "details": {
+        "scroll": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "name": "mobile English: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "anonymous learning CTA keeps return-to",
+      "ok": true,
+      "details": {
+        "url": "http://localhost:3230/login?next=%2Flearn"
+      }
+    },
+    {
+      "name": "English deep link remains protected and keeps its track",
+      "ok": true
+    },
+    {
+      "name": "narrow: anonymous landing 200",
+      "ok": true
+    },
+    {
+      "name": "narrow: articles are public-only requests",
+      "ok": true,
+      "details": [
+        {
+          "url": "http://localhost:8080/api/v1/blog/posts?page=0&size=3",
+          "headers": {
+            "accept": "*/*",
+            "origin": "http://127.0.0.1:3230",
+            "referer": "http://127.0.0.1:3230/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+            "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"macOS\""
+          }
+        }
+      ]
+    },
+    {
+      "name": "narrow: no eager iframe",
+      "ok": true
+    },
+    {
+      "name": "narrow: idle study utility does not obscure public content",
+      "ok": true
+    },
+    {
+      "name": "narrow: no horizontal overflow",
+      "ok": true,
+      "details": {
+        "scroll": 320,
+        "viewport": 320
+      }
+    },
+    {
+      "name": "narrow: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "narrow: cache hit avoids database",
+      "ok": true
+    },
+    {
+      "name": "narrow: cache miss explains TTL",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark: anonymous landing 200",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark: articles are public-only requests",
+      "ok": true,
+      "details": [
+        {
+          "url": "http://localhost:8080/api/v1/blog/posts?page=0&size=3",
+          "headers": {
+            "accept": "*/*",
+            "origin": "http://127.0.0.1:3230",
+            "referer": "http://127.0.0.1:3230/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+            "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"macOS\""
+          }
+        }
+      ]
+    },
+    {
+      "name": "landscape-dark: no eager iframe",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark: idle study utility does not obscure public content",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark: no horizontal overflow",
+      "ok": true,
+      "details": {
+        "scroll": 844,
+        "viewport": 844
+      }
+    },
+    {
+      "name": "landscape-dark: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "landscape-dark: cache hit avoids database",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark: cache miss explains TTL",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: anonymous landing 200",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: articles are public-only requests",
+      "ok": true,
+      "details": [
+        {
+          "url": "http://localhost:8080/api/v1/blog/posts?page=0&size=3",
+          "headers": {
+            "accept": "*/*",
+            "origin": "http://127.0.0.1:3230",
+            "referer": "http://127.0.0.1:3230/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+            "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"macOS\""
+          }
+        }
+      ]
+    },
+    {
+      "name": "desktop-dark-reduced: no eager iframe",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: idle study utility does not obscure public content",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: no horizontal overflow",
+      "ok": true,
+      "details": {
+        "scroll": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "name": "desktop-dark-reduced: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "desktop-dark-reduced: cache hit avoids database",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: cache miss explains TTL",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: playback disabled under reduced motion",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: no running reduced-motion animations",
+      "ok": true,
+      "details": {
+        "animations": 0
+      }
+    },
+    {
+      "name": "published-empty state is honest",
+      "ok": true
+    },
+    {
+      "name": "empty: no horizontal overflow",
+      "ok": true,
+      "details": {
+        "scroll": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "name": "error: recovery action shown",
+      "ok": true
+    },
+    {
+      "name": "error: no horizontal overflow",
+      "ok": true,
+      "details": {
+        "scroll": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "name": "retry: recovery action shown",
+      "ok": true
+    },
+    {
+      "name": "retry recovers without reload/login",
+      "ok": true
+    },
+    {
+      "name": "retry: no horizontal overflow",
+      "ok": true,
+      "details": {
+        "scroll": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "name": "long-text: no horizontal overflow",
+      "ok": true,
+      "details": {
+        "scroll": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "name": "explicit draft is never previewed",
+      "ok": true
+    },
+    {
+      "name": "draft-filter: no horizontal overflow",
+      "ok": true,
+      "details": {
+        "scroll": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "name": "no-JS landing remains public and readable",
+      "ok": true
+    },
+    {
+      "name": "no-JS CTA is still a normal link",
+      "ok": true
+    },
+    {
+      "name": "no uncaught JavaScript errors",
+      "ok": true,
+      "details": []
+    }
+  ],
+  "captures": [
+    "desktop.png",
+    "desktop-en.png",
+    "desktop-archify.png",
+    "laptop.png",
+    "mobile.png",
+    "mobile-en.png",
+    "narrow.png",
+    "landscape-dark.png",
+    "desktop-dark-reduced.png",
+    "mobile-empty.png",
+    "mobile-error.png",
+    "mobile-retry.png",
+    "mobile-long-text.png",
+    "mobile-draft-filter.png"
+  ],
+  "errors": []
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Cache-aside: an illustrative cache miss",
+    "locale": "en",
+    "output": ".archify/sequence-cache-aside-demo-20261011-215627/cache-aside.html",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "column_fit": "spread",
+    "viewBox": [1080, 660]
+  },
+  "participants": [
+    { "id": "client", "type": "frontend", "label": "Client", "sublabel": "requests an item" },
+    { "id": "api", "type": "backend", "label": "API", "sublabel": "owns the lookup" },
+    { "id": "cache", "type": "database", "label": "Cache", "sublabel": "temporary copy" },
+    { "id": "database", "type": "database", "label": "Database", "sublabel": "source of truth" }
+  ],
+  "segments": [
+    { "from": 155, "to": 275, "label": "Check the cache" },
+    { "from": 285, "to": 425, "label": "Miss: read the source" },
+    { "from": 435, "to": 545, "label": "Populate and respond" }
+  ],
+  "messages": [
+    { "id": "request", "from": "client", "to": "api", "y": 175, "label": "GET item", "variant": "emphasis" },
+    { "id": "lookup", "from": "api", "to": "cache", "y": 220, "label": "lookup", "variant": "default" },
+    { "id": "miss", "from": "cache", "to": "api", "y": 265, "label": "cache miss", "variant": "return" },
+    { "id": "read", "from": "api", "to": "database", "y": 320, "label": "read item", "variant": "emphasis" },
+    { "id": "row", "from": "database", "to": "api", "y": 385, "label": "item", "variant": "return" },
+    { "id": "populate", "from": "api", "to": "cache", "y": 460, "label": "store copy + TTL", "variant": "default" },
+    { "id": "response", "from": "api", "to": "client", "y": 515, "label": "respond with item", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "api", "from": 175, "to": 525, "type": "backend" },
+    { "participant": "cache", "from": 220, "to": 272, "type": "database" },
+    { "participant": "database", "from": 320, "to": 395, "type": "database" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Illustration, not live infrastructure", "items": ["A teaching example of cache-aside, not Knowledge Gym's deployment topology or telemetry.", "A cache hit returns a copy without the database-read branch."] },
+    { "dot": "emerald", "title": "What the diagram leaves open", "items": ["TTL, invalidation, concurrent misses and cache failures need a separate policy.", "Trace controls demonstrate reading order, not measured execution time."] }
+  ]
+}

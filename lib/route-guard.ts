@@ -4,7 +4,7 @@
  * Tách khỏi middleware để test được logic đường dẫn mà không phải dựng môi trường Next.
  */
 
-/** Route công khai: blog đọc tự do + toàn bộ luồng xác thực (đăng nhập/đăng ký/OAuth2). */
+/** Prefix công khai: blog đọc tự do + luồng xác thực. Landing chỉ mở đúng đường dẫn `/`. */
 export const PUBLIC_PREFIXES = [
   "/login",
   "/register",
@@ -34,6 +34,7 @@ export function isStaticAssetPath(pathname: string): boolean {
 }
 
 export function isPublicPath(pathname: string): boolean {
+  if (pathname === "/") return true;
   return PUBLIC_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
   );
@@ -46,8 +47,8 @@ export function requiresAuth(pathname: string): boolean {
 /**
  * Đích chuyển hướng khi thiếu phiên.
  *
- * Lưu lại `pathname + search` vào `?next=` để sau khi đăng nhập quay về đúng chỗ. Trang chủ `/` không
- * cần `next` (nó vốn tự chuyển tới `/learn`), còn lại luôn là đường dẫn nội bộ do server sinh.
+ * Lưu lại `pathname + search` vào `?next=` để sau khi đăng nhập quay về đúng chỗ.
+ * Landing `/` công khai không cần redirect; nhánh root được giữ cho các caller cũ.
  */
 export function loginRedirectTarget(pathname: string, search = ""): string {
   if (pathname === "/" || pathname === "") return "/login";

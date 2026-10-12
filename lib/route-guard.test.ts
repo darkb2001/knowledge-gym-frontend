@@ -3,13 +3,13 @@ import { isPublicPath, isStaticAssetPath, loginRedirectTarget, requiresAuth } fr
 
 describe("route guard", () => {
   it("cho qua các route công khai", () => {
-    for (const path of ["/login", "/register", "/forgot-password", "/verify-email", "/blog", "/blog/rss", "/blog/bai-viet-x", "/auth/oauth2/success", "/feed.xml"]) {
+    for (const path of ["/", "/blog/demos/cache-aside.html", "/login", "/register", "/forgot-password", "/verify-email", "/blog", "/blog/rss", "/blog/bai-viet-x", "/auth/oauth2/success", "/feed.xml"]) {
       expect(isPublicPath(path)).toBe(true);
     }
   });
 
   it("chặn mọi trang nội bộ", () => {
-    for (const path of ["/", "/learn", "/questions", "/questions/abc", "/flashcard/abc", "/quiz/abc", "/mock-interview", "/dashboard", "/mindmap", "/notes", "/profile", "/admin", "/admin/users"]) {
+    for (const path of ["/learn", "/english", "/questions", "/questions/abc", "/flashcard/abc", "/quiz/abc", "/mock-interview", "/dashboard", "/mindmap", "/notes", "/profile", "/admin", "/admin/users"]) {
       expect(requiresAuth(path)).toBe(true);
     }
   });
@@ -19,6 +19,8 @@ describe("route guard", () => {
     expect(isPublicPath("/blogging")).toBe(false);
     expect(isPublicPath("/logins")).toBe(false);
     expect(isPublicPath("/authz")).toBe(false);
+    expect(isPublicPath("//evil.example.com")).toBe(false);
+    expect(isPublicPath("/learning")).toBe(false);
   });
 
   it("giữ nguyên đích đến trong ?next=", () => {

@@ -195,7 +195,7 @@ export default function UtilityBubble() {
   }, []);
 
   return (
-    <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-30 flex flex-col items-end gap-3 print:hidden">
+    <div data-study-utility data-playing={playing} className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-30 flex flex-col items-end gap-3 print:hidden">
       {open ? (
         <div
           ref={panel}
