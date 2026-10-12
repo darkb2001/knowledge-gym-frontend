@@ -20,7 +20,9 @@ The existing Alpine Commons palette, locally hosted Geist fonts, VI/EN providers
 
 The root figure is a teaching interaction, not a fabricated screenshot. The shared scenic backdrop is hidden only while `.kg-landing` exists. An idle study utility is also hidden on this public surface to avoid obscuring the diagram; a utility already playing music remains available so the user can pause it. On other routes the utility and landscape retain their existing behavior.
 
-Hero entrance is one finite staggered typographic/diagram moment. Playback advances through four discrete stages, stops at the result, pauses when requested, when the document is hidden, or when the demo leaves view. Reduced motion disables entrance/trace animations and playback; manual scenario and step controls remain usable. No new animation library, scroll hijack or pointer/scroll-driven React rendering was added.
+Hero entrance is one finite staggered typographic/diagram moment. Playback advances through four discrete stages, stops at the result, pauses when requested, when the document is hidden, or when the demo leaves view. Opening the enlarged reader pauses the source demo; the enlarged lesson starts from its scenario/step and has independent, disposable controls. Reduced motion disables entrance/trace animations and playback; manual scenario, step and keyboard node controls remain usable.
+
+The motion follow-up adds a native-cursor-preserving follower on fine mouse pointers, bounded hero tilt, a subtle magnetic primary CTA, hover/focus node feedback, finite intersection entrances and scroll-linked artwork/reading progress. `useLandingMotion` batches event-driven CSS-variable updates with requestAnimationFrame, not React state or a perpetual frame loop. Preferences, hidden tabs, listener/observer cleanup and dynamic article insertion are handled. Touch does not get the follower or mouse tilt. No animation library or scroll hijack was introduced. Cache scenario foreground/background colors switch together rather than crossfading through a low-contrast intermediate state.
 
 ## Public content boundary
 
@@ -40,9 +42,13 @@ Loading, empty, error/retry and long-text states are included. Abort cleanup fen
 
 The initial candidate failed for legend clearance; the second failed for desktop viewport proportions. The same candidate was repaired without changing its semantics. The final candidate passed **validate, deliver, strict check and browser-check** with no diagnostics. The published bytes are checked against the receipt in unit tests. The finalizer itself reports visual review “not-requested”; separate browser captures of the embedded viewer were inspected.
 
-The heavy standalone viewer loads only after disclosure and unloads when closed. Its sandbox grants scripts and downloads, not same-origin privileges. The diagram and viewer use English, disclosed in the host UI. The compact embedded view has a full-size new-tab link; the local step demo is the mobile-first interaction.
+The current enlarged reader is a native `<dialog>` portaled to the document body, with the page-owned interactive demo rather than the heavy viewer. It is outside the hero layout; a bounded scrolling content region keeps the close action reachable. Close, Escape and backdrop dismissal restore focus and scroll; forward/backward Tab wrap within the reader. The source demo is paused on opening. Dialog content mounts only while open. The `DiagramReader` module inherits the client boundary from `CacheDemo`; its client callback is not misrepresented as a Server Action.
+
+The unchanged Archify artifact remains a separate new-tab link (English viewer). During the follow-up, an Axe scan of the previously embedded viewer found `nested-interactive` on its generated SVG. Its immutable bytes were not hand-patched and this standalone accessibility finding is not claimed resolved. The landing no longer embeds it; the page-owned reader passes its own automated accessibility checks. The original artifact finalizer checks above are not an Axe accessibility verdict.
 
 ## Verification
+
+### Initial landing release
 
 Commands run from this repository:
 
@@ -63,6 +69,21 @@ Formatting caveat: `git diff --cached --check` reports 15 trailing-whitespace li
 Browser report: `.impeccable/review/landing/report.json`, **75 checks passed**, **14 captures**, **0 uncaught JavaScript errors**. Covers 1440×900 desktop, 1280×800 laptop, 390×844 mobile, 320px narrow mobile, 844×390 landscape/dark, reduced motion, English UI, public request boundaries, opt-in viewer loading/unloading, finite pauseable playback, empty/error/retry/draft filtering/long text, anonymous learning redirects and no-JS introduction/CTA. Automated WCAG checks reported no violations in the checked viewports. First-pass contrast failures were fixed; the final confirmation passed. Captures start at document top; the lazy reader is captured separately in its visible region to avoid offscreen-compositor artifacts.
 
 These are **local production-build checks with intercepted public API fixtures**, not authenticated live-backend, OAuth, physical-device or deployed-production acceptance. Fixture article titles/content exist only in the verification script and are never imported into the app. Captures use fixtures; the running landing reads its real configured public API and shows its error/empty state when appropriate.
+
+### Diagram-layout and motion follow-up
+
+Current scoped checks:
+
+- `npm run lint`: passed, no warnings.
+- `npm run typecheck`: passed.
+- `npm test`: **738 tests / 41 files passed**; the existing Node experimental-localStorage warnings remain non-failing.
+- `npm audit --omit=dev`: **0 vulnerabilities**.
+- `npm run build`: passed.
+- `NODE_PATH=/tmp/kg-english-browser/node_modules KG_UI_URL=http://127.0.0.1:3236 node scripts/verify-landing.mjs`: **150 checks passed / 0 failed / 15 captures / 0 uncaught JS errors**.
+
+The browser regression suite now measures unchanged hero height and next-section position while opening the reader, background scroll locking/restoration, reachable close action, repeated close/Escape/backdrop dismissal, keyboard focus containment, native node interaction, English reader/scenario controls, mouse tilt/follower shape, scroll feedback and touch/reduced-motion fallbacks. It also checks accessibility with the native reader open in each viewport. Existing published-only transport, protected destinations, error/empty/long-text cases, finite playback and no-JS introduction checks remain. Capture names distinguish the native `desktop-diagram-reader` and `mobile-diagram-reader` from the historical embedded Archify captures.
+
+Current durable report: `docs/landing/browser-verification.json`; local captures remain ignored. These remain fixture-based local production-build checks, not a live deployment or physical-device acceptance. The motion/layout follow-up has not been committed, pushed or deployed at this documentation checkpoint.
 
 ## Tooling/review boundaries
 

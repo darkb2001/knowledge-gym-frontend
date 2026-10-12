@@ -16,9 +16,9 @@ const items = [article("one", "Vì sao cache cần TTL?"), article("two", "Hiể
 function check(name, ok, details) { checks.push({ name, ok, ...(details ? { details } : {}) }); if (!ok) { console.error(name + (details ? `: ${JSON.stringify(details)}` : "")); process.exitCode = 1; } }
 async function snapshot(page, name) {
   const file = `${name}.png`;
-  if (name === "desktop-archify") {
+  if (name === "desktop-diagram-reader") {
     // Capture the lazy reader in its visible viewport, not an unpainted offscreen iframe.
-    await page.locator(".landing-archify-reader").screenshot({ path: path.join(output, file) });
+    await page.locator(".landing-reader-dialog").screenshot({ path: path.join(output, file) });
   } else {
     // Full-page captures start at the document top; scrolled fixed skip-links are not page ink.
     await page.evaluate(() => window.scrollTo(0, 0));
@@ -52,7 +52,8 @@ try {
     ["landscape-dark", { width: 844, height: 390 }, true, false],
     ["desktop-dark-reduced", { width: 1440, height: 900 }, true, true],
   ]) {
-    const { ctx, page, requests } = await context({ viewport, reducedMotion: reduced ? "reduce" : "no-preference" });
+    const touch = ["mobile", "narrow", "landscape-dark"].includes(name);
+    const { ctx, page, requests } = await context({ viewport, hasTouch: touch, isMobile: touch, reducedMotion: reduced ? "reduce" : "no-preference" });
     if (dark) await ctx.addInitScript(() => localStorage.setItem("kg.theme", "dark"));
     const response = await page.goto(base + "/", { waitUntil: "networkidle" });
     check(`${name}: anonymous landing 200`, response.status() === 200);
@@ -92,17 +93,70 @@ try {
       await page.getByRole("heading", { name: "Turn knowledge into second nature.", exact: true }).waitFor();
       check("English UI preserves original article language", await page.getByText(items[0].title, { exact: true }).count() === 1);
       await snapshot(page, "desktop-en");
+      await page.getByRole("button", { name: "Open a larger diagram", exact: true }).click();
+      const englishReader = page.getByRole("dialog", { name: "Explore cache-aside", exact: true });
+      await englishReader.waitFor({ state: "visible" });
+      await englishReader.getByRole("button", { name: "Cache hit", exact: true }).click();
+      await englishReader.getByRole("button", { name: "Explore Database", exact: true }).focus(); await page.keyboard.press("Enter");
+      check("English reader exposes translated keyboard interaction", await englishReader.locator(".landing-demo").getAttribute("data-mode") === "hit" && await englishReader.locator(".landing-demo").getAttribute("data-step") === "2");
+      await axe(page, "English diagram reader");
+      await englishReader.getByRole("button", { name: "Close diagram", exact: true }).click();
+      await englishReader.waitFor({ state: "hidden" });
       await page.getByRole("button", { name: "Tiếng Việt", exact: true }).click();
-      await page.locator(".landing-archify summary").click();
-      await page.locator(".landing-archify iframe").scrollIntoViewIfNeeded();
-      const frame = page.frameLocator(".landing-archify iframe");
-      await frame.locator("svg").first().waitFor({ state: "visible" });
-      check("Archify loads only on disclosure", await page.locator(".landing-archify iframe").count() === 1);
-      await snapshot(page, "desktop-archify");
-      await page.locator(".landing-archify summary").click();
-      await page.locator(".landing-archify iframe").waitFor({ state: "detached" });
-      check("closing disclosure unloads the heavy reader", await page.locator("iframe").count() === 0);
     }
+    // Regression: opening the reader cannot expand the hero or move the next section.
+    const trigger = page.getByRole("button", { name: "Mở diagram lớn", exact: true });
+    await trigger.scrollIntoViewIfNeeded();
+    const before = await page.evaluate(() => ({ hero: document.querySelector(".landing-hero").getBoundingClientRect().height, method: document.querySelector(".landing-method").getBoundingClientRect().top + scrollY, scroll: scrollY }));
+    await trigger.click();
+    const dialog = page.getByRole("dialog", { name: "Khám phá cache-aside", exact: true });
+    await dialog.waitFor({ state: "visible" });
+    await dialog.locator(".landing-graph").waitFor({ state: "visible" });
+    const opened = await page.evaluate(() => ({ hero: document.querySelector(".landing-hero").getBoundingClientRect().height, method: document.querySelector(".landing-method").getBoundingClientRect().top + scrollY, locked: document.body.style.overflow === "hidden" }));
+    check(`${name}: reader never stretches the hero or creates a blank gap`, Math.abs(opened.hero - before.hero) < 2 && Math.abs(opened.method - before.method) < 2, { before, opened });
+    check(`${name}: modal locks background scroll`, opened.locked);
+    const close = page.getByRole("button", { name: "Đóng diagram", exact: true });
+    check(`${name}: close action remains outside scrolling content`, await close.isVisible());
+    await close.focus();
+    for (let tab = 0; tab < 16; tab += 1) {
+      await page.keyboard.press("Tab");
+      if (!await dialog.evaluate(element => element.contains(document.activeElement))) throw new Error(`${name}: modal focus escaped`);
+    }
+    check(`${name}: keyboard focus is contained in the modal`, true);
+    await dialog.getByRole("button", { name: "Khám phá Cache", exact: true }).focus(); await page.keyboard.press(" ");
+    check(`${name}: enlarged diagram remains keyboard interactive`, await dialog.locator(".landing-demo").getAttribute("data-step") === "1");
+    await axe(page, `${name} diagram reader`);
+    if (reduced) check("reduced-motion reader has no running animation", await dialog.evaluate(element => element.getAnimations({ subtree: true }).filter(animation => animation.playState === "running").length === 0));
+    if (name === "desktop") await snapshot(page, "desktop-diagram-reader");
+    if (name === "mobile") { await dialog.screenshot({ path: path.join(output, "mobile-diagram-reader.png") }); captures.push("mobile-diagram-reader.png"); }
+    await close.click();
+    await page.locator(".landing-reader-dialog").waitFor({ state: "detached" });
+    check(`${name}: close unmounts reader and restores focus`, await trigger.evaluate(element => element === document.activeElement));
+    check(`${name}: close restores scroll`, await page.evaluate(y => document.body.style.overflow !== "hidden" && Math.abs(scrollY - y) < 2, before.scroll));
+    await trigger.click(); await close.waitFor({ state: "visible" }); await close.focus(); await page.keyboard.press("Escape");
+    await dialog.waitFor({ state: "hidden" });
+    check(`${name}: repeated opening and Escape closure work`, await page.locator("iframe").count() === 0);
+    await trigger.click(); await close.waitFor({ state: "visible" });
+    await page.mouse.click(2, 2); await dialog.waitFor({ state: "hidden" });
+    check(`${name}: backdrop dismissal works`, await page.locator("iframe").count() === 0);
+    await page.getByRole("button", { name: "Khám phá Database", exact: true }).focus(); await page.keyboard.press("Enter");
+    check(`${name}: diagram nodes are keyboard explorable`, await page.locator(".landing-demo").getAttribute("data-step") === "2");
+    if (name === "desktop") {
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.mouse.move(10, 10);
+      await page.waitForTimeout(150);
+      const art = await page.locator(".landing-hero-art").boundingBox();
+      await page.mouse.move(art.x + 30, art.y + 60);
+      await page.waitForFunction(() => document.querySelector(".kg-landing").dataset.pointer === "true");
+      check("pointer produces bounded diagram tilt", await page.locator(".kg-landing").evaluate(root => parseFloat(root.style.getPropertyValue("--tilt-y")) !== 0 && Math.abs(parseFloat(root.style.getPropertyValue("--tilt-y"))) <= 3.1));
+      await page.getByRole("button", { name: "Khám phá Client", exact: true }).hover();
+      check("pointer shape changes over explorable nodes", await page.locator(".kg-landing").getAttribute("data-pointer-focus") === "true");
+      await page.locator(".landing-paths").scrollIntoViewIfNeeded();
+      await page.waitForFunction(() => Number(document.querySelector(".kg-landing").style.getPropertyValue("--reading-progress")) > 0);
+      check("scroll advances reading progress and moves the learning visual", await page.locator(".kg-landing").evaluate(root => Math.abs(parseFloat(root.style.getPropertyValue("--path-travel"))) > 0));
+    }
+    if (touch || reduced) check(`${name}: no custom pointer on touch/reduced motion`, !await page.locator(".landing-pointer").isVisible());
+    if (reduced) check("reduced-motion diagram has no spatial tilt", await page.locator(".landing-hero-depth").evaluate(element => getComputedStyle(element).transform === "none"));
     if (name === "mobile") {
       await page.getByRole("button", { name: "English", exact: true }).click();
       await assertNoOverflow(page, "mobile English");

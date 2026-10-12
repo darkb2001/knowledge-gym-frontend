@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import { LocaleProvider } from "@/components/locale";
 import { ThemeProvider } from "@/components/theme";
 import { LandingPage } from "@/components/landing/LandingPage";
+import { CacheDemo } from "@/components/landing/CacheDemo";
 import { CACHE_STEPS, LANDING_DIAGRAM_URL, landingPosts } from "./landing";
 import { isPublicPath, requiresAuth, loginRedirectTarget } from "./route-guard";
 
@@ -39,6 +40,38 @@ describe("public landing boundary", () => {
     expect(articles).toContain("/blog/posts?page=0&size=3");
     expect(articles).not.toMatch(/restoreSession|apiGet|Authorization|\/admin\/|\.fixtures/);
     expect(demo).not.toMatch(/\bfetch\(|localStorage|submitAttempt|recordAttempt/);
+  });
+});
+
+describe("native diagram reader and motion boundaries", () => {
+  it("does not create an eager dialog, iframe or duplicate demo in SSR", () => {
+    const html = renderToStaticMarkup(createElement(LocaleProvider, null, createElement(CacheDemo)));
+    expect(html).toContain("Mở diagram lớn");
+    expect(html).toContain('aria-haspopup="dialog"');
+    expect(html).not.toContain("<dialog");
+    expect(html).not.toContain("<iframe");
+    expect(html.match(/id="diagram-demo"/g)).toHaveLength(1);
+    expect(html.match(/role="button"/g)).toHaveLength(4);
+  });
+  it("renders an independent reader demo without another opener or duplicate anchor", () => {
+    const html = renderToStaticMarkup(createElement(LocaleProvider, null, createElement(CacheDemo, { allowReader: false, initialMode: "hit", initialStep: 2 })));
+    expect(html).toContain('data-mode="hit"');
+    expect(html).toContain('data-step="2"');
+    expect(html).toContain("không được truy vấn");
+    expect(html).not.toContain("Mở diagram lớn");
+    expect(html).not.toContain('id="diagram-demo"');
+  });
+  it("keeps continuous values out of React state and uses native focus/scroll restoration", () => {
+    const motion = fs.readFileSync("components/landing/useLandingMotion.ts", "utf8");
+    const reader = fs.readFileSync("components/landing/DiagramReader.tsx", "utf8");
+    expect(motion).not.toContain("useState");
+    expect(motion).toContain("requestAnimationFrame");
+    expect(motion).toContain("cancelAnimationFrame");
+    expect(motion).toContain("(hover: hover) and (pointer: fine)");
+    expect(reader).toContain("createPortal");
+    expect(reader).toContain("element.showModal()");
+    expect(reader).toContain("preventScroll: true");
+    expect(reader).not.toContain("<iframe");
   });
 });
 

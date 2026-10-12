@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-12T12:54:47.258Z",
-  "base": "http://127.0.0.1:3230",
+  "generatedAt": "2026-10-12T13:46:25.533Z",
+  "base": "http://127.0.0.1:3236",
   "evidenceBoundary": "Local production build, public API fixtures. Not live backend, OAuth or deployed-production acceptance.",
   "checks": [
     {
@@ -15,8 +15,8 @@
           "url": "http://localhost:8080/api/v1/blog/posts?page=0&size=3",
           "headers": {
             "accept": "*/*",
-            "origin": "http://127.0.0.1:3230",
-            "referer": "http://127.0.0.1:3230/",
+            "origin": "http://127.0.0.1:3236",
+            "referer": "http://127.0.0.1:3236/",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
             "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
             "sec-ch-ua-mobile": "?0",
@@ -37,7 +37,7 @@
       "name": "desktop: no horizontal overflow",
       "ok": true,
       "details": {
-        "scroll": 1440,
+        "scroll": 1429,
         "viewport": 1440
       }
     },
@@ -71,11 +71,81 @@
       "ok": true
     },
     {
-      "name": "Archify loads only on disclosure",
+      "name": "English reader exposes translated keyboard interaction",
       "ok": true
     },
     {
-      "name": "closing disclosure unloads the heavy reader",
+      "name": "English diagram reader: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "desktop: reader never stretches the hero or creates a blank gap",
+      "ok": true,
+      "details": {
+        "before": {
+          "hero": 901.1875,
+          "method": 1005.1875,
+          "scroll": 0
+        },
+        "opened": {
+          "hero": 901.1875,
+          "method": 1005.1875,
+          "locked": true
+        }
+      }
+    },
+    {
+      "name": "desktop: modal locks background scroll",
+      "ok": true
+    },
+    {
+      "name": "desktop: close action remains outside scrolling content",
+      "ok": true
+    },
+    {
+      "name": "desktop: keyboard focus is contained in the modal",
+      "ok": true
+    },
+    {
+      "name": "desktop: enlarged diagram remains keyboard interactive",
+      "ok": true
+    },
+    {
+      "name": "desktop diagram reader: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "desktop: close unmounts reader and restores focus",
+      "ok": true
+    },
+    {
+      "name": "desktop: close restores scroll",
+      "ok": true
+    },
+    {
+      "name": "desktop: repeated opening and Escape closure work",
+      "ok": true
+    },
+    {
+      "name": "desktop: backdrop dismissal works",
+      "ok": true
+    },
+    {
+      "name": "desktop: diagram nodes are keyboard explorable",
+      "ok": true
+    },
+    {
+      "name": "pointer produces bounded diagram tilt",
+      "ok": true
+    },
+    {
+      "name": "pointer shape changes over explorable nodes",
+      "ok": true
+    },
+    {
+      "name": "scroll advances reading progress and moves the learning visual",
       "ok": true
     },
     {
@@ -90,8 +160,8 @@
           "url": "http://localhost:8080/api/v1/blog/posts?page=0&size=3",
           "headers": {
             "accept": "*/*",
-            "origin": "http://127.0.0.1:3230",
-            "referer": "http://127.0.0.1:3230/",
+            "origin": "http://127.0.0.1:3236",
+            "referer": "http://127.0.0.1:3236/",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
             "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
             "sec-ch-ua-mobile": "?0",
@@ -112,7 +182,7 @@
       "name": "laptop: no horizontal overflow",
       "ok": true,
       "details": {
-        "scroll": 1280,
+        "scroll": 1269,
         "viewport": 1280
       }
     },
@@ -140,6 +210,63 @@
       "ok": true
     },
     {
+      "name": "laptop: reader never stretches the hero or creates a blank gap",
+      "ok": true,
+      "details": {
+        "before": {
+          "hero": 853.734375,
+          "method": 957.734375,
+          "scroll": 583
+        },
+        "opened": {
+          "hero": 853.734375,
+          "method": 957.734375,
+          "locked": true
+        }
+      }
+    },
+    {
+      "name": "laptop: modal locks background scroll",
+      "ok": true
+    },
+    {
+      "name": "laptop: close action remains outside scrolling content",
+      "ok": true
+    },
+    {
+      "name": "laptop: keyboard focus is contained in the modal",
+      "ok": true
+    },
+    {
+      "name": "laptop: enlarged diagram remains keyboard interactive",
+      "ok": true
+    },
+    {
+      "name": "laptop diagram reader: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "laptop: close unmounts reader and restores focus",
+      "ok": true
+    },
+    {
+      "name": "laptop: close restores scroll",
+      "ok": true
+    },
+    {
+      "name": "laptop: repeated opening and Escape closure work",
+      "ok": true
+    },
+    {
+      "name": "laptop: backdrop dismissal works",
+      "ok": true
+    },
+    {
+      "name": "laptop: diagram nodes are keyboard explorable",
+      "ok": true
+    },
+    {
       "name": "mobile: anonymous landing 200",
       "ok": true
     },
@@ -151,8 +278,8 @@
           "url": "http://localhost:8080/api/v1/blog/posts?page=0&size=3",
           "headers": {
             "accept": "*/*",
-            "origin": "http://127.0.0.1:3230",
-            "referer": "http://127.0.0.1:3230/",
+            "origin": "http://127.0.0.1:3236",
+            "referer": "http://127.0.0.1:3236/",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
             "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
             "sec-ch-ua-mobile": "?0",
@@ -163,20 +290,8 @@
           "url": "http://localhost:8080/api/v1/auth/refresh",
           "headers": {
             "accept": "*/*",
-            "origin": "http://localhost:3230",
-            "referer": "http://localhost:3230/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
-            "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"macOS\""
-          }
-        },
-        {
-          "url": "http://localhost:8080/api/v1/auth/refresh",
-          "headers": {
-            "accept": "*/*",
-            "origin": "http://localhost:3230",
-            "referer": "http://localhost:3230/",
+            "origin": "http://localhost:3236",
+            "referer": "http://localhost:3236/",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
             "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
             "sec-ch-ua-mobile": "?0",
@@ -225,6 +340,67 @@
       "ok": true
     },
     {
+      "name": "mobile: reader never stretches the hero or creates a blank gap",
+      "ok": true,
+      "details": {
+        "before": {
+          "hero": 1176.59375,
+          "method": 1264.59375,
+          "scroll": 471
+        },
+        "opened": {
+          "hero": 1176.59375,
+          "method": 1264.59375,
+          "locked": true
+        }
+      }
+    },
+    {
+      "name": "mobile: modal locks background scroll",
+      "ok": true
+    },
+    {
+      "name": "mobile: close action remains outside scrolling content",
+      "ok": true
+    },
+    {
+      "name": "mobile: keyboard focus is contained in the modal",
+      "ok": true
+    },
+    {
+      "name": "mobile: enlarged diagram remains keyboard interactive",
+      "ok": true
+    },
+    {
+      "name": "mobile diagram reader: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "mobile: close unmounts reader and restores focus",
+      "ok": true
+    },
+    {
+      "name": "mobile: close restores scroll",
+      "ok": true
+    },
+    {
+      "name": "mobile: repeated opening and Escape closure work",
+      "ok": true
+    },
+    {
+      "name": "mobile: backdrop dismissal works",
+      "ok": true
+    },
+    {
+      "name": "mobile: diagram nodes are keyboard explorable",
+      "ok": true
+    },
+    {
+      "name": "mobile: no custom pointer on touch/reduced motion",
+      "ok": true
+    },
+    {
       "name": "mobile English: no horizontal overflow",
       "ok": true,
       "details": {
@@ -241,7 +417,7 @@
       "name": "anonymous learning CTA keeps return-to",
       "ok": true,
       "details": {
-        "url": "http://localhost:3230/login?next=%2Flearn"
+        "url": "http://localhost:3236/login?next=%2Flearn"
       }
     },
     {
@@ -260,8 +436,8 @@
           "url": "http://localhost:8080/api/v1/blog/posts?page=0&size=3",
           "headers": {
             "accept": "*/*",
-            "origin": "http://127.0.0.1:3230",
-            "referer": "http://127.0.0.1:3230/",
+            "origin": "http://127.0.0.1:3236",
+            "referer": "http://127.0.0.1:3236/",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
             "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
             "sec-ch-ua-mobile": "?0",
@@ -300,6 +476,67 @@
       "ok": true
     },
     {
+      "name": "narrow: reader never stretches the hero or creates a blank gap",
+      "ok": true,
+      "details": {
+        "before": {
+          "hero": 1279.046875,
+          "method": 1390.046875,
+          "scroll": 874
+        },
+        "opened": {
+          "hero": 1279.046875,
+          "method": 1390.046875,
+          "locked": true
+        }
+      }
+    },
+    {
+      "name": "narrow: modal locks background scroll",
+      "ok": true
+    },
+    {
+      "name": "narrow: close action remains outside scrolling content",
+      "ok": true
+    },
+    {
+      "name": "narrow: keyboard focus is contained in the modal",
+      "ok": true
+    },
+    {
+      "name": "narrow: enlarged diagram remains keyboard interactive",
+      "ok": true
+    },
+    {
+      "name": "narrow diagram reader: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "narrow: close unmounts reader and restores focus",
+      "ok": true
+    },
+    {
+      "name": "narrow: close restores scroll",
+      "ok": true
+    },
+    {
+      "name": "narrow: repeated opening and Escape closure work",
+      "ok": true
+    },
+    {
+      "name": "narrow: backdrop dismissal works",
+      "ok": true
+    },
+    {
+      "name": "narrow: diagram nodes are keyboard explorable",
+      "ok": true
+    },
+    {
+      "name": "narrow: no custom pointer on touch/reduced motion",
+      "ok": true
+    },
+    {
       "name": "landscape-dark: anonymous landing 200",
       "ok": true
     },
@@ -311,8 +548,8 @@
           "url": "http://localhost:8080/api/v1/blog/posts?page=0&size=3",
           "headers": {
             "accept": "*/*",
-            "origin": "http://127.0.0.1:3230",
-            "referer": "http://127.0.0.1:3230/",
+            "origin": "http://127.0.0.1:3236",
+            "referer": "http://127.0.0.1:3236/",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
             "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
             "sec-ch-ua-mobile": "?0",
@@ -351,6 +588,67 @@
       "ok": true
     },
     {
+      "name": "landscape-dark: reader never stretches the hero or creates a blank gap",
+      "ok": true,
+      "details": {
+        "before": {
+          "hero": 1420.5,
+          "method": 1508.5,
+          "scroll": 989
+        },
+        "opened": {
+          "hero": 1420.5,
+          "method": 1508.5,
+          "locked": true
+        }
+      }
+    },
+    {
+      "name": "landscape-dark: modal locks background scroll",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark: close action remains outside scrolling content",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark: keyboard focus is contained in the modal",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark: enlarged diagram remains keyboard interactive",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark diagram reader: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "landscape-dark: close unmounts reader and restores focus",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark: close restores scroll",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark: repeated opening and Escape closure work",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark: backdrop dismissal works",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark: diagram nodes are keyboard explorable",
+      "ok": true
+    },
+    {
+      "name": "landscape-dark: no custom pointer on touch/reduced motion",
+      "ok": true
+    },
+    {
       "name": "desktop-dark-reduced: anonymous landing 200",
       "ok": true
     },
@@ -362,8 +660,8 @@
           "url": "http://localhost:8080/api/v1/blog/posts?page=0&size=3",
           "headers": {
             "accept": "*/*",
-            "origin": "http://127.0.0.1:3230",
-            "referer": "http://127.0.0.1:3230/",
+            "origin": "http://127.0.0.1:3236",
+            "referer": "http://127.0.0.1:3236/",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
             "sec-ch-ua": "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\"",
             "sec-ch-ua-mobile": "?0",
@@ -384,7 +682,7 @@
       "name": "desktop-dark-reduced: no horizontal overflow",
       "ok": true,
       "details": {
-        "scroll": 1440,
+        "scroll": 1429,
         "viewport": 1440
       }
     },
@@ -413,6 +711,75 @@
       }
     },
     {
+      "name": "desktop-dark-reduced: reader never stretches the hero or creates a blank gap",
+      "ok": true,
+      "details": {
+        "before": {
+          "hero": 901.1875,
+          "method": 1005.1875,
+          "scroll": 0
+        },
+        "opened": {
+          "hero": 901.1875,
+          "method": 1005.1875,
+          "locked": true
+        }
+      }
+    },
+    {
+      "name": "desktop-dark-reduced: modal locks background scroll",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: close action remains outside scrolling content",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: keyboard focus is contained in the modal",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: enlarged diagram remains keyboard interactive",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced diagram reader: automated WCAG",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "reduced-motion reader has no running animation",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: close unmounts reader and restores focus",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: close restores scroll",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: repeated opening and Escape closure work",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: backdrop dismissal works",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: diagram nodes are keyboard explorable",
+      "ok": true
+    },
+    {
+      "name": "desktop-dark-reduced: no custom pointer on touch/reduced motion",
+      "ok": true
+    },
+    {
+      "name": "reduced-motion diagram has no spatial tilt",
+      "ok": true
+    },
+    {
       "name": "published-empty state is honest",
       "ok": true
     },
@@ -420,7 +787,7 @@
       "name": "empty: no horizontal overflow",
       "ok": true,
       "details": {
-        "scroll": 390,
+        "scroll": 379,
         "viewport": 390
       }
     },
@@ -432,7 +799,7 @@
       "name": "error: no horizontal overflow",
       "ok": true,
       "details": {
-        "scroll": 390,
+        "scroll": 379,
         "viewport": 390
       }
     },
@@ -448,7 +815,7 @@
       "name": "retry: no horizontal overflow",
       "ok": true,
       "details": {
-        "scroll": 390,
+        "scroll": 379,
         "viewport": 390
       }
     },
@@ -456,7 +823,7 @@
       "name": "long-text: no horizontal overflow",
       "ok": true,
       "details": {
-        "scroll": 390,
+        "scroll": 379,
         "viewport": 390
       }
     },
@@ -468,7 +835,7 @@
       "name": "draft-filter: no horizontal overflow",
       "ok": true,
       "details": {
-        "scroll": 390,
+        "scroll": 379,
         "viewport": 390
       }
     },
@@ -489,9 +856,10 @@
   "captures": [
     "desktop.png",
     "desktop-en.png",
-    "desktop-archify.png",
+    "desktop-diagram-reader.png",
     "laptop.png",
     "mobile.png",
+    "mobile-diagram-reader.png",
     "mobile-en.png",
     "narrow.png",
     "landscape-dark.png",
