@@ -18,7 +18,13 @@ function write(value: string, maxAgeSeconds: number, name = SESSION_MARKER): voi
   if (typeof document === "undefined") return;
   const secure =
     typeof window !== "undefined" && window.location.protocol === "https:" ? "; Secure" : "";
-  document.cookie = `${name}=${value}; Path=/; Max-Age=${maxAgeSeconds}; SameSite=Lax${secure}`;
+  // Ghi cookie có thể ném SecurityError (cookie bị chặn / WebView hạn chế). Marker chỉ là gợi ý
+  // routing, không phải credential: lỗi ghi ở đây không được làm hỏng đăng nhập đã thành công.
+  try {
+    document.cookie = `${name}=${value}; Path=/; Max-Age=${maxAgeSeconds}; SameSite=Lax${secure}`;
+  } catch {
+    /* Không ghi được marker: middleware sẽ chặn trang nội bộ, nhưng phiên vẫn hợp lệ ở API. */
+  }
 }
 
 export function markSessionAlive(): void {

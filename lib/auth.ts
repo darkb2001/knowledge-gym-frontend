@@ -17,10 +17,20 @@ export function readStoredUser(): User | null {
 
 export function storeUser(user: User | null): void {
   if (typeof window === "undefined") return;
-  if (user) {
-    sessionStorage.setItem(USER_KEY, JSON.stringify(user));
-  } else {
-    sessionStorage.removeItem(USER_KEY);
+  // `kg.user` chỉ là cache hiển thị, KHÔNG phải credential: quyền vẫn do `GET /users/me` + API quyết
+  // định. Trình duyệt bị hạn chế (Safari chế độ riêng tư, WebView của app Facebook/Zalo/Messenger,
+  // máy hết dung lượng) ném lỗi ngay khi truy cập sessionStorage — xem ghi chú trong
+  // `components/english/useVocabularySession.ts`. Vì vậy lỗi ghi cache không được làm hỏng một lần
+  // đăng nhập/đăng ký mà server ĐÃ chấp nhận (200/201) — nếu không người dùng sẽ thấy lỗi lạ và
+  // không vào được app dù tài khoản hoàn toàn hợp lệ.
+  try {
+    if (user) {
+      sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+    } else {
+      sessionStorage.removeItem(USER_KEY);
+    }
+  } catch {
+    /* Cache không ghi được: bỏ qua, phiên vẫn hợp lệ trong bộ nhớ. */
   }
 }
 
